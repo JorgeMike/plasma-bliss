@@ -197,3 +197,29 @@ ahi. Se puede comprobar leyendo los `Inherits` de cada `index.theme`:
     Papirus-Dark -> breeze-dark -> hicolor -> breeze
 
 Por eso `make install` copia `bliss-start.svg` a las dos rutas.
+
+## Hay DOS rutas de tooltip, y usan grupos de color distintos
+
+| Componente | SVG que pide | colorSet |
+|---|---|---|
+| `PlasmaComponents.ToolTip` | **`solid/widgets/tooltip`** | `Tooltip` |
+| `PlasmaCore.ToolTipArea` → `DefaultToolTip.qml` | `dialogs/background` | `Window`, con `inherit: false` |
+
+Dos trampas:
+
+1. **El prefijo `solid/`.** `ToolTip.qml` pide literalmente
+   `"solid/widgets/tooltip"`. Un tema que solo tenga `widgets/tooltip.svg`
+   no cubre esa ruta. El tema del sistema tiene un directorio `solid/` con
+   `background`, `panel-background` y `tooltip` justo por esto.
+2. **`DefaultToolTip.qml` fuerza `colorSet: Window` con `inherit: false`**, asi
+   que `[Colors:Tooltip]` no se aplica en esa ruta. Con el chrome oscuro eso
+   significa texto BLANCO. Un fondo amarillo claro de XP lo deja invisible, y
+   el sintoma es exactamente "un recuadro blanco y nada dentro".
+
+Por eso en Bliss el tooltip va oscuro con texto blanco: es lo unico legible
+con los dos grupos a la vez. El amarillo de XP exigiria chrome claro, que es
+lo contrario de lo que necesita el panel.
+
+El SVG de Breeze usa las clases `ColorScheme-Background` y `ColorScheme-Text`,
+asi que Plasma lo recolorea en caliente con el grupo activo. Bliss hardcodea
+los colores a proposito y no incluye `current-color-scheme`.

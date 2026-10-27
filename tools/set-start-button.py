@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Pone el icono y la etiqueta de Bliss en el boton Inicio del panel actual.
 
-    python3 tools/set-start-button.py            # aplica
+    python3 tools/set-start-button.py              # solo el icono
+    python3 tools/set-start-button.py --label Inicio
     python3 tools/set-start-button.py --revert   # vuelve al de Plasma
 
 Kickoff acepta dos ajustes, `icon` y `menuLabel`, pero viven en el archivo de
@@ -49,7 +50,7 @@ def write(cont, applet, key, value):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--icon", default="bliss-start")
-    ap.add_argument("--label", default="Inicio")
+    ap.add_argument("--label", default="")   # vacio = solo icono
     ap.add_argument("--revert", action="store_true")
     a = ap.parse_args()
 
@@ -66,8 +67,11 @@ def main():
             print(f"  Kickoff [{cont}][{applet}] -> restaurado")
         else:
             write(cont, applet, "icon", a.icon)
-            write(cont, applet, "menuLabel", a.label)
-            print(f"  Kickoff [{cont}][{applet}] -> icono {a.icon!r}, etiqueta {a.label!r}")
+            # Etiqueta vacia: se BORRA la clave en vez de escribir "". Kickoff
+            # sin menuLabel no dibuja texto, que es lo que queremos.
+            write(cont, applet, "menuLabel", a.label or None)
+            shown = repr(a.label) if a.label else "sin etiqueta, solo icono"
+            print(f"  Kickoff [{cont}][{applet}] -> icono {a.icon!r}, {shown}")
     print("Ahora: make reload")
 
 

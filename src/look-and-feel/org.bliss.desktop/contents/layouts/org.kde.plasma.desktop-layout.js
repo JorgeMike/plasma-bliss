@@ -17,7 +17,7 @@ panel.hiding    = "none";
 var kickoff = panel.addWidget("org.kde.plasma.kickoff");
 kickoff.currentConfigGroup = ["General"];
 kickoff.writeConfig("icon", "bliss-start");         // src/icons/Bliss/scalable/apps/
-kickoff.writeConfig("menuLabel", "Inicio");
+// sin menuLabel: solo el icono, sin texto
 panel.addWidget("org.kde.plasma.showdesktop");      // "Mostrar escritorio"
 
 var tasks = panel.addWidget("org.kde.plasma.taskmanager");

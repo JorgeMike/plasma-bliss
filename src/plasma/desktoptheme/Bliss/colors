@@ -87,22 +87,23 @@ ForegroundNormal=255,255,255
 ForegroundPositive=190,240,160
 ForegroundVisited=230,210,250
 
-# Los tooltips conservan el amarillo palido de XP con texto negro: su fondo
-# viene de widgets/tooltip.svg, que todavia se hereda de Breeze (claro).
+# Los tooltips van oscuros, no con el amarillo de XP. DefaultToolTip.qml
+# fuerza colorSet Window con inherit:false, asi que una de las dos rutas de
+# tooltip pinta el texto en BLANCO pase lo que pase aqui. Con fondo claro el
+# texto desaparecia. Ver la cabecera de widgets/tooltip.svg.
 [Colors:Tooltip]
-BackgroundAlternate=255,255,225
-BackgroundNormal=255,255,225
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
-ForegroundActive=0,84,227
-ForegroundInactive=122,118,104
-ForegroundLink=0,102,204
-ForegroundNegative=212,58,47
-ForegroundNeutral=240,163,10
-ForegroundNormal=0,0,0
-ForegroundPositive=92,184,46
-ForegroundVisited=85,26,139
-
+BackgroundAlternate=24,58,112
+BackgroundNormal=28,63,122
+DecorationFocus=91,155,248
+DecorationHover=129,212,250
+ForegroundActive=129,212,250
+ForegroundInactive=186,210,245
+ForegroundLink=129,212,250
+ForegroundNegative=255,138,128
+ForegroundNeutral=255,204,102
+ForegroundNormal=255,255,255
+ForegroundPositive=156,224,112
+ForegroundVisited=197,160,224
 [Colors:View]
 BackgroundAlternate=24,58,112
 BackgroundNormal=28,63,122

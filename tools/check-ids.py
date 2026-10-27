@@ -68,9 +68,12 @@ def main():
     bad |= need(dlg, "dialogs/background.svg", PARTS, lambda p: p)
     bad |= need(dlg, "dialogs/background.svg [mask]", PARTS, lambda p: f"mask-{p}")
 
-    tip = ids(f"{plasma}/widgets/tooltip.svg")
-    bad |= need(tip, "tooltip.svg", PARTS, lambda p: p)
-    bad |= need(tip, "tooltip.svg [mask]", PARTS, lambda p: f"mask-{p}")
+    # El tooltip va DOS veces: ToolTip.qml pide "solid/widgets/tooltip"
+    # literalmente, y otros componentes usan "widgets/tooltip".
+    for where in ("widgets", "solid/widgets"):
+        tip = ids(f"{plasma}/{where}/tooltip.svg")
+        bad |= need(tip, f"{where}/tooltip.svg", PARTS, lambda p: p)
+        bad |= need(tip, f"{where}/tooltip.svg [mask]", PARTS, lambda p: f"mask-{p}")
 
     return bad
 

@@ -41,7 +41,8 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 - [x] `dialogs/background.svg` — fondo de popups y del menu Inicio
 - [x] `widgets/listitem.svg` — filas con hover y seleccion
 - [x] Boton Inicio verde: icono propio + etiqueta, via `make start-button`
-- [x] `widgets/tooltip.svg` — el amarillo palido de XP con texto negro
+- [x] `widgets/tooltip.svg` + `solid/widgets/tooltip.svg` — oscuros, no
+      amarillos: una de las dos rutas de tooltip fuerza texto blanco
 - [ ] Fondo de pantalla
 
 ### Decidido: el menu Inicio se queda azul oscuro

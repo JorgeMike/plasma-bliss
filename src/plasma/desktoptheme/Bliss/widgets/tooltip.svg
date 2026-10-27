@@ -1,55 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Bliss — widgets/tooltip.svg
+  Bliss — tooltip
 
-  Mismo contrato que dialogs/background.svg: prefijo VACIO para el marco y
-  prefijo "mask" para la region opaca.
+  OJO: este archivo se instala DOS veces, en widgets/ y en solid/widgets/.
+  org/kde/plasma/components/ToolTip.qml pide literalmente
+  "solid/widgets/tooltip", no "widgets/tooltip". Sin la copia en solid/, el
+  tooltip cae al de Breeze.
 
-  Amarillo palido #FFFFE1 con borde oscuro de 1 px y esquinas CUADRADAS: el
-  tooltip de XP no redondea. El texto va negro, y eso no se define aqui sino
-  en [Colors:Tooltip] del archivo colors, que se dejo claro a proposito
-  mientras el resto del chrome es oscuro.
+  Va OSCURO, no con el amarillo de XP, y la razon es defensiva. Hay dos rutas
+  de tooltip en Plasma y usan grupos de color distintos:
+
+    PlasmaComponents.ToolTip  -> solid/widgets/tooltip  · colorSet Tooltip
+    PlasmaCore.ToolTipArea    -> dialogs/background     · colorSet Window
+                                 (DefaultToolTip.qml lo fuerza con inherit:false)
+
+  Con el chrome oscuro, Window da texto BLANCO. Un fondo amarillo claro lo
+  hacia invisible: el sintoma era "un recuadro blanco y nada dentro". Fondo
+  oscuro + texto blanco en AMBOS grupos funciona pase lo que pase.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="40"
      viewBox="0 0 26 40" version="1.1">
   <g id="topleft">
-    <rect x="0" y="0" width="4" height="4" fill="#FFFFE1"/>
-    <rect x="0" y="0" width="4" height="1" fill="#767661"/>
-    <rect x="0" y="0" width="1" height="4" fill="#767661"/>
+    <rect x="0" y="0" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="0" y="0" width="4" height="1" fill="#0E2F72"/>
+    <rect x="0" y="0" width="1" height="4" fill="#0E2F72"/>
   </g>
   <g id="top">
-    <rect x="4" y="0" width="8" height="4" fill="#FFFFE1"/>
-    <rect x="4" y="0" width="8" height="1" fill="#767661"/>
+    <rect x="4" y="0" width="8" height="4" fill="#1C3F7A"/>
+    <rect x="4" y="0" width="8" height="1" fill="#0E2F72"/>
   </g>
   <g id="topright">
-    <rect x="12" y="0" width="4" height="4" fill="#FFFFE1"/>
-    <rect x="12" y="0" width="4" height="1" fill="#767661"/>
-    <rect x="15" y="0" width="1" height="4" fill="#767661"/>
+    <rect x="12" y="0" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="12" y="0" width="4" height="1" fill="#0E2F72"/>
+    <rect x="15" y="0" width="1" height="4" fill="#0E2F72"/>
   </g>
   <g id="left">
-    <rect x="0" y="4" width="4" height="8" fill="#FFFFE1"/>
-    <rect x="0" y="4" width="1" height="8" fill="#767661"/>
+    <rect x="0" y="4" width="4" height="8" fill="#1C3F7A"/>
+    <rect x="0" y="4" width="1" height="8" fill="#0E2F72"/>
   </g>
   <g id="center">
-    <rect x="4" y="4" width="8" height="8" fill="#FFFFE1"/>
+    <rect x="4" y="4" width="8" height="8" fill="#1C3F7A"/>
   </g>
   <g id="right">
-    <rect x="12" y="4" width="4" height="8" fill="#FFFFE1"/>
-    <rect x="15" y="4" width="1" height="8" fill="#767661"/>
+    <rect x="12" y="4" width="4" height="8" fill="#1C3F7A"/>
+    <rect x="15" y="4" width="1" height="8" fill="#0E2F72"/>
   </g>
   <g id="bottomleft">
-    <rect x="0" y="12" width="4" height="4" fill="#FFFFE1"/>
-    <rect x="0" y="15" width="4" height="1" fill="#767661"/>
-    <rect x="0" y="12" width="1" height="4" fill="#767661"/>
+    <rect x="0" y="12" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="0" y="15" width="4" height="1" fill="#0E2F72"/>
+    <rect x="0" y="12" width="1" height="4" fill="#0E2F72"/>
   </g>
   <g id="bottom">
-    <rect x="4" y="12" width="8" height="4" fill="#FFFFE1"/>
-    <rect x="4" y="15" width="8" height="1" fill="#767661"/>
+    <rect x="4" y="12" width="8" height="4" fill="#1C3F7A"/>
+    <rect x="4" y="15" width="8" height="1" fill="#0E2F72"/>
   </g>
   <g id="bottomright">
-    <rect x="12" y="12" width="4" height="4" fill="#FFFFE1"/>
-    <rect x="12" y="15" width="4" height="1" fill="#767661"/>
-    <rect x="15" y="12" width="1" height="4" fill="#767661"/>
+    <rect x="12" y="12" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="12" y="15" width="4" height="1" fill="#0E2F72"/>
+    <rect x="15" y="12" width="1" height="4" fill="#0E2F72"/>
   </g>
   <g id="mask-topleft">
     <rect x="0" y="20" width="4" height="4" fill="#ffffff"/>

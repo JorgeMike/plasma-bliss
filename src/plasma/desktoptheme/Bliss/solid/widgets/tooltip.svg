@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss — tooltip
+
+  OJO: este archivo se instala DOS veces, en widgets/ y en solid/widgets/.
+  org/kde/plasma/components/ToolTip.qml pide literalmente
+  "solid/widgets/tooltip", no "widgets/tooltip". Sin la copia en solid/, el
+  tooltip cae al de Breeze.
+
+  Va OSCURO, no con el amarillo de XP, y la razon es defensiva. Hay dos rutas
+  de tooltip en Plasma y usan grupos de color distintos:
+
+    PlasmaComponents.ToolTip  -> solid/widgets/tooltip  · colorSet Tooltip
+    PlasmaCore.ToolTipArea    -> dialogs/background     · colorSet Window
+                                 (DefaultToolTip.qml lo fuerza con inherit:false)
+
+  Con el chrome oscuro, Window da texto BLANCO. Un fondo amarillo claro lo
+  hacia invisible: el sintoma era "un recuadro blanco y nada dentro". Fondo
+  oscuro + texto blanco en AMBOS grupos funciona pase lo que pase.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="40"
+     viewBox="0 0 26 40" version="1.1">
+  <g id="topleft">
+    <rect x="0" y="0" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="0" y="0" width="4" height="1" fill="#0E2F72"/>
+    <rect x="0" y="0" width="1" height="4" fill="#0E2F72"/>
+  </g>
+  <g id="top">
+    <rect x="4" y="0" width="8" height="4" fill="#1C3F7A"/>
+    <rect x="4" y="0" width="8" height="1" fill="#0E2F72"/>
+  </g>
+  <g id="topright">
+    <rect x="12" y="0" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="12" y="0" width="4" height="1" fill="#0E2F72"/>
+    <rect x="15" y="0" width="1" height="4" fill="#0E2F72"/>
+  </g>
+  <g id="left">
+    <rect x="0" y="4" width="4" height="8" fill="#1C3F7A"/>
+    <rect x="0" y="4" width="1" height="8" fill="#0E2F72"/>
+  </g>
+  <g id="center">
+    <rect x="4" y="4" width="8" height="8" fill="#1C3F7A"/>
+  </g>
+  <g id="right">
+    <rect x="12" y="4" width="4" height="8" fill="#1C3F7A"/>
+    <rect x="15" y="4" width="1" height="8" fill="#0E2F72"/>
+  </g>
+  <g id="bottomleft">
+    <rect x="0" y="12" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="0" y="15" width="4" height="1" fill="#0E2F72"/>
+    <rect x="0" y="12" width="1" height="4" fill="#0E2F72"/>
+  </g>
+  <g id="bottom">
+    <rect x="4" y="12" width="8" height="4" fill="#1C3F7A"/>
+    <rect x="4" y="15" width="8" height="1" fill="#0E2F72"/>
+  </g>
+  <g id="bottomright">
+    <rect x="12" y="12" width="4" height="4" fill="#1C3F7A"/>
+    <rect x="12" y="15" width="4" height="1" fill="#0E2F72"/>
+    <rect x="15" y="12" width="1" height="4" fill="#0E2F72"/>
+  </g>
+  <g id="mask-topleft">
+    <rect x="0" y="20" width="4" height="4" fill="#ffffff"/>
+  </g>
+  <g id="mask-top">
+    <rect x="4" y="20" width="8" height="4" fill="#ffffff"/>
+  </g>
+  <g id="mask-topright">
+    <rect x="12" y="20" width="4" height="4" fill="#ffffff"/>
+  </g>
+  <g id="mask-left">
+    <rect x="0" y="24" width="4" height="8" fill="#ffffff"/>
+  </g>
+  <g id="mask-center">
+    <rect x="4" y="24" width="8" height="8" fill="#ffffff"/>
+  </g>
+  <g id="mask-right">
+    <rect x="12" y="24" width="4" height="8" fill="#ffffff"/>
+  </g>
+  <g id="mask-bottomleft">
+    <rect x="0" y="32" width="4" height="4" fill="#ffffff"/>
+  </g>
+  <g id="mask-bottom">
+    <rect x="4" y="32" width="8" height="4" fill="#ffffff"/>
+  </g>
+  <g id="mask-bottomright">
+    <rect x="12" y="32" width="4" height="4" fill="#ffffff"/>
+  </g>
+
+  <rect id="hint-top-margin"    x="20" y="0"  width="1" height="3" fill="none"/>
+  <rect id="hint-bottom-margin" x="20" y="4"  width="1" height="3" fill="none"/>
+  <rect id="hint-left-margin"   x="20" y="8"  width="4" height="1" fill="none"/>
+  <rect id="hint-right-margin"  x="20" y="12" width="4" height="1" fill="none"/>
+</svg>
