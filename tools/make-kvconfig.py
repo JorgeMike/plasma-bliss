@@ -7,6 +7,7 @@ La geometria y los nombres de grupo del tema base se conservan INTACTOS: tienen
 que seguir cuadrando con los IDs de Bliss.svg, que sale del mismo tema. Solo se
 reescribe la paleta y los colores de texto que el tema base daba por supuestos.
 """
+import colorsys
 import re
 import sys
 
@@ -82,6 +83,45 @@ HEADER = """# Bliss.kvconfig — estilo de widgets de aplicacion
 """
 
 
+# El texto no es material: es primer plano. Por eso, al derivar la variante
+# oscura de una base CLARA, los colores de texto si se invierten, al reves de
+# lo que hace la rampa del SVG. La base da por supuesto un fondo claro y fija
+# el texto en negro; sobre pizarra eso es texto invisible.
+#
+# Es generico a proposito. Enumerar los grupos afectados — PanelButtonCommand,
+# Tab, GroupBox, DockTitle, ToolboxTab, Progressbar — funcionaria hoy y se
+# quedaria corto en cuanto cambie el tema base.
+TEXT_KEY = re.compile(r"^[\w.]*text[\w.]*\.color$")
+NAMED = {"black": "#000000", "white": "#ffffff"}
+
+
+def is_dark(value):
+    v = NAMED.get(value.strip().lower(), value.strip())
+    m = re.fullmatch(r"#([0-9a-fA-F]{6})([0-9a-fA-F]{2})?", v)
+    if not m:
+        return False, ""
+    r, g, b = (int(m.group(1)[i:i + 2], 16) / 255 for i in (0, 2, 4))
+    return colorsys.rgb_to_hls(r, g, b)[1] < 0.5, (m.group(2) or "")
+
+
+def lift_text(cfg, light="#E8EDF2"):
+    """Aclara todo color de texto oscuro, conservando el canal alfa."""
+    out, group, n = [], "", 0
+    for line in cfg.splitlines():
+        head = re.fullmatch(r"\[(.+)\]", line.strip())
+        if head:
+            group = head.group(1)
+        elif "=" in line and group != "GeneralColors":
+            key, _, val = line.partition("=")
+            if TEXT_KEY.fullmatch(key.strip()):
+                dark, alpha = is_dark(val)
+                if dark:
+                    line = f"{key}={light}{alpha}"
+                    n += 1
+        out.append(line)
+    return "\n".join(out) + "\n", n
+
+
 def patch(text, group, mapping):
     m = re.search(rf"(^\[{re.escape(group)}\]\n)(.*?)(?=^\[|\Z)", text, re.S | re.M)
     if not m:
@@ -108,12 +148,16 @@ def main(src, dst, dark=False):
         general["comment"] = "Bliss Dark — cristal de oceano profundo"
     cfg = patch(cfg, "%General", general)
     cfg = patch(cfg, "GeneralColors", DARK if dark else COLORS)
+    lifted = 0
+    if dark:
+        cfg, lifted = lift_text(cfg)
     for group, fixes in (DARK_TEXT_FIXES if dark else TEXT_FIXES).items():
         cfg = patch(cfg, group, fixes)
     open(dst, "w").write(HEADER + "\n" + cfg)
     fixes = DARK_TEXT_FIXES if dark else TEXT_FIXES
+    extra = f", {lifted} colores de texto aclarados" if lifted else ""
     print(f"{dst}: paleta {'pizarra (oscuro)' if dark else 'Luna (claro)'} "
-          f"+ {len(fixes)} grupos de texto corregidos")
+          f"+ {len(fixes)} grupos de texto corregidos{extra}")
 
 
 if __name__ == "__main__":

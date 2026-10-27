@@ -18,10 +18,22 @@ dejaria color crema, invisibles. Esta fase las reasigna por ID de elemento,
 siguiendo la cadena de degradados y clonando los que esten compartidos con
 elementos que no son objetivo, para no danarlos.
 
-Con --dark usa la rampa de pizarra y parte de un tema ya oscuro (KvCurves3d).
-Ahi SAT_KEEP sube a 1.1, es decir, NINGUN color se conserva por saturado: la
-base trae acentos naranjas y rojos que no pintan nada en Bliss. Todo pasa a
-pizarra y la fase 2 devuelve el azul de seleccion y el verde de progreso.
+Con --dark se parte de la MISMA base clara que la variante clara y se usa la
+rampa de pizarra. Antes se partia de un tema ya oscuro (KvCurves3d), pero eso
+traia su geometria: botones en forma de capsula, lejisimos de Luna. Compartir
+base es lo que garantiza que claro y oscuro tengan el mismo radio de esquina,
+el mismo bisel y el mismo grosor de borde; solo cambia el pigmento. Es el
+mismo criterio que sigue tools/make-dark-aurorae.py.
+
+La rampa de pizarra NO invierte la luminosidad. Invertirla pondria la luz
+debajo: el degradado de la cara quedaria oscuro arriba y claro abajo, y los
+biseles se verian hundidos. Lo que hace es comprimir, de forma monotona, el
+rango claro dentro del rango oscuro, asi que el orden relativo de cada tono
+se conserva y la pieza se sigue leyendo iluminada desde arriba.
+
+En --dark, SAT_KEEP sube a 1.1: NINGUN color se conserva por saturado. Todo
+pasa a pizarra y la fase 2 devuelve el azul de seleccion y el verde de
+progreso.
 """
 import colorsys
 import re
@@ -33,13 +45,26 @@ RAMP = [
     (0.63, "aca899"), (0.71, "d8d4c2"), (0.76, "e4e0ce"), (0.84, "ece9d8"),
     (0.90, "f4f1e4"), (0.98, "fdfcf6"), (1.00, "ffffff"),
 ]
-# Rampa de pizarra para --dark. Anclada en los mismos valores que
-# src/color-schemes/Bliss-Dark.colors, para que el estilo de widgets y el
-# esquema de color de las aplicaciones no se contradigan.
+# Rampa de pizarra para --dark. Usa las MISMAS luminosidades de entrada que
+# RAMP, porque ahora ambas leen la misma base: asi cada tono del original cae
+# en el escalon equivalente de una y otra y las dos variantes son comparables
+# tono a tono.
+#
+# Anclada en src/color-schemes/Bliss-Dark.colors, para que el estilo de
+# widgets y el esquema de color de las aplicaciones no se contradigan. Las
+# luminosidades de anclaje no son inventadas: se midieron sobre la variante
+# clara ya renderizada, buscando que entrada produce cada superficie.
+#     0.66 -> borde del boton
+#     0.80 -> base del degradado de la cara
+#     0.88 -> fondo de ventana, que debe caer en window.color (#2E343B)
+#     0.92 -> cima del degradado de la cara, en button.color (#3A424B)
+# Sin este anclaje el fondo salia en #434C59, cien milesimas por encima de lo
+# que declara la paleta, y el estilo de widgets contradecia al esquema de
+# color en cuanto una aplicacion pintaba las dos cosas juntas.
 DARK_RAMP = [
-    (0.00, "0d1013"), (0.04, "121519"), (0.12, "1c2127"), (0.16, "262c33"),
-    (0.24, "2e343b"), (0.31, "3a424b"), (0.43, "4e5862"), (0.60, "78838f"),
-    (0.82, "b4bec8"), (0.94, "e8edf2"), (1.00, "ffffff"),
+    (0.00, "04060a"), (0.27, "0e1218"), (0.35, "12171e"), (0.50, "171d25"),
+    (0.66, "1d232c"), (0.76, "262c34"), (0.80, "2a3038"), (0.88, "2e343b"),
+    (0.92, "3a424b"), (0.98, "444d58"), (1.00, "4a5663"),
 ]
 ACCENT = {"0067ce": "0054e3", "ce0400": "d43a2f"}
 KEEP = {"b74aff"}          # marcadores con los que Kvantum mide las sombras

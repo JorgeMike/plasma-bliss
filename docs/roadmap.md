@@ -27,8 +27,14 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 - [x] `Bliss.kvconfig` con la paleta Luna y los colores de texto corregidos
 - [x] Acentos fuera del material: seleccion azul, barra de progreso verde
 - [x] `make apply` activa tambien el estilo de widgets
-- [ ] Radio de esquina: Luna usa ~3 px, KvBeige ~6. Es geometria, no color,
-      asi que toca editar rutas en Inkscape
+- [x] Radio de esquina. **Este punto estaba mal planteado.** Decia que KvBeige
+      redondeaba ~6 px frente a los ~3 de Luna, y que habria que editar rutas
+      en Inkscape. Medido sobre `kvantumpreview`, la variante clara ya daba
+      3 px exactos: la esquina del SVG es un cuarto de circulo que ocupa la
+      pieza entera, y Kvantum la escala a `frame.left` x `frame.top`, que vale
+      3. Quien redondeaba de mas era la variante OSCURA, porque salia de otra
+      base (KvCurves3d) y heredaba su geometria de capsula. Arreglado
+      generando las dos desde la misma base; no hubo que tocar una sola ruta
 - [ ] Barra de progreso segmentada (XP la dibuja a bloques, no continua)
 - [ ] Decidir que hacer con las apps GTK (no obedecen a Kvantum: hacen falta
       un tema GTK aparte y `gtk.css`)
@@ -68,7 +74,8 @@ Kvantum — se reutiliza tal cual. Solo cambia el pigmento.
       todos los pares criticos pasan AA, el peor es 5.3:1
 - [x] Aurorae `Bliss-Dark` generado desde el claro por escalado de
       luminosidad. `make check` verifica que comparte geometria exacta
-- [x] Kvantum oscuro desde KvCurves3d con `recolor-kvantum.py --dark`
+- [x] Kvantum oscuro con `recolor-kvantum.py --dark`, desde la MISMA base
+      que la clara (antes desde KvCurves3d, que traia botones de capsula)
 - [x] Segundo look-and-feel `org.bliss.dark.desktop`
 - [x] `make apply-dark` / `make apply-light` para alternar
 - [x] Plasma style: NO se duplica. El chrome ya es oscuro en ambas variantes,

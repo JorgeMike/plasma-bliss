@@ -19,10 +19,14 @@ STAMP  := $(shell date +%Y%m%d-%H%M%S)
 # Tema Kvantum base del que se derivan Bliss.svg y Bliss.kvconfig.
 # KvBeige se eligio porque su boton ya tiene la estructura de Luna: borde
 # crisp de 1 px, bisel vertical y pulsado invertido.
+# La variante OSCURA sale de la MISMA base que la clara. Antes salia de
+# KvCurves3d, que es oscuro de serie, pero con su geometria venian botones en
+# forma de capsula; Luna los tiene a 3 px de radio. Compartiendo base, claro y
+# oscuro comparten geometria exacta y solo se diferencian en el pigmento.
 KV_BASE := KvBeige
-KV_DARK := KvCurves3d
+KV_DARK := $(KV_BASE)
 KV_DIR  := /usr/share/Kvantum/$(KV_BASE)
-KV_DDIR := /usr/share/Kvantum/$(KV_DARK)
+KV_DDIR := $(KV_DIR)
 
 KWRITE := $(shell command -v kwriteconfig6 2>/dev/null)
 KREAD  := $(shell command -v kreadconfig6 2>/dev/null)

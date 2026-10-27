@@ -277,3 +277,53 @@ funcionan, porque el plugin de imagen los carga por ruta. Pero
 `kpackagetool6 --type Wallpaper/Images --list` no los reconoce. Anadir
 `"KPackageStructure": "Wallpaper/Images"` al `metadata.json` no cambia nada
 para Plasma y hace que las herramientas de KPackage vean el paquete.
+
+## Kvantum: de donde sale el radio de esquina
+
+No del SVG a solas, ni del kvconfig a solas: del producto de los dos.
+
+Kvantum pinta cada marco con nueve piezas y llama una vez por pieza a
+`QSvgRenderer::render(painter, id, rect)`. Eso **estira la caja del elemento
+hasta el rectangulo de destino**. La esquina superior izquierda va a un
+rectangulo de `frame.left` x `frame.top` pixeles.
+
+En KvBeige, `button-normal-topleft` mide 8x8 unidades y dibuja dentro un
+cuarto de circulo de radio 8, o sea la pieza entera. Como
+`[PanelButtonCommand] frame.left=3`, el radio en pantalla es de 3 px. El borde
+claro ocupa 2 de esas 8 unidades, un 25 %, que a esa escala es el 1 px de
+Luna.
+
+Conclusion practica: **para cambiar el radio no hace falta editar rutas**,
+basta con mover `frame.*`. El precio es que el borde se escala con el, porque
+es una fraccion de la pieza, no un grosor absoluto.
+
+### Como medirlo sin tocar la sesion
+
+`kvantumpreview` pinta con el tema activo, y Kvantum lee cual es de
+`$XDG_CONFIG_HOME/Kvantum/kvantum.kvconfig`. Asi que se puede previsualizar un
+tema sin aplicarlo ni reestilar las aplicaciones abiertas:
+
+```bash
+mkdir -p /tmp/kv/Kvantum/Bliss-Dark
+cp src/kvantum/Bliss-Dark/Bliss-Dark.{svg,kvconfig} /tmp/kv/Kvantum/Bliss-Dark/
+printf '[General]\ntheme=Bliss-Dark\n' > /tmp/kv/Kvantum/kvantum.kvconfig
+XDG_CONFIG_HOME=/tmp/kv QT_STYLE_OVERRIDE=kvantum kvantumpreview
+```
+
+Es la unica forma fiable de medir esto. Renderizar las piezas sueltas con
+Inkscape y recomponerlas a mano induce a error: no reproduce ni el escalado
+por pieza ni el orden de pintado, y ya mando por mal camino una vez.
+
+### La geometria se hereda de la base, tambien en oscuro
+
+Un tema derivado solo cambia el pigmento si la base es la misma. Bliss-Dark
+salia de KvCurves3d, que es oscuro de serie pero redondea los botones hasta la
+capsula; el resultado no se parecia a la variante clara. Generando las dos
+desde KvBeige, `make check` confirma que los 794 elementos tienen caja
+identica.
+
+La rampa de pizarra que convierte una base clara en oscura **no invierte** la
+luminosidad. Invertirla pondria la luz debajo: la cara del boton quedaria
+oscura arriba y clara abajo, y el relieve se leeria hundido. Lo que hace es
+comprimir de forma monotona el rango claro dentro del oscuro, conservando el
+orden de los tonos.

@@ -12,6 +12,8 @@ Referencia (leida de /usr/share/kwin/aurorae/*.qml en Plasma 6.3):
 Cada prefijo necesita las 9 partes del 9-slice.
 """
 import os
+import shutil
+import subprocess
 import sys
 import xml.etree.ElementTree as ET
 
@@ -29,6 +31,53 @@ def need(found, label, required, fmt):
         print(f"  FALTA  {label}: {', '.join(fmt(p) for p in missing)}")
         return 1
     print(f"  ok     {label}")
+    return 0
+
+
+def boxes(path):
+    """Caja de cada elemento con id, tal y como la ve el renderizador.
+
+    Kvantum escala cada pieza del 9-slice a su hueco, asi que la caja es lo
+    que fija el radio de esquina y el grosor del bisel. Comparar cajas entre
+    claro y oscuro es, literalmente, comprobar que tienen la misma forma.
+    """
+    out = subprocess.run(["inkscape", "--query-all", path],
+                         capture_output=True, text=True).stdout
+    box = {}
+    for line in out.splitlines():
+        parts = line.split(",")
+        if len(parts) == 5:
+            box[parts[0]] = tuple(round(float(v), 2) for v in parts[1:])
+    return box
+
+
+def kvantum_geometry():
+    """Bliss y Bliss-Dark salen de la misma base, asi que deben coincidir.
+
+    Es la comprobacion que habria cazado el fallo de origen: la oscura se
+    generaba desde KvCurves3d y traia botones en forma de capsula, cuando
+    Luna los quiere a 3 px de radio.
+    """
+    light = "src/kvantum/Bliss/Bliss.svg"
+    dark = "src/kvantum/Bliss-Dark/Bliss-Dark.svg"
+    if not (os.path.exists(light) and os.path.exists(dark)):
+        print("  --     kvantum: sin generar, omitido")
+        return 0
+    if not shutil.which("inkscape"):
+        print("  --     kvantum: falta inkscape, omitido")
+        return 0
+
+    a, b = boxes(light), boxes(dark)
+    only = (set(a) ^ set(b))
+    moved = [k for k in set(a) & set(b) if a[k] != b[k]]
+    if only or moved:
+        print(f"  FALTA  kvantum: Bliss-Dark no comparte geometria con Bliss "
+              f"({len(moved)} elementos movidos, {len(only)} descuadrados)")
+        for k in sorted(moved)[:5]:
+            print(f"           {k}: {a[k]} vs {b[k]}")
+        return 1
+    print(f"  ok     kvantum: Bliss-Dark comparte geometria con Bliss "
+          f"({len(a)} elementos)")
     return 0
 
 
@@ -89,6 +138,8 @@ def main():
         tip = ids(f"{plasma}/{where}/tooltip.svg")
         bad |= need(tip, f"{where}/tooltip.svg", PARTS, lambda p: p)
         bad |= need(tip, f"{where}/tooltip.svg [mask]", PARTS, lambda p: f"mask-{p}")
+
+    bad |= kvantum_geometry()
 
     return bad
 

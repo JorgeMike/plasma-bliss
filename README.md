@@ -71,9 +71,12 @@ las dos decoraciones. Si divergen, el generador ha roto algo.
   la barra de titulo se hunda y no deslumbre, y 0.82 en los botones, que son
   lo interactivo y deben seguir leyendose. El blanco puro queda intacto:
   define la mascara de opacidad, el brillo de cristal y los glifos.
-- **Kvantum**: el mismo recolorizador con `--dark`, partiendo de KvCurves3d.
-  Ahi no se conserva ningun color por saturado — la base trae naranjas y rojos
-  que no pintan nada aqui — y la fase 2 devuelve el azul de seleccion.
+- **Kvantum**: el mismo recolorizador con `--dark`, partiendo de la MISMA
+  base que la variante clara. Ahi no se conserva ningun color por saturado y
+  la fase 2 devuelve el azul de seleccion. La rampa de pizarra no invierte la
+  luminosidad, la comprime: invertirla pondria la luz debajo y los biseles se
+  verian hundidos. `make check` comprueba que las dos variantes comparten la
+  caja de los 794 elementos, es decir, la misma forma.
 - **Plasma style**: no cambia. El chrome del shell ya es azul oscuro en ambas
   variantes, igual que la barra de tareas de Windows 7 o 10 se mantiene
   oscura con independencia del modo de las aplicaciones.
