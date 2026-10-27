@@ -14,12 +14,19 @@ DEST   ?= $(HOME)/.local/share
 CFG    ?= $(HOME)/.config
 STAMP  := $(shell date +%Y%m%d-%H%M%S)
 
+# Tema Kvantum base del que se derivan Bliss.svg y Bliss.kvconfig.
+# KvBeige se eligio porque su boton ya tiene la estructura de Luna: borde
+# crisp de 1 px, bisel vertical y pulsado invertido.
+KV_BASE := KvBeige
+KV_DIR  := /usr/share/Kvantum/$(KV_BASE)
+
 KWRITE := $(shell command -v kwriteconfig6 2>/dev/null)
 KREAD  := $(shell command -v kreadconfig6 2>/dev/null)
 QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
 
 .DEFAULT_GOAL := help
 .PHONY: help install uninstall apply apply-deco apply-global revert backup restore \
+        kvantum apply-kvantum \
         check list install-colors install-aurorae install-plasma install-lnf \
         install-icons install-kvantum
 
@@ -33,6 +40,7 @@ help:
 	@printf "  \033[36mmake revert\033[0m        vuelve a Breeze\n"
 	@printf "  \033[36mmake backup\033[0m        guarda tu config actual en ./backup/\n"
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
+	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
 	@printf "  \033[36mmake check\033[0m         valida SVG y JSON antes de instalar\n"
 	@printf "  \033[36mmake list\033[0m          muestra que hay instalado ahora mismo\n"
 	@printf "\n"
@@ -94,7 +102,17 @@ apply:
 	@plasma-apply-colorscheme $(NAME)
 	@plasma-apply-desktoptheme $(NAME)
 	@$(MAKE) --no-print-directory apply-deco
+	@$(MAKE) --no-print-directory apply-kvantum
 	@echo ">> aplicado. El panel NO se ha tocado (eso es: make apply-global)."
+
+apply-kvantum:
+	@if [ -d $(CFG)/Kvantum/$(NAME) ] && command -v kvantummanager >/dev/null; then \
+		kvantummanager --set $(NAME) >/dev/null 2>&1; \
+		$(KWRITE) --file kdeglobals --group KDE --key widgetStyle kvantum; \
+		echo "   estilo de widgets -> kvantum/$(NAME)"; \
+	else \
+		echo "   kvantum -- no instalado, omitido"; \
+	fi
 
 apply-deco:
 	@if [ -z "$(KWRITE)" ]; then echo "!! falta kwriteconfig6 (paquete kconfig-bin)"; exit 1; fi
@@ -114,6 +132,7 @@ revert:
 	@if [ -n "$(KWRITE)" ]; then \
 		$(KWRITE) --file kwinrc --group org.kde.kdecoration2 --key library org.kde.breeze; \
 		$(KWRITE) --file kwinrc --group org.kde.kdecoration2 --key theme Breeze; \
+	$(KWRITE) --file kdeglobals --group KDE --key widgetStyle Breeze; \
 	fi
 	@if [ -n "$(QDBUS)" ]; then $(QDBUS) org.kde.KWin /KWin reconfigure; fi
 	@echo ">> de vuelta en Breeze"
@@ -132,6 +151,14 @@ restore:
 	if [ -z "$$last" ]; then echo "!! no hay backups"; exit 1; fi; \
 	cp $$last/* $(CFG)/ && echo ">> restaurado desde $$last"; \
 	echo "   cierra sesion, o ejecuta: plasmashell --replace &"
+
+# ------------------------------------------------------------------- kvantum
+# Bliss.svg y Bliss.kvconfig son GENERADOS. Para cambiar la paleta, edita las
+# rampas de tools/recolor-kvantum.py y vuelve a ejecutar esto.
+kvantum:
+	@test -d $(KV_DIR) || { echo "!! falta $(KV_DIR) (sudo apt install qt6-style-kvantum)"; exit 1; }
+	@python3 -I tools/recolor-kvantum.py $(KV_DIR)/$(KV_BASE).svg src/kvantum/$(NAME)/$(NAME).svg
+	@python3 -I tools/make-kvconfig.py $(KV_DIR)/$(KV_BASE).kvconfig src/kvantum/$(NAME)/$(NAME).kvconfig
 
 # ----------------------------------------------------------------- validacion
 check:

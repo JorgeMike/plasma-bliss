@@ -25,7 +25,7 @@ un backup automatico antes porque rehace el panel.
     src/color-schemes/Bliss.colors      Paleta Luna para todas las apps Qt
     src/aurorae/Bliss/                  Barra de titulo y botones
     src/plasma/desktoptheme/Bliss/      Barra de tareas y widgets del escritorio
-    src/kvantum/Bliss/                  Interior de las aplicaciones (falta el SVG)
+    src/kvantum/Bliss/                  Interior de las aplicaciones (GENERADO)
     src/icons/Bliss/                    Iconos (hereda de Breeze)
     src/look-and-feel/org.bliss.desktop Meta-paquete que enlaza todo lo anterior
 
@@ -33,8 +33,29 @@ un backup automatico antes porque rehace el panel.
     docs/formats.md    referencia de formatos verificada en este sistema
     docs/roadmap.md    que falta, en orden de impacto
 
-    tools/check-ids.py     valida los IDs de los SVG
-    tools/test-nested.sh   KWin anidado con config aislada para probar sin riesgo
+    tools/check-ids.py        valida los IDs de los SVG
+    tools/test-nested.sh      KWin anidado con config aislada, para probar sin riesgo
+    tools/recolor-kvantum.py  remapea la paleta de un tema Kvantum
+    tools/make-kvconfig.py    genera el kvconfig con la paleta Luna
+
+## El tema Kvantum es generado
+
+`src/kvantum/Bliss/Bliss.svg` y `Bliss.kvconfig` **no se editan a mano**: salen
+de `make kvantum`, que deriva ambos de KvBeige.
+
+KvBeige se eligio como base porque su boton ya tiene la estructura de Luna:
+borde crisp de 1 px, bisel vertical y estado pulsado invertido. Lo unico que
+cambia es el pigmento. Cada color pasa a HSL y su luminosidad indexa una rampa
+de material anclada en dos valores canonicos de XP, `#ACA899` (ButtonShadow) y
+`#ECE9D8` (ButtonFace). Eso conserva el modelado y solo cambia el color.
+
+Una segunda fase reasigna las superficies que no son del material: la fila
+seleccionada es azul Luna y la barra de progreso verde. Sin ella quedarian
+color crema, es decir invisibles.
+
+Para cambiar la paleta, edita las rampas de `tools/recolor-kvantum.py` y
+vuelve a ejecutar `make kvantum`. Ese mismo mecanismo es el que hara barato el
+modo oscuro (ver `docs/roadmap.md`).
 
 ## El concepto que cuesta mas
 
@@ -61,20 +82,26 @@ consola, y `make restore` devuelve la configuracion guardada.
 
 Ya presentes: `plasma-workspace`, `kwin-wayland`, `kconfig-bin`, `python3`.
 
-Para seguir avanzando:
+Instalados: `inkscape`, `qt6-style-kvantum` (con `kvantummanager` y
+`kvantumpreview`).
 
-    sudo apt install inkscape plasma-sdk qt6-style-kvantum
+Pendiente, util pero no bloqueante:
 
-- **inkscape** — editar los SVG. Imprescindible: hay que tocar IDs de objeto
-  a mano constantemente.
-- **plasma-sdk** — `plasmoidviewer`, `lookandfeelexplorer`, `cuttlefish`.
-- **qt6-style-kvantum** — el estilo de widgets de aplicacion.
+    sudo apt install plasma-sdk
+
+Aporta `plasmoidviewer`, `lookandfeelexplorer` y `cuttlefish`.
 
 ## Estado
 
-Fase 0 completada: el esqueleto se instala, Plasma lo reconoce y se puede
-aplicar. El arte es un punto de partida calibrado a ojo, no un calco fiel.
-Ver `docs/roadmap.md`.
+Fases 1 y 2 completadas: la ventana (barra de titulo, nueve botones, estado
+maximizado) y el interior de las aplicaciones Qt. Falta el escritorio — barra
+de tareas e Inicio — y los iconos.
+
+El modo oscuro esta disenado pero no construido: paleta en `docs/palette.md`,
+plan en la fase 4 de `docs/roadmap.md`. Sale barato porque la geometria se
+reutiliza entera.
+
+El arte es un punto de partida calibrado a ojo, no un calco fiel.
 
 ## Licencia
 

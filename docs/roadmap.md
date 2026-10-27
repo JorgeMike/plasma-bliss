@@ -22,9 +22,14 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 
 ## Fase 2 — que las aplicaciones se vean XP
 
-- [ ] `sudo apt install qt6-style-kvantum`
-- [ ] Partir de un tema Kvantum existente y reemplazar su SVG
-- [ ] Botones, pestanas, campos de texto, barras de desplazamiento
+- [x] Kvantum instalado
+- [x] `Bliss.svg` derivado de KvBeige por remapeo de material (`make kvantum`)
+- [x] `Bliss.kvconfig` con la paleta Luna y los colores de texto corregidos
+- [x] Acentos fuera del material: seleccion azul, barra de progreso verde
+- [x] `make apply` activa tambien el estilo de widgets
+- [ ] Radio de esquina: Luna usa ~3 px, KvBeige ~6. Es geometria, no color,
+      asi que toca editar rutas en Inkscape
+- [ ] Barra de progreso segmentada (XP la dibuja a bloques, no continua)
 - [ ] Decidir que hacer con las apps GTK (no obedecen a Kvantum: hacen falta
       un tema GTK aparte y `gtk.css`)
 
@@ -36,7 +41,30 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 - [ ] Reloj y bandeja del sistema
 - [ ] Fondo de pantalla
 
-## Fase 4 — acabado
+## Fase 4 — modo oscuro (Bliss Dark)
+
+XP no tuvo modo oscuro, asi que esto es una interpretacion, no una
+reconstruccion: se apoya en la mitad Frutiger Aero del concepto y la lee como
+cristal de oceano profundo. La paleta completa esta en `palette.md`.
+
+Lo que lo hace barato es que **la geometria no cambia**. Todo el trabajo ya
+hecho — el 9-slice de Aurorae, el contrato de IDs, el recolorizador de
+Kvantum — se reutiliza tal cual. Solo cambia el pigmento.
+
+- [ ] `src/color-schemes/Bliss-Dark.colors` (copia con la paleta oscura)
+- [ ] Aurorae `Bliss-Dark`: mismo `decoration.svg`, otros `<defs>`. Conviene
+      extraer los degradados a un fragmento compartido antes de duplicar
+- [ ] Kvantum: `make kvantum KV_BASE=KvCurves3d` con una RAMP oscura en
+      `tools/recolor-kvantum.py`. KvCurves3d ya se comprobo que es oscuro y
+      tiene la misma cobertura de estados que KvBeige
+- [ ] Plasma style: `panel-background.svg` con el degradado hundido
+- [ ] Segundo look-and-feel `org.bliss.dark.desktop`
+- [ ] `make apply-dark` / `make apply-light` para alternar
+- [ ] Decidir el cambio automatico dia/noche. Plasma no trae un conmutador de
+      tema global por horario; habria que comprobar si merece la pena un
+      script con `plasma-apply-lookandfeel` o dejarlo manual
+
+## Fase 5 — acabado
 
 - [ ] Iconos: forkear Breeze y rehacer solo los 40 visibles a diario
 - [ ] Cursores
