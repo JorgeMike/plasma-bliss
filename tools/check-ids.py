@@ -34,11 +34,13 @@ def need(found, label, required, fmt):
 def main():
     bad = 0
     deco = ids("src/aurorae/Bliss/decoration.svg")
-    for prefix in ("decoration", "decoration-inactive", "mask"):
+    for prefix in ("decoration", "decoration-inactive", "mask",
+                   "decoration-maximized", "decoration-maximized-inactive"):
         bad |= need(deco, f"decoration.svg [{prefix}]", PARTS,
                     lambda p, x=prefix: f"{x}-{p}")
 
-    for btn in ("close", "minimize", "maximize", "restore"):
+    for btn in ("close", "minimize", "maximize", "restore", "alldesktops",
+                "keepabove", "keepbelow", "shade", "help"):
         found = ids(f"src/aurorae/Bliss/{btn}.svg")
         bad |= need(found, f"{btn}.svg",
                     ["active", "hover", "pressed", "inactive"],

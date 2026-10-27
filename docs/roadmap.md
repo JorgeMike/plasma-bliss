@@ -13,10 +13,11 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 
 ## Fase 1 — que la ventana se vea XP
 
+- [x] Prefijos `decoration-maximized` / `-inactive` (sin ellos la barra de
+      titulo desaparece al maximizar)
+- [x] `alldesktops.svg`, `keepabove.svg`, `keepbelow.svg`, `shade.svg`, `help.svg`
+- [x] Documentadas las claves de `Blissrc` que Plasma 6 ya no lee
 - [ ] Afinar los stops del degradado contra una captura real (ver `palette.md`)
-- [ ] `alldesktops.svg`, `keepabove.svg`, `keepbelow.svg`, `shade.svg`, `help.svg`
-- [ ] Prefijo `decoration-maximized`: en XP la ventana maximizada pierde los
-      bordes laterales
 - [ ] Probar con HiDPI: los biseles de 1 px son el punto debil del vectorial
 
 ## Fase 2 — que las aplicaciones se vean XP

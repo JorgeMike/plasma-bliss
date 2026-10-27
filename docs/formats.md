@@ -41,8 +41,9 @@ Cada prefijo necesita las nueve partes:
 | `hover`, `pressed`, `inactive`, `deactivated` | no (cae a `active`) |
 | `hover-inactive`, `pressed-inactive`, `deactivated-inactive` | no |
 
-**`<Nombre>rc`** — dos grupos, `[General]` y `[Layout]`. Las claves que lee el
-plugin (`org.kde.kwin.aurorae.so`):
+**`<Nombre>rc`** — dos grupos, `[General]` y `[Layout]`. Lista exacta de claves
+que el binario `org.kde.kwin.aurorae.so` contiene como cadena, es decir, las
+unicas que puede leer:
 
     [General]  ActiveTextColor InactiveTextColor UseTextShadow
                ActiveTextShadowColor InactiveTextShadowColor
@@ -50,8 +51,7 @@ plugin (`org.kde.kwin.aurorae.so`):
                TitleAlignment TitleVerticalAlignment Animation
                LeftButtons RightButtons
 
-    [Layout]   BorderLeft BorderRight BorderBottom
-               BorderLeftMaximized BorderRightMaximized BorderBottomMaximized
+    [Layout]   BorderTop BorderBottom BorderSize
                TitleHeight TitleEdgeTop TitleEdgeBottom
                TitleEdgeLeft TitleEdgeRight
                TitleEdgeTopMaximized TitleEdgeBottomMaximized
@@ -62,8 +62,44 @@ plugin (`org.kde.kwin.aurorae.so`):
                ButtonWidthMenu ButtonWidthHelp ButtonWidthShade
                ButtonWidthKeepabove ButtonWidthKeepbelow
                ButtonWidthAlldesktops ButtonWidthAppMenu
-               ExplicitButtonSpacer
+               ExplicitButtonSpacer ButtonMarginTopMaximized
                PaddingTop PaddingBottom PaddingLeft PaddingRight
+
+**Claves que NO existen en el binario de 6.3**, aunque medio internet y muchos
+temas de la KDE Store las usen:
+
+    BorderLeft  BorderRight  BorderLeftMaximized  BorderRightMaximized
+    BorderBottomMaximized  BorderTopMaximized
+    LeftButtons  RightButtons  Shadow
+
+Consecuencias practicas:
+
+- El **ancho de los bordes laterales** no lo decide el tema. Sale de
+  Preferencias del sistema > Decoracion de ventanas > Tamano del borde.
+- El **orden de los botones** tampoco. Sale del mismo sitio.
+- Comprobar esto es una linea:
+  `strings /usr/lib/x86_64-linux-gnu/qt6/plugins/org.kde.kdecoration3/org.kde.kwin.aurorae.so | grep -x BorderLeft`
+
+**El boton de menu no necesita `menu.svg`.** `MenuButton.qml` dibuja el icono
+de la aplicacion con `Kirigami.Icon`, no un SVG del tema. Lo mismo
+`AppMenuButton.qml`. Los demas botones si necesitan su archivo: sin el,
+`visible: buttonSvg.imagePath != ""` los oculta.
+
+### La trampa de la ventana maximizada
+
+Si el tema no define el prefijo `decoration-maximized`, `aurorae.qml` hace esto:
+
+    decorationActive.shown:  (!maximized || !supportsMaximized) && ...
+    decorationActive.enabledBorders:  maximized ? NoBorder : Top|Bottom|Left|Right
+
+Es decir, sigue dibujando el marco normal pero con `NoBorder`, y `FrameSvg` con
+`NoBorder` dibuja **solo el elemento `-center`** estirado. Si tu
+`decoration-center` es transparente — que es lo normal, porque ahi va el
+contenido de la ventana — la barra de titulo de una ventana maximizada
+desaparece y queda el texto flotando.
+
+Por eso Bliss define `decoration-maximized` y `decoration-maximized-inactive`,
+con el degradado completo en el `-center`.
 
 El borde superior real es `TitleHeight + TitleEdgeTop + TitleEdgeBottom`.
 En Bliss: 22 + 4 + 4 = **30 px**, la altura de la barra de Luna a 96 dpi.
