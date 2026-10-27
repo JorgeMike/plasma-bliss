@@ -68,6 +68,10 @@ def main():
     bad |= need(dlg, "dialogs/background.svg", PARTS, lambda p: p)
     bad |= need(dlg, "dialogs/background.svg [mask]", PARTS, lambda p: f"mask-{p}")
 
+    tip = ids(f"{plasma}/widgets/tooltip.svg")
+    bad |= need(tip, "tooltip.svg", PARTS, lambda p: p)
+    bad |= need(tip, "tooltip.svg [mask]", PARTS, lambda p: f"mask-{p}")
+
     return bad
 
 

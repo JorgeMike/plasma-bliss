@@ -12,6 +12,11 @@ Wayland.
     make install   # copia a ~/.local/share — no cambia nada visible todavia
     make apply     # activa colores + Plasma style + decoracion de ventana
 
+El boton Inicio verde va aparte, porque Kickoff guarda su icono en la
+configuracion de tu panel y no en el tema:
+
+    make start-button          # y make start-button-revert para deshacerlo
+
 Si cambias un SVG del Plasma style sin cambiar el nombre del tema, Plasma lo
 sirve de cache. Para verlo:
 
@@ -33,6 +38,7 @@ un backup automatico antes porque rehace el panel.
       widgets/panel-background.svg        fondo de la barra de tareas
       widgets/tasks.svg                   botones de ventana
       widgets/listitem.svg                filas con hover y seleccion
+      widgets/tooltip.svg                 el amarillo palido de XP
       dialogs/background.svg              fondo de popups y menu Inicio
       colors                              colores del SHELL (no de las apps)
     src/kvantum/Bliss/                  Interior de las aplicaciones (GENERADO)
@@ -47,6 +53,7 @@ un backup automatico antes porque rehace el panel.
     tools/test-nested.sh      KWin anidado con config aislada, para probar sin riesgo
     tools/recolor-kvantum.py  remapea la paleta de un tema Kvantum
     tools/make-kvconfig.py    genera el kvconfig con la paleta Luna
+    tools/set-start-button.py pone el icono Inicio en el panel del usuario
 
 ## El tema Kvantum es generado
 
@@ -117,8 +124,7 @@ popups, todo el chrome comparte paleta oscura. Detalles en `docs/formats.md`.
 
 Fases 1 a 3 casi completas: la ventana (barra de titulo, nueve botones,
 maximizado), el interior de las aplicaciones Qt y el escritorio (barra de
-tareas, popups, filas de menu). Faltan el boton Inicio verde, el tooltip
-amarillo y los iconos.
+tareas, popups, filas de menu). Falta el fondo de pantalla y los iconos.
 
 El modo oscuro esta disenado pero no construido: paleta en `docs/palette.md`,
 plan en la fase 4 de `docs/roadmap.md`. Sale barato porque la geometria se

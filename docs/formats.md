@@ -178,3 +178,22 @@ El nombre del tema Aurorae va prefijado:
 
 `contents/layouts/org.kde.plasma.desktop-layout.js` solo se ejecuta con
 `plasma-apply-lookandfeel -a` y **rehace el panel del usuario**.
+
+## El boton Inicio no se define en el tema
+
+Kickoff acepta `icon` y `menuLabel`, pero viven en la configuracion del PANEL
+del usuario (`plasma-org.kde.plasma.desktop-appletsrc`), no en el tema global.
+El numero del applet cambia en cada equipo, asi que hay que buscarlo:
+`tools/set-start-button.py` lo localiza por `plugin=org.kde.plasma.kickoff` y
+escribe con `kwriteconfig6`. `make start-button` lo aplica y
+`make start-button-revert` lo deshace.
+
+**El icono se instala en `hicolor`, no solo en el tema Bliss.** El tema de
+iconos activo del usuario no tiene por que ser el del tema global — en este
+equipo es Papirus-Dark — y un icono que solo exista en `icons/Bliss/` no
+resolveria. `hicolor` es el respaldo universal: toda cadena de herencia acaba
+ahi. Se puede comprobar leyendo los `Inherits` de cada `index.theme`:
+
+    Papirus-Dark -> breeze-dark -> hicolor -> breeze
+
+Por eso `make install` copia `bliss-start.svg` a las dos rutas.

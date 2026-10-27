@@ -26,7 +26,7 @@ QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
 
 .DEFAULT_GOAL := help
 .PHONY: help install uninstall apply apply-deco apply-global revert backup restore \
-        kvantum apply-kvantum reload \
+        kvantum apply-kvantum reload start-button start-button-revert \
         check list install-colors install-aurorae install-plasma install-lnf \
         install-icons install-kvantum
 
@@ -41,6 +41,7 @@ help:
 	@printf "  \033[36mmake backup\033[0m        guarda tu config actual en ./backup/\n"
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
 	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
+	@printf "  \033[36mmake start-button\033[0m  pone el icono Inicio verde en tu panel\n"
 	@printf "  \033[36mmake reload\033[0m        reinicia plasmashell para ver los cambios\n"
 	@printf "  \033[36mmake check\033[0m         valida SVG y JSON antes de instalar\n"
 	@printf "  \033[36mmake list\033[0m          muestra que hay instalado ahora mismo\n"
@@ -72,7 +73,13 @@ install-icons:
 	@mkdir -p $(DEST)/icons
 	@cp -r $(SRC)/icons/$(NAME) $(DEST)/icons/
 	-@gtk-update-icon-cache -qtf $(DEST)/icons/$(NAME) 2>/dev/null || true
-	@echo "   iconos       -> $(DEST)/icons/$(NAME)"
+# El icono de Inicio va TAMBIEN a hicolor: el tema de iconos activo del
+# usuario no tiene por que ser Bliss, y hicolor es el respaldo universal
+# al que llega cualquier tema por herencia.
+	@install -Dm644 $(SRC)/icons/$(NAME)/scalable/apps/bliss-start.svg \
+		$(DEST)/icons/hicolor/scalable/apps/bliss-start.svg
+	-@gtk-update-icon-cache -qtf $(DEST)/icons/hicolor 2>/dev/null || true
+	@echo "   iconos       -> $(DEST)/icons/$(NAME) (+ hicolor/bliss-start)"
 
 install-lnf:
 	@rm -rf $(DEST)/plasma/look-and-feel/$(LNF_ID)
@@ -95,6 +102,7 @@ uninstall:
 		$(DEST)/plasma/desktoptheme/$(NAME) \
 		$(DEST)/plasma/look-and-feel/$(LNF_ID) \
 		$(DEST)/icons/$(NAME) \
+		$(DEST)/icons/hicolor/scalable/apps/bliss-start.svg \
 		$(CFG)/Kvantum/$(NAME)
 	@echo ">> desinstalado (la config activa no se ha tocado; usa: make revert)"
 
@@ -160,6 +168,16 @@ kvantum:
 	@test -d $(KV_DIR) || { echo "!! falta $(KV_DIR) (sudo apt install qt6-style-kvantum)"; exit 1; }
 	@python3 -I tools/recolor-kvantum.py $(KV_DIR)/$(KV_BASE).svg src/kvantum/$(NAME)/$(NAME).svg
 	@python3 -I tools/make-kvconfig.py $(KV_DIR)/$(KV_BASE).kvconfig src/kvantum/$(NAME)/$(NAME).kvconfig
+
+# Kickoff guarda su icono en la config del PANEL del usuario, no en el tema,
+# asi que esto toca plasma-org.kde.plasma.desktop-appletsrc. Es reversible.
+start-button:
+	@python3 -I tools/set-start-button.py
+	@$(MAKE) --no-print-directory reload
+
+start-button-revert:
+	@python3 -I tools/set-start-button.py --revert
+	@$(MAKE) --no-print-directory reload
 
 # Plasma cachea el Plasma style: si cambias un SVG sin cambiar el nombre del
 # tema, hay que reiniciar el shell para verlo.

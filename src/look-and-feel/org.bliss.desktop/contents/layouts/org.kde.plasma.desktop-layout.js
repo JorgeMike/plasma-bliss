@@ -14,7 +14,10 @@ panel.height    = 30;
 panel.alignment = "left";
 panel.hiding    = "none";
 
-panel.addWidget("org.kde.plasma.kickoff");          // boton Inicio
+var kickoff = panel.addWidget("org.kde.plasma.kickoff");
+kickoff.currentConfigGroup = ["General"];
+kickoff.writeConfig("icon", "bliss-start");         // src/icons/Bliss/scalable/apps/
+kickoff.writeConfig("menuLabel", "Inicio");
 panel.addWidget("org.kde.plasma.showdesktop");      // "Mostrar escritorio"
 
 var tasks = panel.addWidget("org.kde.plasma.taskmanager");

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss — icono del boton Inicio.
+
+  Es una reinterpretacion, no una copia: el verde glossy y el brillo son los
+  de Luna, pero la marca es una rejilla de ventana blanca monocroma, no la
+  bandera de cuatro colores de Microsoft, que es marca registrada.
+
+  Se usa con el ajuste "icon" de Kickoff. Ver tools/set-start-button.sh
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" version="1.1">
+  <defs>
+    <linearGradient id="verde" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#A8E25A"/>
+      <stop offset="0.12" stop-color="#7ACB33"/>
+      <stop offset="0.52" stop-color="#4EAD18"/>
+      <stop offset="0.88" stop-color="#3C8F10"/>
+      <stop offset="1.00" stop-color="#4E9A1C"/>
+    </linearGradient>
+    <linearGradient id="brillo" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.00"/>
+    </linearGradient>
+  </defs>
+  <rect x="1.5" y="1.5" width="45" height="45" rx="11" ry="11"
+        fill="url(#verde)" stroke="#1D5208" stroke-width="2"/>
+  <rect x="4.5" y="4" width="39" height="17" rx="8" ry="8" fill="url(#brillo)"/>
+  <g fill="#ffffff">
+    <rect x="13.5" y="13.5" width="9" height="9" rx="1.4" ry="1.4"/>
+    <rect x="25.5" y="13.5" width="9" height="9" rx="1.4" ry="1.4"/>
+    <rect x="13.5" y="25.5" width="9" height="9" rx="1.4" ry="1.4"/>
+    <rect x="25.5" y="25.5" width="9" height="9" rx="1.4" ry="1.4"/>
+  </g>
+</svg>
