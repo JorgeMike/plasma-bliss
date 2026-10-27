@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [ { "Name": "Miguel" } ],
+        "Category": "",
+        "Description": "Windows XP Luna meets Frutiger Aero",
+        "EnabledByDefault": true,
+        "Id": "org.bliss.desktop",
+        "License": "GPL v3",
+        "Name": "Bliss",
+        "Version": "0.1.0"
+    }
+}

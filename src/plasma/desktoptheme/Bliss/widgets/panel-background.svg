@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss — widgets/panel-background.svg  (fondo de la barra de tareas)
+
+  Igual que en Aurorae es un 9-slice, pero aqui el prefijo es VACIO:
+  los IDs son  topleft top topright left center right
+               bottomleft bottom bottomright
+  Opcionales:  hint-tile-center       (repetir en vez de estirar)
+               hint-{top,bottom,left,right}-margin  (margenes de contenido)
+               mask-*                 (region opaca)
+               current-color-scheme   (NO lo usamos: el azul Luna es fijo)
+
+  Rejilla: columnas 0-2 | 2-22 | 22-24 · filas 0-3 | 8-28 | 33-35
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" viewBox="0 0 30 35" version="1.1">
+  <defs>
+    <linearGradient id="g-taskbar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#3C81F3"/>
+      <stop offset="0.10" stop-color="#2C6BE0"/>
+      <stop offset="0.45" stop-color="#1F57CE"/>
+      <stop offset="0.88" stop-color="#215CD4"/>
+      <stop offset="1.00" stop-color="#3A7FEE"/>
+    </linearGradient>
+    <linearGradient id="g-topline" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#1A3F9E"/>
+      <stop offset="0.34" stop-color="#4C8BF5"/>
+      <stop offset="1.00" stop-color="#2E6FE0"/>
+    </linearGradient>
+  </defs>
+
+  <rect id="topleft"     x="0"  y="0"  width="2"  height="3"  fill="url(#g-topline)"/>
+  <rect id="top"         x="2"  y="0"  width="20" height="3"  fill="url(#g-topline)"/>
+  <rect id="topright"    x="22" y="0"  width="2"  height="3"  fill="url(#g-topline)"/>
+
+  <rect id="left"        x="0"  y="8"  width="2"  height="20" fill="url(#g-taskbar)"/>
+  <rect id="center"      x="2"  y="8"  width="20" height="20" fill="url(#g-taskbar)"/>
+  <rect id="right"       x="22" y="8"  width="2"  height="20" fill="url(#g-taskbar)"/>
+
+  <rect id="bottomleft"  x="0"  y="33" width="2"  height="2"  fill="#1B4FBE"/>
+  <rect id="bottom"      x="2"  y="33" width="20" height="2"  fill="#1B4FBE"/>
+  <rect id="bottomright" x="22" y="33" width="2"  height="2"  fill="#1B4FBE"/>
+
+  <!-- Margenes de contenido: el TAMANO del rect es lo que cuenta, no su posicion -->
+  <rect id="hint-top-margin"    x="26" y="0"  width="1" height="3" fill="none"/>
+  <rect id="hint-bottom-margin" x="26" y="5"  width="1" height="2" fill="none"/>
+  <rect id="hint-left-margin"   x="26" y="9"  width="2" height="1" fill="none"/>
+  <rect id="hint-right-margin"  x="26" y="12" width="2" height="1" fill="none"/>
+</svg>

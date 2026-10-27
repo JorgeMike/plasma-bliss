@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss — minimize.svg
+  Boton de decoracion Aurorae. KSvg::FrameSvg busca estos prefijos de ID:
+    active-center    (obligatorio)   hover-center     pressed-center
+    inactive-center  (ventana sin foco)
+  Opcionales: deactivated-center, hover-inactive-center, pressed-inactive-center.
+  Si un prefijo falta, Aurorae reutiliza "active". El ancho debe coincidir con
+  ButtonWidth de Blissrc.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="21" height="96" viewBox="0 0 21 96" version="1.1">
+  <defs>
+    <linearGradient id="g-active" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7FBCFC"/>
+      <stop offset="1" stop-color="#0E55C8"/>
+    </linearGradient>
+    <linearGradient id="g-hover" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#A5D3FE"/>
+      <stop offset="1" stop-color="#2A72E0"/>
+    </linearGradient>
+    <linearGradient id="g-pressed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0B49AE"/>
+      <stop offset="1" stop-color="#4C8FE8"/>
+    </linearGradient>
+    <linearGradient id="g-inactive" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#BBD2F0"/>
+      <stop offset="1" stop-color="#8AA8DC"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.00"/>
+    </linearGradient>
+  </defs>
+  <g id="active-center">
+    <rect x="0.5" y="0.5" width="20" height="20" rx="3" fill="url(#g-active)" stroke="#0A3F96" stroke-width="1"/>
+    <rect x="2" y="2" width="17" height="8" rx="2" fill="url(#gloss)"/>
+    <rect x="6" y="13" width="9" height="3" fill="#ffffff"/>
+  </g>
+  <g id="hover-center">
+    <rect x="0.5" y="25.5" width="20" height="20" rx="3" fill="url(#g-hover)" stroke="#0A3F96" stroke-width="1"/>
+    <rect x="2" y="27" width="17" height="8" rx="2" fill="url(#gloss)"/>
+    <rect x="6" y="38" width="9" height="3" fill="#ffffff"/>
+  </g>
+  <g id="pressed-center">
+    <rect x="0.5" y="50.5" width="20" height="20" rx="3" fill="url(#g-pressed)" stroke="#083573" stroke-width="1"/>
+    <rect x="2" y="52" width="17" height="8" rx="2" fill="url(#gloss)"/>
+    <rect x="6" y="63" width="9" height="3" fill="#ffffff"/>
+  </g>
+  <g id="inactive-center">
+    <rect x="0.5" y="75.5" width="20" height="20" rx="3" fill="url(#g-inactive)" stroke="#7B95C8" stroke-width="1"/>
+    <rect x="2" y="77" width="17" height="8" rx="2" fill="url(#gloss)"/>
+    <rect x="6" y="88" width="9" height="3" fill="#EDF3FD"/>
+  </g>
+</svg>

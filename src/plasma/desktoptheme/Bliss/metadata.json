@@ -1,0 +1,14 @@
+{
+    "KPackageStructure": "Plasma/Theme",
+    "KPlugin": {
+        "Authors": [ { "Name": "Miguel" } ],
+        "Category": "",
+        "Description": "XP Luna taskbar with Frutiger Aero glass",
+        "EnabledByDefault": true,
+        "Id": "Bliss",
+        "License": "GPL v3",
+        "Name": "Bliss",
+        "Version": "0.1.0"
+    },
+    "X-Plasma-API": "5.0"
+}

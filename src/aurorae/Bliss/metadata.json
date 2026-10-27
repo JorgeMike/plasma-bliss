@@ -1,0 +1,18 @@
+{
+    "KPackageStructure": "aurorae",
+    "KPlugin": {
+        "Authors": [
+            { "Name": "Miguel" }
+        ],
+        "Category": "Plasma 6 Window Decorations",
+        "Description": "Luna-style titlebar with a Frutiger Aero gloss",
+        "EnabledByDefault": true,
+        "Id": "Bliss",
+        "License": "GPL v3",
+        "Name": "Bliss",
+        "ServiceTypes": [ "aurorae" ],
+        "Version": "0.1.0",
+        "X-KDE-PluginInfo-blur": false,
+        "X-KPackage-Dependencies": []
+    }
+}

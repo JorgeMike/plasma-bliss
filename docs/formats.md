@@ -1,0 +1,110 @@
+# Referencia de formatos (verificada en este sistema)
+
+Plasma 6.3.6 · KF6 · Debian 13. Todo lo de aqui esta leido de los binarios y
+del QML instalados, no de documentacion de internet que puede ir por detras.
+
+## Donde vive cada cosa
+
+| Componente | Destino | Tipo de kpackagetool6 |
+|---|---|---|
+| Esquema de color | `~/.local/share/color-schemes/X.colors` | — (archivo suelto) |
+| Decoracion | `~/.local/share/aurorae/themes/X/` | `KWin/Aurorae` |
+| Plasma style | `~/.local/share/plasma/desktoptheme/X/` | `Plasma/Theme` |
+| Tema global | `~/.local/share/plasma/look-and-feel/ID/` | `Plasma/LookAndFeel` |
+| Iconos | `~/.local/share/icons/X/` | — |
+| Kvantum | `~/.config/Kvantum/X/` | — |
+
+## Aurorae
+
+Ground truth: `/usr/share/kwin/aurorae/aurorae.qml` y `AuroraeButton.qml`.
+
+**`decoration.svg`** — prefijos de `KSvg::FrameSvg`:
+
+| Prefijo | Obligatorio | Para que |
+|---|---|---|
+| `decoration` | si | ventana activa |
+| `decoration-inactive` | no | ventana sin foco |
+| `decoration-maximized` | no | maximizada (borde superior solo) |
+| `decoration-maximized-inactive` | no | |
+| `innerborder`, `innerborder-inactive` | no | linea interior |
+| `mask` | no | region opaca; sin el, esquinas cuadradas |
+
+Cada prefijo necesita las nueve partes:
+`-topleft -top -topright -left -center -right -bottomleft -bottom -bottomright`
+
+**Botones** (`close.svg`, `minimize.svg`, `maximize.svg`, `restore.svg`,
+`alldesktops.svg`, `keepabove.svg`, `keepbelow.svg`, `shade.svg`, `help.svg`):
+
+| Prefijo | Obligatorio |
+|---|---|
+| `active` | si |
+| `hover`, `pressed`, `inactive`, `deactivated` | no (cae a `active`) |
+| `hover-inactive`, `pressed-inactive`, `deactivated-inactive` | no |
+
+**`<Nombre>rc`** — dos grupos, `[General]` y `[Layout]`. Las claves que lee el
+plugin (`org.kde.kwin.aurorae.so`):
+
+    [General]  ActiveTextColor InactiveTextColor UseTextShadow
+               ActiveTextShadowColor InactiveTextShadowColor
+               TextShadowOffsetX TextShadowOffsetY
+               TitleAlignment TitleVerticalAlignment Animation
+               LeftButtons RightButtons
+
+    [Layout]   BorderLeft BorderRight BorderBottom
+               BorderLeftMaximized BorderRightMaximized BorderBottomMaximized
+               TitleHeight TitleEdgeTop TitleEdgeBottom
+               TitleEdgeLeft TitleEdgeRight
+               TitleEdgeTopMaximized TitleEdgeBottomMaximized
+               TitleEdgeLeftMaximized TitleEdgeRightMaximized
+               TitleBorderLeft TitleBorderRight
+               ButtonWidth ButtonHeight ButtonSpacing ButtonMarginTop
+               ButtonWidthClose ButtonWidthMinimize ButtonWidthMaximizeRestore
+               ButtonWidthMenu ButtonWidthHelp ButtonWidthShade
+               ButtonWidthKeepabove ButtonWidthKeepbelow
+               ButtonWidthAlldesktops ButtonWidthAppMenu
+               ExplicitButtonSpacer
+               PaddingTop PaddingBottom PaddingLeft PaddingRight
+
+El borde superior real es `TitleHeight + TitleEdgeTop + TitleEdgeBottom`.
+En Bliss: 22 + 4 + 4 = **30 px**, la altura de la barra de Luna a 96 dpi.
+`Padding*` es espacio para la sombra dibujada por el tema (Bliss usa 0: en
+Wayland la sombra la pone KWin).
+
+**Letras de botones** en `LeftButtons`/`RightButtons`:
+`M` menu · `S` pegajosa (todos los escritorios) · `H` ayuda · `I` minimizar ·
+`A` maximizar · `X` cerrar · `F` mantener encima · `B` mantener debajo ·
+`L` enrollar · `_` espaciador
+
+## Plasma style
+
+Igual, pero **sin prefijo**: los IDs son `topleft`, `top`, `center`, …
+Extras opcionales:
+
+- `hint-tile-center` — repite el centro en vez de estirarlo
+- `hint-{top,bottom,left,right}-margin` — margenes de contenido; cuenta el
+  TAMANO del rect, no su posicion
+- `hint-{top,bottom,left,right}-inset`
+- `hint-stretch-borders`, `hint-no-border-padding`
+- `current-color-scheme` — bloque `<style>` que Plasma reescribe en caliente
+  para seguir los colores del usuario. **Bliss no lo usa** a proposito: el azul
+  de Luna es fijo, no debe seguir al esquema.
+
+Acepta `.svg` y `.svgz` (gzip). Usa `.svg` mientras desarrollas.
+
+Para inspeccionar el tema del sistema:
+
+    zcat /usr/share/plasma/desktoptheme/default/widgets/button.svgz
+
+## Tema global (look-and-feel)
+
+`contents/defaults` enlaza todos los componentes. **Trampa verificada:** el
+grupo sigue llamandose `org.kde.kdecoration2` aunque Plasma 6 use
+KDecoration**3** por dentro. Si lo "corriges" a `kdecoration3`, deja de
+funcionar. Comprobado contra el `defaults` de Breeze del sistema.
+
+El nombre del tema Aurorae va prefijado:
+
+    theme=__aurorae__svg__Bliss
+
+`contents/layouts/org.kde.plasma.desktop-layout.js` solo se ejecuta con
+`plasma-apply-lookandfeel -a` y **rehace el panel del usuario**.

@@ -1,0 +1,99 @@
+# Bliss — estilo de widgets de aplicacion (Kvantum)
+#
+# Esto NO lo pinta el Plasma style: Kvantum sustituye a Breeze dentro de
+# Dolphin, Kate, Konsole, etc. Pareja obligatoria: Bliss.kvconfig + Bliss.svg
+#
+# Instalar:  ~/.config/Kvantum/Bliss/
+# Aplicar:   kvantummanager --set Bliss   (y widgetStyle=kvantum en kdeglobals)
+#
+# Para empezar de verdad, copia un tema que ya funcione y edita su SVG:
+#   cp -r /usr/share/Kvantum/KvArc ~/Proyectos/plasma-bliss/src/kvantum/Bliss
+# Documentacion del formato: https://github.com/tsujan/Kvantum
+
+[%General]
+author=Miguel
+comment=Windows XP Luna x Frutiger Aero
+x11drag=all
+alt_mnemonic=true
+left_tabs=true
+attach_active_tab=false
+mirror_doc_tabs=true
+group_toolbar_buttons=false
+spread_progressbar=true
+composite=true
+menu_shadow_depth=5
+tooltip_shadow_depth=0
+splitter_width=4
+scroll_width=14
+scroll_arrows=true
+scroll_min_extent=36
+slider_width=4
+slider_handle_width=16
+slider_handle_length=16
+tickless_slider_handle_size=16
+center_toolbar_handle=true
+check_size=13
+textless_progressbar=false
+progressbar_thickness=12
+menubar_mouse_tracking=true
+toolbutton_style=1
+click_behavior=0
+translucent_windows=false
+blurring=false
+popup_blurring=false
+vertical_spin_indicators=false
+spin_button_width=16
+fill_rubberband=false
+merge_menubar_with_toolbar=true
+small_icon_size=16
+large_icon_size=32
+button_icon_size=16
+toolbar_icon_size=22
+combo_as_lineedit=true
+animate_states=false
+button_contents_shift=true
+combo_menu=false
+hide_combo_checkboxes=false
+combo_focus_rect=true
+groupbox_top_label=true
+inline_spin_indicators=true
+joined_inactive_tabs=true
+
+[GeneralColors]
+window.color=#ECE9D8
+base.color=#FFFFFF
+alt.base.color=#F4F3EB
+button.color=#ECE9D8
+light.color=#FFFFFF
+mid.light.color=#F0EEE4
+dark.color=#716F64
+mid.color=#ACA899
+highlight.color=#316AC5
+inactive.highlight.color=#7A96DF
+text.color=#000000
+window.text.color=#000000
+button.text.color=#000000
+disabled.text.color=#ACA899
+tooltip.text.color=#000000
+highlight.text.color=#FFFFFF
+link.color=#0066CC
+link.visited.color=#551A8B
+progress.indicator.text.color=#FFFFFF
+
+[Hacks]
+transparent_dolphin_view=false
+transparent_pcmanfm_sidepane=false
+blur_translucent=false
+transparent_menutitle=true
+respect_darkness=false
+kcapacitybar_as_progressbar=true
+force_size_grip=true
+iconless_pushbutton=false
+iconless_menu=false
+disabled_icon_opacity=50
+lxqtmainmenu_iconsize=22
+normal_default_pushbutton=true
+single_top_toolbar=true
+tint_on_mouseover=0
+no_selection_tint=false
+transparent_ktitle_label=false

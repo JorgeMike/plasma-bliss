@@ -1,0 +1,15 @@
+[Wallpaper]
+defaultWallpaperTheme=Next
+defaultFileSuffix=.png
+defaultWidth=1920
+defaultHeight=1080
+
+# El desenfoque "cristal" de Frutiger Aero lo produce el efecto Blur de KWin,
+# no este tema. Aqui solo se ajusta el contraste del fondo translucido.
+[ContrastEffect]
+enabled=true
+contrast=0.25
+saturation=1.3
+
+[AdaptiveTransparency]
+enabled=false

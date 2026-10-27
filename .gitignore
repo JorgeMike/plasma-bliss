@@ -1,0 +1,7 @@
+*.kate-swp
+*~
+.directory
+build/
+dist/
+*.tar.gz
+backup/
