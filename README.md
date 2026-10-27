@@ -12,6 +12,11 @@ Wayland.
     make install   # copia a ~/.local/share — no cambia nada visible todavia
     make apply     # activa colores + Plasma style + decoracion de ventana
 
+Si cambias un SVG del Plasma style sin cambiar el nombre del tema, Plasma lo
+sirve de cache. Para verlo:
+
+    make reload
+
 Para volver atras, en cualquier momento:
 
     make revert
@@ -24,7 +29,12 @@ un backup automatico antes porque rehace el panel.
 
     src/color-schemes/Bliss.colors      Paleta Luna para todas las apps Qt
     src/aurorae/Bliss/                  Barra de titulo y botones
-    src/plasma/desktoptheme/Bliss/      Barra de tareas y widgets del escritorio
+    src/plasma/desktoptheme/Bliss/      Shell de Plasma: barra, popups, filas
+      widgets/panel-background.svg        fondo de la barra de tareas
+      widgets/tasks.svg                   botones de ventana
+      widgets/listitem.svg                filas con hover y seleccion
+      dialogs/background.svg              fondo de popups y menu Inicio
+      colors                              colores del SHELL (no de las apps)
     src/kvantum/Bliss/                  Interior de las aplicaciones (GENERADO)
     src/icons/Bliss/                    Iconos (hereda de Breeze)
     src/look-and-feel/org.bliss.desktop Meta-paquete que enlaza todo lo anterior
@@ -91,11 +101,24 @@ Pendiente, util pero no bloqueante:
 
 Aporta `plasmoidviewer`, `lookandfeelexplorer` y `cuttlefish`.
 
+## Dos archivos de color que no son el mismo
+
+Esto se presta a confusion y cuesta una tarde:
+
+    src/color-schemes/Bliss.colors          -> las aplicaciones Qt. CLARO.
+    src/plasma/.../Bliss/colors             -> el shell de Plasma. OSCURO.
+
+El contenido del panel se pinta con `[Colors:Window]` del **Plasma style**. Si
+ahi pones el esquema claro, los iconos de la bandeja salen negros sobre la
+barra azul. Y como Plasma no deja dar colores distintos al panel y a los
+popups, todo el chrome comparte paleta oscura. Detalles en `docs/formats.md`.
+
 ## Estado
 
-Fases 1 y 2 completadas: la ventana (barra de titulo, nueve botones, estado
-maximizado) y el interior de las aplicaciones Qt. Falta el escritorio — barra
-de tareas e Inicio — y los iconos.
+Fases 1 a 3 casi completas: la ventana (barra de titulo, nueve botones,
+maximizado), el interior de las aplicaciones Qt y el escritorio (barra de
+tareas, popups, filas de menu). Faltan el boton Inicio verde, el tooltip
+amarillo y los iconos.
 
 El modo oscuro esta disenado pero no construido: paleta en `docs/palette.md`,
 plan en la fase 4 de `docs/roadmap.md`. Sale barato porque la geometria se

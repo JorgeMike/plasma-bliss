@@ -26,7 +26,7 @@ QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
 
 .DEFAULT_GOAL := help
 .PHONY: help install uninstall apply apply-deco apply-global revert backup restore \
-        kvantum apply-kvantum \
+        kvantum apply-kvantum reload \
         check list install-colors install-aurorae install-plasma install-lnf \
         install-icons install-kvantum
 
@@ -41,6 +41,7 @@ help:
 	@printf "  \033[36mmake backup\033[0m        guarda tu config actual en ./backup/\n"
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
 	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
+	@printf "  \033[36mmake reload\033[0m        reinicia plasmashell para ver los cambios\n"
 	@printf "  \033[36mmake check\033[0m         valida SVG y JSON antes de instalar\n"
 	@printf "  \033[36mmake list\033[0m          muestra que hay instalado ahora mismo\n"
 	@printf "\n"
@@ -159,6 +160,18 @@ kvantum:
 	@test -d $(KV_DIR) || { echo "!! falta $(KV_DIR) (sudo apt install qt6-style-kvantum)"; exit 1; }
 	@python3 -I tools/recolor-kvantum.py $(KV_DIR)/$(KV_BASE).svg src/kvantum/$(NAME)/$(NAME).svg
 	@python3 -I tools/make-kvconfig.py $(KV_DIR)/$(KV_BASE).kvconfig src/kvantum/$(NAME)/$(NAME).kvconfig
+
+# Plasma cachea el Plasma style: si cambias un SVG sin cambiar el nombre del
+# tema, hay que reiniciar el shell para verlo.
+reload:
+	@rm -rf $(HOME)/.cache/plasma-svgelements* $(HOME)/.cache/plasma_theme_$(NAME)* 2>/dev/null || true
+	@if systemctl --user is-active --quiet plasma-plasmashell; then \
+		systemctl --user restart plasma-plasmashell; \
+		echo ">> plasmashell reiniciado"; \
+	else \
+		(plasmashell --replace >/dev/null 2>&1 &); \
+		echo ">> plasmashell relanzado"; \
+	fi
 
 # ----------------------------------------------------------------- validacion
 check:

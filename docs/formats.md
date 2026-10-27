@@ -127,6 +127,40 @@ Extras opcionales:
 
 Acepta `.svg` y `.svgz` (gzip). Usa `.svg` mientras desarrollas.
 
+### El archivo `colors` del Plasma style no es el esquema de las aplicaciones
+
+Son dos cosas distintas y confundirlas tiene un sintoma muy concreto:
+
+| Archivo | Tiñe |
+|---|---|
+| `~/.local/share/color-schemes/X.colors` | las aplicaciones Qt |
+| `<desktoptheme>/X/colors` | el shell de Plasma: panel, popups, widgets |
+
+El contenido del panel — texto del reloj, iconos monocromos de la bandeja — se
+pinta con **`[Colors:Window] ForegroundNormal` del Plasma style**. Copiar ahi
+el esquema claro de las aplicaciones deja los iconos negros sobre la barra
+azul. Se puede verificar en el tema del sistema: `breeze-light/colors` tiene
+Window en 35,38,41 (oscuro, panel claro) y `breeze-dark/colors` en 252,252,252.
+
+**Plasma no permite dar un grupo de color distinto al panel y a los popups.**
+Se comprobo: el unico sitio que usa `Complementary` es la pantalla de bloqueo
+(`LockScreenUi.qml`), y ni el contenedor del panel ni Kickoff fijan
+`Kirigami.Theme.colorSet`. El reloj usa `Kirigami.Theme.textColor` con el
+grupo por defecto, y su calendario emergente fija explicitamente `Window`, el
+mismo del panel. O todo el chrome es claro, o todo oscuro.
+
+### Prefijos de `widgets/tasks.svg`
+
+`normal`, `hover`, `focus` (ventana activa), `minimized`, `attention`,
+`launcher-hover`. **No hacen falta las variantes `north-`/`east-`/`west-`**:
+`taskPrefix()` de
+`plasmoids/org.kde.plasma.taskmanager/contents/ui/code/tools.js` devuelve
+`["south-<p>", "<p>"]` y `FrameSvgItem` usa el primero que exista, asi que el
+prefijo sin direccion sirve para los cuatro bordes.
+
+El prefijo **vacio** es el fondo de los lanzadores en reposo. Omitirlo los
+deja sin marco, que es justo el aspecto del inicio rapido de XP.
+
 Para inspeccionar el tema del sistema:
 
     zcat /usr/share/plasma/desktoptheme/default/widgets/button.svgz

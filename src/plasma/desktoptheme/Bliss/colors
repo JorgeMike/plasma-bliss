@@ -1,12 +1,18 @@
-# Bliss — Windows XP "Luna Blue" x Frutiger Aero
-# SPDX-License-Identifier: GPL-3.0-or-later
+# Colores del PLASMA STYLE — ojo, no es el esquema de las aplicaciones.
 #
-# Base Luna (XP):   face #ECE9D8 · highlight #316AC5 · title #0054E3 -> #3D95FF
-# Acento Aero:      hover aqua #4FC3F7 · positive leaf #5CB82E
-# Los valores son R,G,B en decimal. Ver docs/palette.md.
+# Este archivo solo tiñe el shell de Plasma: panel, popups, widgets del
+# escritorio. Las aplicaciones usan src/color-schemes/Bliss.colors, que es
+# claro. Son dos archivos distintos y NO deben ser iguales: al principio copie
+# aqui el esquema claro y los iconos del panel salian negros sobre azul.
+#
+# El contenido del panel se pinta con [Colors:Window] ForegroundNormal. Plasma
+# no ofrece forma de dar un grupo de color distinto al panel y a los popups
+# (se comprobo: solo la pantalla de bloqueo usa Complementary), asi que todo
+# el chrome va oscuro de forma coherente. El menu Inicio claro de XP exigiria
+# un plasmoide propio; esta anotado en docs/roadmap.md.
 
 [ColorEffects:Disabled]
-Color=172,168,153
+Color=122,150,223
 ColorAmount=0
 ColorEffect=0
 ContrastAmount=0.65
@@ -26,23 +32,23 @@ IntensityAmount=0
 IntensityEffect=0
 
 [Colors:Button]
-BackgroundAlternate=222,219,203
-BackgroundNormal=236,233,216
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
-ForegroundActive=0,84,227
-ForegroundInactive=122,118,104
-ForegroundLink=0,102,204
-ForegroundNegative=212,58,47
-ForegroundNeutral=240,163,10
-ForegroundNormal=0,0,0
-ForegroundPositive=92,184,46
-ForegroundVisited=85,26,139
+BackgroundAlternate=36,82,158
+BackgroundNormal=46,95,168
+DecorationFocus=91,155,248
+DecorationHover=129,212,250
+ForegroundActive=129,212,250
+ForegroundInactive=186,210,245
+ForegroundLink=129,212,250
+ForegroundNegative=255,138,128
+ForegroundNeutral=255,204,102
+ForegroundNormal=255,255,255
+ForegroundPositive=156,224,112
+ForegroundVisited=197,160,224
 
 [Colors:Complementary]
-BackgroundAlternate=8,52,120
-BackgroundNormal=10,62,140
-DecorationFocus=79,195,247
+BackgroundAlternate=11,38,85
+BackgroundNormal=14,46,99
+DecorationFocus=91,155,248
 DecorationHover=129,212,250
 ForegroundActive=129,212,250
 ForegroundInactive=166,202,240
@@ -54,47 +60,35 @@ ForegroundPositive=156,224,112
 ForegroundVisited=197,160,224
 
 [Colors:Header]
-BackgroundAlternate=232,229,215
-BackgroundNormal=240,238,228
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
-ForegroundActive=0,84,227
-ForegroundInactive=122,118,104
-ForegroundLink=0,102,204
-ForegroundNegative=212,58,47
-ForegroundNeutral=240,163,10
-ForegroundNormal=0,0,0
-ForegroundPositive=92,184,46
-ForegroundVisited=85,26,139
-
-[Colors:Header][Inactive]
-BackgroundAlternate=228,225,211
-BackgroundNormal=236,233,216
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
-ForegroundActive=0,84,227
-ForegroundInactive=140,136,122
-ForegroundLink=0,102,204
-ForegroundNegative=212,58,47
-ForegroundNeutral=240,163,10
-ForegroundNormal=40,40,36
-ForegroundPositive=92,184,46
-ForegroundVisited=85,26,139
+BackgroundAlternate=36,82,158
+BackgroundNormal=42,95,196
+DecorationFocus=91,155,248
+DecorationHover=129,212,250
+ForegroundActive=129,212,250
+ForegroundInactive=186,210,245
+ForegroundLink=129,212,250
+ForegroundNegative=255,138,128
+ForegroundNeutral=255,204,102
+ForegroundNormal=255,255,255
+ForegroundPositive=156,224,112
+ForegroundVisited=197,160,224
 
 [Colors:Selection]
-BackgroundAlternate=0,84,227
-BackgroundNormal=49,106,197
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
+BackgroundAlternate=74,140,232
+BackgroundNormal=91,155,248
+DecorationFocus=91,155,248
+DecorationHover=129,212,250
 ForegroundActive=255,255,255
-ForegroundInactive=214,226,245
-ForegroundLink=170,215,255
+ForegroundInactive=225,235,250
+ForegroundLink=255,255,255
 ForegroundNegative=255,186,180
 ForegroundNeutral=255,220,150
 ForegroundNormal=255,255,255
 ForegroundPositive=190,240,160
-ForegroundVisited=220,190,245
+ForegroundVisited=230,210,250
 
+# Los tooltips conservan el amarillo palido de XP con texto negro: su fondo
+# viene de widgets/tooltip.svg, que todavia se hereda de Breeze (claro).
 [Colors:Tooltip]
 BackgroundAlternate=255,255,225
 BackgroundNormal=255,255,225
@@ -110,36 +104,36 @@ ForegroundPositive=92,184,46
 ForegroundVisited=85,26,139
 
 [Colors:View]
-BackgroundAlternate=244,243,235
-BackgroundNormal=255,255,255
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
-ForegroundActive=0,84,227
-ForegroundInactive=122,118,104
-ForegroundLink=0,102,204
-ForegroundNegative=212,58,47
-ForegroundNeutral=240,163,10
-ForegroundNormal=0,0,0
-ForegroundPositive=92,184,46
-ForegroundVisited=85,26,139
+BackgroundAlternate=24,58,112
+BackgroundNormal=28,63,122
+DecorationFocus=91,155,248
+DecorationHover=129,212,250
+ForegroundActive=129,212,250
+ForegroundInactive=186,210,245
+ForegroundLink=129,212,250
+ForegroundNegative=255,138,128
+ForegroundNeutral=255,204,102
+ForegroundNormal=255,255,255
+ForegroundPositive=156,224,112
+ForegroundVisited=197,160,224
 
 [Colors:Window]
-BackgroundAlternate=222,219,203
-BackgroundNormal=236,233,216
-DecorationFocus=0,84,227
-DecorationHover=79,195,247
-ForegroundActive=0,84,227
-ForegroundInactive=122,118,104
-ForegroundLink=0,102,204
-ForegroundNegative=212,58,47
-ForegroundNeutral=240,163,10
-ForegroundNormal=0,0,0
-ForegroundPositive=92,184,46
-ForegroundVisited=85,26,139
+BackgroundAlternate=31,70,135
+BackgroundNormal=36,82,158
+DecorationFocus=91,155,248
+DecorationHover=129,212,250
+ForegroundActive=129,212,250
+ForegroundInactive=186,210,245
+ForegroundLink=129,212,250
+ForegroundNegative=255,138,128
+ForegroundNeutral=255,204,102
+ForegroundNormal=255,255,255
+ForegroundPositive=156,224,112
+ForegroundVisited=197,160,224
 
 [General]
-ColorScheme=Bliss
-Name=Bliss
+ColorScheme=BlissShell
+Name=Bliss Shell
 shadeSortColumn=true
 
 [KDE]

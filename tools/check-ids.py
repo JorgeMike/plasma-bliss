@@ -46,8 +46,27 @@ def main():
                     ["active", "hover", "pressed", "inactive"],
                     lambda s: f"{s}-center")
 
-    panel = ids("src/plasma/desktoptheme/Bliss/widgets/panel-background.svg")
+    plasma = "src/plasma/desktoptheme/Bliss"
+    panel = ids(f"{plasma}/widgets/panel-background.svg")
     bad |= need(panel, "panel-background.svg", PARTS, lambda p: p)
+
+    # tasks.svg: taskPrefix() de tools.js devuelve ["south-<p>", "<p>"], asi que
+    # el prefijo sin direccion cubre los cuatro bordes del panel.
+    tasks = ids(f"{plasma}/widgets/tasks.svg")
+    for prefix in ("normal", "hover", "focus", "minimized", "attention",
+                   "launcher-hover"):
+        bad |= need(tasks, f"tasks.svg [{prefix}]", PARTS,
+                    lambda p, x=prefix: f"{x}-{p}")
+
+    item = ids(f"{plasma}/widgets/listitem.svg")
+    for prefix in ("normal", "hover", "pressed", "section", "separator"):
+        bad |= need(item, f"listitem.svg [{prefix}]", PARTS,
+                    lambda p, x=prefix: f"{x}-{p}")
+
+    # dialogs/background.svg usa prefijo VACIO, mas "mask" para las esquinas
+    dlg = ids(f"{plasma}/dialogs/background.svg")
+    bad |= need(dlg, "dialogs/background.svg", PARTS, lambda p: p)
+    bad |= need(dlg, "dialogs/background.svg [mask]", PARTS, lambda p: f"mask-{p}")
 
     return bad
 

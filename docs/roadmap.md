@@ -35,11 +35,27 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 
 ## Fase 3 — el escritorio
 
-- [ ] `tasks.svg` — los botones de ventana en la barra de tareas
-- [ ] `background.svg` + `listitem.svg` — el menu Inicio
+- [x] `colors` del Plasma style separado del esquema de aplicaciones. Eran el
+      mismo archivo y los iconos de la bandeja salian negros sobre el azul
+- [x] `widgets/tasks.svg` — botones de ventana, cinco estados
+- [x] `dialogs/background.svg` — fondo de popups y del menu Inicio
+- [x] `widgets/listitem.svg` — filas con hover y seleccion
 - [ ] Boton Inicio verde: un plasmoide propio, o `kickoff` con un icono a medida
-- [ ] Reloj y bandeja del sistema
+- [ ] `widgets/tooltip.svg` — el amarillo palido de XP (ahora hereda Breeze)
 - [ ] Fondo de pantalla
+
+### Pendiente de decidir: el menu Inicio claro
+
+XP tiene la barra oscura y el menu Inicio claro. Plasma no lo permite desde el
+tema: panel y popups comparten `[Colors:Window]` (ver `formats.md`). Ahora
+mismo todo el chrome va azul oscuro, que es coherente y legible pero no es XP.
+
+Las salidas, de menos a mas trabajo:
+
+1. Aceptarlo. Un menu Inicio azul oscuro con texto blanco no desentona.
+2. Un plasmoide de menu propio que fije sus colores sin depender del tema.
+   Es QML de verdad, no SVG.
+3. Sustituir Kickoff por otro menu que ya permita tematizarse aparte.
 
 ## Fase 4 — modo oscuro (Bliss Dark)
 
