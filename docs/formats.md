@@ -223,3 +223,57 @@ lo contrario de lo que necesita el panel.
 El SVG de Breeze usa las clases `ColorScheme-Background` y `ColorScheme-Text`,
 asi que Plasma lo recolorea en caliente con el grupo activo. Bliss hardcodea
 los colores a proposito y no incluye `current-color-scheme`.
+
+## Fondo de pantalla
+
+Un fondo "de tema" no es un archivo suelto: es un paquete KPackage del tipo
+`Wallpaper/Images`, que vive en `~/.local/share/wallpapers/<Id>/`.
+
+```
+Bliss/
+  metadata.json              KPlugin.Id + KPackageStructure
+  contents/
+    screenshot.png           miniatura del selector
+    images/1920x1080.svg     variante clara
+    images_dark/1920x1080.svg  variante oscura
+```
+
+Plasma lee el nombre del archivo como resolucion y se queda con el mas
+cercano al tamano de la pantalla. No hay que cubrir todas: con una por
+proporcion util basta.
+
+### Acepta SVG, no solo PNG
+
+Comprobado en `libplasma_wallpaper_imageplugin.so`: enlaza con `KSvg::Svg`
+(`_ZN4KSvg3Svg12setImagePathERK7QString`) y lleva las cadenas `:svgz` e
+`image/svg`. Un paquete de SVG pesa kilobytes en vez de decenas de megas y se
+rasteriza nitido a cualquier densidad.
+
+El precio es que lo pinta **QSvgRenderer**, no librsvg ni Inkscape. Eso es
+SVG Tiny 1.2 con anadidos, asi que en el dibujo no puede haber filtros
+(`feGaussianBlur`), ni mascaras, ni `clip-path`, ni CSS, ni variables. Lo que
+si hay, verificado con `strings` sobre `libQt6Svg.so.6`: `use`, `ellipse`,
+`gradientUnits`, `stop-opacity`, `preserveAspectRatio`. Por eso las nubes de
+`bliss.svg` son gradientes radiales y no desenfoques.
+
+Un SVG se estira a lo que le pidan, asi que publicar uno solo deformaria el
+dibujo en pantallas de otra proporcion. Por eso cada resolucion lleva su
+propio recorte: el mismo archivo con otro `viewBox`.
+
+### Quien elige entre `images` e `images_dark`
+
+El plugin, por la **paleta de las aplicaciones** (`slotSystemPaletteChanged`,
+senal `colorSchemeChanged`), no por el Plasma style.
+
+Para Bliss esto sale gratis y es justo lo que queremos: el Plasma style es el
+mismo en claro y oscuro (chrome azul oscuro siempre), pero el esquema de color
+si cambia, asi que el fondo sigue solo a `make apply` y `make apply-dark`. No
+hay nada que aplicar dos veces.
+
+### `kpackagetool6` exige `KPackageStructure`
+
+Los fondos de serie (`/usr/share/wallpapers/Next`) traen solo `KPlugin` y
+funcionan, porque el plugin de imagen los carga por ruta. Pero
+`kpackagetool6 --type Wallpaper/Images --list` no los reconoce. Anadir
+`"KPackageStructure": "Wallpaper/Images"` al `metadata.json` no cambia nada
+para Plasma y hace que las herramientas de KPackage vean el paquete.

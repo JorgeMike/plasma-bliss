@@ -33,7 +33,8 @@ QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
         kvantum kvantum-dark aurorae-dark dark apply-dark apply-light _apply \
         reload start-button start-button-revert \
         check list install-colors install-aurorae install-plasma install-lnf \
-        install-icons install-kvantum
+        install-icons install-kvantum install-wallpaper \
+        wallpaper wallpaper-apply
 
 help:
 	@printf "\033[1mBliss\033[0m — tema global de Plasma 6\n"
@@ -48,6 +49,8 @@ help:
 	@printf "  \033[36mmake backup\033[0m        guarda tu config actual en ./backup/\n"
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
 	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
+	@printf "  \033[36mmake wallpaper\033[0m     regenera el fondo desde bliss.svg\n"
+	@printf "  \033[36mmake wallpaper-apply\033[0m pone el fondo en tu escritorio\n"
 	@printf "  \033[36mmake start-button\033[0m  pone el icono Inicio verde en tu panel\n"
 	@printf "  \033[36mmake reload\033[0m        reinicia plasmashell para ver los cambios\n"
 	@printf "  \033[36mmake check\033[0m         valida SVG y JSON antes de instalar\n"
@@ -56,7 +59,8 @@ help:
 	@printf "Ciclo normal:  make check && make install && make apply\n"
 
 # ---------------------------------------------------------------- instalacion
-install: install-colors install-aurorae install-plasma install-lnf install-icons install-kvantum
+install: install-colors install-aurorae install-plasma install-lnf install-icons \
+         install-kvantum install-wallpaper
 	@echo ">> instalado. Ahora: make apply"
 
 install-colors:
@@ -99,6 +103,12 @@ install-lnf:
 	@cp -r $(SRC)/look-and-feel/$(LNF_DK) $(DEST)/plasma/look-and-feel/
 	@echo "   tema global  -> $(LNF_ID) y $(LNF_DK)"
 
+install-wallpaper:
+	@rm -rf $(DEST)/wallpapers/$(NAME)
+	@mkdir -p $(DEST)/wallpapers
+	@cp -r $(SRC)/wallpapers/$(NAME) $(DEST)/wallpapers/
+	@echo "   fondo        -> $(DEST)/wallpapers/$(NAME)"
+
 install-kvantum:
 	@for v in $(NAME) $(DARK); do \
 		if [ -f $(SRC)/kvantum/$$v/$$v.svg ]; then \
@@ -117,7 +127,8 @@ uninstall:
 		$(DEST)/plasma/look-and-feel/$(LNF_ID) $(DEST)/plasma/look-and-feel/$(LNF_DK) \
 		$(DEST)/icons/$(NAME) \
 		$(DEST)/icons/hicolor/scalable/apps/bliss-start.svg \
-		$(CFG)/Kvantum/$(NAME) $(CFG)/Kvantum/$(DARK)
+		$(CFG)/Kvantum/$(NAME) $(CFG)/Kvantum/$(DARK) \
+		$(DEST)/wallpapers/$(NAME)
 	@echo ">> desinstalado (la config activa no se ha tocado; usa: make revert)"
 
 # ----------------------------------------------------------------- aplicacion
@@ -176,6 +187,21 @@ restore:
 	if [ -z "$$last" ]; then echo "!! no hay backups"; exit 1; fi; \
 	cp $$last/* $(CFG)/ && echo ">> restaurado desde $$last"; \
 	echo "   cierra sesion, o ejecuta: plasmashell --replace &"
+
+# --------------------------------------------------------------------- fondo
+# bliss-dark.svg y contents/ son GENERADOS. La unica fuente es bliss.svg: para
+# cambiar el paisaje, editalo (Inkscape vale) y vuelve a ejecutar esto.
+wallpaper:
+	@python3 -I tools/make-dark-wallpaper.py \
+		$(SRC)/wallpapers/$(NAME)/bliss.svg $(SRC)/wallpapers/$(NAME)/bliss-dark.svg
+	@python3 -I tools/build-wallpaper.py $(SRC)/wallpapers/$(NAME)
+
+# Fuera de `make apply` a proposito: esto toca el escritorio del usuario.
+# No hay version clara y otra oscura que aplicar: el paquete lleva las dos y
+# Plasma elige segun la paleta de las aplicaciones, asi que el fondo sigue
+# solo a `make apply` y `make apply-dark`.
+wallpaper-apply:
+	@plasma-apply-wallpaperimage $(DEST)/wallpapers/$(NAME)
 
 # ------------------------------------------------------------------- kvantum
 # Bliss.svg y Bliss.kvconfig son GENERADOS. Para cambiar la paleta, edita las

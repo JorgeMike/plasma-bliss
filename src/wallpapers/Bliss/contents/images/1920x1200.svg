@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss — fondo de escritorio maestro.
+
+  Lienzo 3840x2400 (16:10). Los ficheros que Plasma consume salen de aqui
+  recortados por tools/build-wallpaper.py; la variante oscura la genera
+  tools/make-dark-wallpaper.py con un mapa de color explicito. No edites
+  bliss-dark.svg ni contents/: se sobrescriben.
+
+  Recreacion vectorial, NO la fotografia de Microsoft (es de Charles O'Rear
+  y tiene derechos). Misma idea de encuadre, dibujo propio.
+
+  Restriccion tecnica: lo pinta QSvgRenderer a traves de KSvg, asi que aqui
+  no hay filtros, ni mascaras, ni clip-path, ni CSS. Solo formas, gradientes
+  y <use>. Las nubes son gradientes radiales, no desenfoques.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1920" height="1200" viewBox="0.0 0.0 3840.0 2400.0" preserveAspectRatio="xMidYMid slice">
+
+  <defs>
+    <!-- Cielo. userSpaceOnUse para que el degradado no dependa de la caja
+         del rectangulo y se mantenga igual en cualquier recorte. -->
+    <linearGradient id="g-sky" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="1700">
+      <stop offset="0"    stop-color="#1b5ac0"/>
+      <stop offset="0.35" stop-color="#2f7bdf"/>
+      <stop offset="0.62" stop-color="#68aef2"/>
+      <stop offset="0.82" stop-color="#a8d8fa"/>
+      <stop offset="1"    stop-color="#e8f6fe"/>
+    </linearGradient>
+
+    <!-- Resplandor del sol tras la loma. -->
+    <radialGradient id="g-bloom">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="0.45" stop-color="#ffffff" stop-opacity="0.30"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Volumen de nube: blanco opaco al centro, nada en el borde. -->
+    <radialGradient id="g-puff">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="1"/>
+      <stop offset="0.42" stop-color="#ffffff" stop-opacity="0.94"/>
+      <stop offset="0.72" stop-color="#ffffff" stop-opacity="0.48"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Panza de la nube, azulada. Va debajo del volumen blanco. -->
+    <radialGradient id="g-puff-shade">
+      <stop offset="0"    stop-color="#c9dcf2" stop-opacity="0.95"/>
+      <stop offset="0.65" stop-color="#c9dcf2" stop-opacity="0.45"/>
+      <stop offset="1"    stop-color="#c9dcf2" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Loma principal. -->
+    <linearGradient id="g-hill" gradientUnits="userSpaceOnUse" x1="0" y1="950" x2="0" y2="2400">
+      <stop offset="0"    stop-color="#a6dc55"/>
+      <stop offset="0.12" stop-color="#86c93f"/>
+      <stop offset="0.34" stop-color="#5fa92e"/>
+      <stop offset="0.64" stop-color="#3c821f"/>
+      <stop offset="1"    stop-color="#2b6a17"/>
+    </linearGradient>
+
+    <!-- Brillo de la hierba al sol, sobre la ladera izquierda. -->
+    <radialGradient id="g-sheen">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="0.26"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Burbuja Frutiger Aero: vacia por dentro, aro de luz en el borde. -->
+    <radialGradient id="g-bubble">
+      <stop offset="0"    stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.80" stop-color="#ffffff" stop-opacity="0.02"/>
+      <stop offset="0.93" stop-color="#ffffff" stop-opacity="0.15"/>
+      <stop offset="1"    stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Vineteado. Centrado en el lienzo entero. -->
+    <radialGradient id="g-vignette" gradientUnits="userSpaceOnUse"
+                    cx="1920" cy="1180" r="2450">
+      <stop offset="0"    stop-color="#000000" stop-opacity="0"/>
+      <stop offset="0.62" stop-color="#000000" stop-opacity="0"/>
+      <stop offset="1"    stop-color="#000000" stop-opacity="0.16"/>
+    </radialGradient>
+
+    <!-- Cumulos. Se instancian con <use>; los gradientes son
+         objectBoundingBox, asi que acompanan a cada transform. -->
+    <g id="cu-a">
+      <ellipse cx="60"   cy="70"  rx="420" ry="120" fill="url(#g-puff-shade)"/>
+      <ellipse cx="-230" cy="10"  rx="250" ry="130" fill="url(#g-puff)"/>
+      <ellipse cx="40"   cy="-60" rx="330" ry="200" fill="url(#g-puff)"/>
+      <ellipse cx="300"  cy="10"  rx="260" ry="140" fill="url(#g-puff)"/>
+      <ellipse cx="150"  cy="-150" rx="190" ry="130" fill="url(#g-puff)"/>
+    </g>
+
+    <g id="cu-b">
+      <ellipse cx="0"    cy="60"  rx="520" ry="110" fill="url(#g-puff-shade)"/>
+      <ellipse cx="-320" cy="20"  rx="280" ry="120" fill="url(#g-puff)"/>
+      <ellipse cx="-60"  cy="-40" rx="360" ry="170" fill="url(#g-puff)"/>
+      <ellipse cx="250"  cy="-10" rx="300" ry="130" fill="url(#g-puff)"/>
+      <ellipse cx="480"  cy="40"  rx="210" ry="90"  fill="url(#g-puff)"/>
+      <ellipse cx="-120" cy="-170" rx="220" ry="120" fill="url(#g-puff)"/>
+    </g>
+
+    <!-- Jiron fino, para las capas altas. -->
+    <g id="cu-wisp">
+      <ellipse cx="0"   cy="0" rx="620" ry="52" fill="url(#g-puff)"/>
+      <ellipse cx="380" cy="24" rx="380" ry="34" fill="url(#g-puff)"/>
+      <ellipse cx="-330" cy="18" rx="300" ry="30" fill="url(#g-puff)"/>
+    </g>
+  </defs>
+
+  <!-- ============================================================ cielo -->
+  <rect x="0" y="0" width="3840" height="2400" fill="url(#g-sky)"/>
+
+  <!-- Resplandor bajo, detras de la loma, hacia la derecha. -->
+  <ellipse cx="2620" cy="1500" rx="1750" ry="760" fill="url(#g-bloom)"/>
+
+  <!-- ============================================================ nubes -->
+  <!-- Altas y tenues. -->
+  <use xlink:href="#cu-wisp" href="#cu-wisp" transform="translate(900,250) scale(1.15,1)"  opacity="0.38"/>
+  <use xlink:href="#cu-wisp" href="#cu-wisp" transform="translate(2900,170) scale(0.9,1)"  opacity="0.30"/>
+  <use xlink:href="#cu-wisp" href="#cu-wisp" transform="translate(2100,470) scale(1.3,0.9)" opacity="0.26"/>
+
+  <!-- Cumulos medios. -->
+  <use xlink:href="#cu-a" href="#cu-a" transform="translate(620,640) scale(1.25)"  opacity="0.92"/>
+  <use xlink:href="#cu-b" href="#cu-b" transform="translate(2450,560) scale(1.45)" opacity="0.95"/>
+  <use xlink:href="#cu-a" href="#cu-a" transform="translate(3450,880) scale(1.0)"  opacity="0.78"/>
+
+  <!-- Bajos y pequenos, cerca del horizonte: dan profundidad. -->
+  <use xlink:href="#cu-b" href="#cu-b" transform="translate(1500,1080) scale(0.62,0.5)" opacity="0.62"/>
+  <use xlink:href="#cu-a" href="#cu-a" transform="translate(3150,1230) scale(0.5,0.42)" opacity="0.52"/>
+  <use xlink:href="#cu-a" href="#cu-a" transform="translate(300,1010) scale(0.7,0.55)"  opacity="0.55"/>
+
+  <!-- =================================================== loma de fondo -->
+  <!-- Mas clara y desaturada: perspectiva aerea. Va antes que la principal. -->
+  <path fill="#9cc49a"
+        d="M 1700 2400
+           L 1700 1600
+           C 2100 1480, 2600 1392, 3100 1404
+           C 3380 1411, 3640 1436, 3840 1462
+           L 3840 2400 Z"/>
+
+  <!-- ====================================================== loma principal -->
+  <path fill="url(#g-hill)"
+        d="M 0 2400
+           L 0 1240
+           C 420 1116, 930 1006, 1420 1052
+           C 2010 1107, 2610 1330, 3200 1452
+           C 3452 1504, 3650 1531, 3840 1546
+           L 3840 2400 Z"/>
+
+  <!-- Canto iluminado de la cresta. Es la misma curva, solo trazo. -->
+  <path fill="none" stroke="#c9ee7e" stroke-width="9" opacity="0.55"
+        d="M 0 1240
+           C 420 1116, 930 1006, 1420 1052
+           C 2010 1107, 2610 1330, 3200 1452
+           C 3452 1504, 3650 1531, 3840 1546"/>
+
+  <!-- Hierba al sol en la ladera izquierda. -->
+  <ellipse cx="760" cy="1560" rx="1150" ry="420" fill="url(#g-sheen)"/>
+  <ellipse cx="1900" cy="1880" rx="1400" ry="330" fill="url(#g-sheen)"/>
+
+  <!-- ================================================= toque Frutiger Aero -->
+  <circle cx="3240" cy="640"  r="210" fill="url(#g-bubble)"/>
+  <circle cx="520"  cy="430"  r="165" fill="url(#g-bubble)"/>
+  <circle cx="2250" cy="900"  r="145" fill="url(#g-bubble)"/>
+
+  <!-- ============================================================= vineta -->
+  <rect x="0" y="0" width="3840" height="2400" fill="url(#g-vignette)"/>
+</svg>

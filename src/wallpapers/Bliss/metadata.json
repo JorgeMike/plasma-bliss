@@ -1,0 +1,16 @@
+{
+    "KPlugin": {
+        "Authors": [
+            {
+                "Name": "Miguel"
+            }
+        ],
+        "Description": "Colina y cielo, al estilo de Windows XP",
+        "Description[en]": "Rolling hill and sky, Windows XP style",
+        "Id": "Bliss",
+        "License": "CC-BY-SA-4.0",
+        "Name": "Bliss",
+        "Version": "1.0"
+    },
+    "KPackageStructure": "Wallpaper/Images"
+}

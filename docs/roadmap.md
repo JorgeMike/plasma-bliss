@@ -43,7 +43,8 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
 - [x] Boton Inicio verde: icono propio + etiqueta, via `make start-button`
 - [x] `widgets/tooltip.svg` + `solid/widgets/tooltip.svg` — oscuros, no
       amarillos: una de las dos rutas de tooltip fuerza texto blanco
-- [ ] Fondo de pantalla
+- [x] Fondo de pantalla: paquete `Wallpaper/Images` de SVG, con recorte por
+      proporcion y variante oscura generada. Detalles en `formats.md`
 
 ### Decidido: el menu Inicio se queda azul oscuro
 
@@ -72,6 +73,8 @@ Kvantum — se reutiliza tal cual. Solo cambia el pigmento.
 - [x] `make apply-dark` / `make apply-light` para alternar
 - [x] Plasma style: NO se duplica. El chrome ya es oscuro en ambas variantes,
       como la barra de tareas de Windows 7 o 10
+- [x] Fondo oscuro: no hay nada que aplicar. El plugin de imagen elige
+      `images_dark` por la paleta de las aplicaciones, que ya cambia
 - [ ] Decidir el cambio automatico dia/noche. Plasma no trae un conmutador de
       tema global por horario; habria que comprobar si merece la pena un
       script con `plasma-apply-lookandfeel` o dejarlo manual
