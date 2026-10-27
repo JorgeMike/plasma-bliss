@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Reescribe la paleta de un tema Kvantum sin tocar su geometria.
 
-    python3 tools/recolor-kvantum.py <origen.svg> <destino.svg>
+    python3 tools/recolor-kvantum.py <origen.svg> <destino.svg> [--dark]
 
 Dos fases.
 
@@ -18,7 +18,10 @@ dejaria color crema, invisibles. Esta fase las reasigna por ID de elemento,
 siguiendo la cadena de degradados y clonando los que esten compartidos con
 elementos que no son objetivo, para no danarlos.
 
-Para el modo oscuro: cambia RAMP y parte de un tema oscuro (KvCurves3d).
+Con --dark usa la rampa de pizarra y parte de un tema ya oscuro (KvCurves3d).
+Ahi SAT_KEEP sube a 1.1, es decir, NINGUN color se conserva por saturado: la
+base trae acentos naranjas y rojos que no pintan nada en Bliss. Todo pasa a
+pizarra y la fase 2 devuelve el azul de seleccion y el verde de progreso.
 """
 import colorsys
 import re
@@ -29,6 +32,14 @@ RAMP = [
     (0.00, "2b2821"), (0.27, "6b6758"), (0.35, "8a8574"), (0.50, "9e9a88"),
     (0.63, "aca899"), (0.71, "d8d4c2"), (0.76, "e4e0ce"), (0.84, "ece9d8"),
     (0.90, "f4f1e4"), (0.98, "fdfcf6"), (1.00, "ffffff"),
+]
+# Rampa de pizarra para --dark. Anclada en los mismos valores que
+# src/color-schemes/Bliss-Dark.colors, para que el estilo de widgets y el
+# esquema de color de las aplicaciones no se contradigan.
+DARK_RAMP = [
+    (0.00, "0d1013"), (0.04, "121519"), (0.12, "1c2127"), (0.16, "262c33"),
+    (0.24, "2e343b"), (0.31, "3a424b"), (0.43, "4e5862"), (0.60, "78838f"),
+    (0.82, "b4bec8"), (0.94, "e8edf2"), (1.00, "ffffff"),
 ]
 ACCENT = {"0067ce": "0054e3", "ce0400": "d43a2f"}
 KEEP = {"b74aff"}          # marcadores con los que Kvantum mide las sombras
@@ -65,18 +76,19 @@ def through(ramp, lightness):
     return ramp[-1][1]
 
 
-def material(h):
+def material(h, ramp, sat_keep):
     h = h.lower()
     if h in KEEP:
         return h
     if h in ACCENT:
         return ACCENT[h]
     _, lightness, saturation = colorsys.rgb_to_hls(*rgb(h))
-    return h if saturation > SAT_KEEP else through(RAMP, lightness)
+    return h if saturation > sat_keep else through(ramp, lightness)
 
 
-def phase1(svg):
-    return re.sub(r"#([0-9a-fA-F]{6})\b", lambda m: "#" + material(m.group(1)), svg)
+def phase1(svg, ramp, sat_keep):
+    return re.sub(r"#([0-9a-fA-F]{6})\b",
+                  lambda m: "#" + material(m.group(1), ramp, sat_keep), svg)
 
 
 # ---------------------------------------------------------------- utilidades
@@ -215,15 +227,18 @@ def phase2(svg):
     return svg, len(edits), problems
 
 
-def main(src, dst):
+def main(src, dst, dark=False):
+    ramp = DARK_RAMP if dark else RAMP
+    sat_keep = 1.1 if dark else SAT_KEEP   # en oscuro no se conserva ningun acento
     svg = open(src).read()
     n_colors = len(set(re.findall(r"#[0-9a-fA-F]{6}", svg)))
     n_ids_before = len(set(re.findall(r'id="([^"]+)"', svg)))
-    svg = phase1(svg)
+    svg = phase1(svg, ramp, sat_keep)
     svg, n_accent, problems = phase2(svg)
     open(dst, "w").write(svg)
     print(f"{dst}")
-    print(f"  fase 1: {n_colors} colores distintos pasados por la rampa de material")
+    print(f"  fase 1: {n_colors} colores por la rampa "
+          f"{'de pizarra (oscuro)' if dark else 'de material (claro)'}")
     print(f"  fase 2: {n_accent} elementos de acento reasignados")
     for p in problems:
         print(f"    AVISO {p}")
@@ -236,6 +251,7 @@ def main(src, dst):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if len(args) != 2:
         sys.exit(__doc__)
-    main(sys.argv[1], sys.argv[2])
+    main(args[0], args[1], dark="--dark" in sys.argv)

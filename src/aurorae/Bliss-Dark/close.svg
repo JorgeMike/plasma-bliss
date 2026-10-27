@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss Dark (GENERADO por tools/make-dark-aurorae.py) — close.svg
+  Boton de decoracion Aurorae. KSvg::FrameSvg busca estos prefijos de ID:
+    active-center    (obligatorio)   hover-center     pressed-center
+    inactive-center  (ventana sin foco)
+  Opcionales: deactivated-center, hover-inactive-center, pressed-inactive-center.
+  Si un prefijo falta, Aurorae reutiliza "active". El ancho debe coincidir con
+  ButtonWidthClose de Blissrc.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="25" height="96" viewBox="0 0 25 96" version="1.1">
+  <defs>
+    <linearGradient id="g-active" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f2714d"/>
+      <stop offset="1" stop-color="#b13918"/>
+    </linearGradient>
+    <linearGradient id="g-hover" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff9165"/>
+      <stop offset="1" stop-color="#d7410f"/>
+    </linearGradient>
+    <linearGradient id="g-pressed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9d3111"/>
+      <stop offset="1" stop-color="#df4d1d"/>
+    </linearGradient>
+    <linearGradient id="g-inactive" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#d6876e"/>
+      <stop offset="1" stop-color="#b96849"/>
+    </linearGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.65"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.00"/>
+    </linearGradient>
+  </defs>
+  <g id="active-center">
+    <rect x="0.5" y="0.5" width="24" height="20" rx="3" fill="url(#g-active)" stroke="#8a270c" stroke-width="1"/>
+    <rect x="2" y="2" width="21" height="8" rx="2" fill="url(#gloss)"/>
+    <path d="M 8.5,6.5 L 16.5,14.5 M 16.5,6.5 L 8.5,14.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </g>
+  <g id="hover-center">
+    <rect x="0.5" y="25.5" width="24" height="20" rx="3" fill="url(#g-hover)" stroke="#8a270c" stroke-width="1"/>
+    <rect x="2" y="27" width="21" height="8" rx="2" fill="url(#gloss)"/>
+    <path d="M 8.5,31.5 L 16.5,39.5 M 16.5,31.5 L 8.5,39.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </g>
+  <g id="pressed-center">
+    <rect x="0.5" y="50.5" width="24" height="20" rx="3" fill="url(#g-pressed)" stroke="#751f07" stroke-width="1"/>
+    <rect x="2" y="52" width="21" height="8" rx="2" fill="url(#gloss)"/>
+    <path d="M 8.5,56.5 L 16.5,64.5 M 16.5,56.5 L 8.5,64.5" stroke="#ffffff" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </g>
+  <g id="inactive-center">
+    <rect x="0.5" y="75.5" width="24" height="20" rx="3" fill="url(#g-inactive)" stroke="#8e6755" stroke-width="1"/>
+    <rect x="2" y="77" width="21" height="8" rx="2" fill="url(#gloss)"/>
+    <path d="M 8.5,81.5 L 16.5,89.5 M 16.5,81.5 L 8.5,89.5" stroke="#e1b6a3" stroke-width="2" stroke-linecap="round" fill="none"/>
+  </g>
+</svg>

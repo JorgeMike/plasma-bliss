@@ -53,7 +53,7 @@ Se valoro escribir un plasmoide de menu propio que fijase sus colores al
 margen del tema, pero el azul oscuro convencio al verlo, asi que se queda.
 Queda aqui escrito por si alguien se pregunta por que no es como XP.
 
-## Fase 4 — modo oscuro (Bliss Dark)
+## Fase 4 — modo oscuro (Bliss Dark)  ·  HECHA
 
 XP no tuvo modo oscuro, asi que esto es una interpretacion, no una
 reconstruccion: se apoya en la mitad Frutiger Aero del concepto y la lee como
@@ -63,15 +63,15 @@ Lo que lo hace barato es que **la geometria no cambia**. Todo el trabajo ya
 hecho — el 9-slice de Aurorae, el contrato de IDs, el recolorizador de
 Kvantum — se reutiliza tal cual. Solo cambia el pigmento.
 
-- [ ] `src/color-schemes/Bliss-Dark.colors` (copia con la paleta oscura)
-- [ ] Aurorae `Bliss-Dark`: mismo `decoration.svg`, otros `<defs>`. Conviene
-      extraer los degradados a un fragmento compartido antes de duplicar
-- [ ] Kvantum: `make kvantum KV_BASE=KvCurves3d` con una RAMP oscura en
-      `tools/recolor-kvantum.py`. KvCurves3d ya se comprobo que es oscuro y
-      tiene la misma cobertura de estados que KvBeige
-- [ ] Plasma style: `panel-background.svg` con el degradado hundido
-- [ ] Segundo look-and-feel `org.bliss.dark.desktop`
-- [ ] `make apply-dark` / `make apply-light` para alternar
+- [x] `src/color-schemes/Bliss-Dark.colors`, con el contraste comprobado:
+      todos los pares criticos pasan AA, el peor es 5.3:1
+- [x] Aurorae `Bliss-Dark` generado desde el claro por escalado de
+      luminosidad. `make check` verifica que comparte geometria exacta
+- [x] Kvantum oscuro desde KvCurves3d con `recolor-kvantum.py --dark`
+- [x] Segundo look-and-feel `org.bliss.dark.desktop`
+- [x] `make apply-dark` / `make apply-light` para alternar
+- [x] Plasma style: NO se duplica. El chrome ya es oscuro en ambas variantes,
+      como la barra de tareas de Windows 7 o 10
 - [ ] Decidir el cambio automatico dia/noche. Plasma no trae un conmutador de
       tema global por horario; habria que comprobar si merece la pena un
       script con `plasma-apply-lookandfeel` o dejarlo manual

@@ -1,0 +1,13 @@
+{
+    "KPackageStructure": "Plasma/LookAndFeel",
+    "KPlugin": {
+        "Authors": [ { "Name": "Miguel" } ],
+        "Category": "",
+        "Description": "Bliss with a deep-ocean Aero palette",
+        "EnabledByDefault": true,
+        "Id": "org.bliss.dark.desktop",
+        "License": "GPL v3",
+        "Name": "Bliss Dark",
+        "Version": "0.1.0"
+    }
+}

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Bliss Dark (GENERADO por tools/make-dark-aurorae.py) — decoration.svg
+  Rejilla 9-slice leida por KSvg::FrameSvg. Los IDs son OBLIGATORIOS:
+    prefijo "decoration"           -> ventana activa
+    prefijo "decoration-inactive"  -> ventana inactiva
+    prefijo "mask"                 -> region opaca (esquinas redondeadas)
+  Cada prefijo necesita: -topleft -top -topright -left -center -right
+                         -bottomleft -bottom -bottomright
+  El tamano de "left" define el borde izquierdo, el de "top" el superior, etc.
+  Deben coincidir con Border*/Title* de Blissrc o el SVG saldra escalado.
+
+  Columnas: 0-5 (borde izq) | 5-25 (estirable) | 25-30 (borde der)
+  Filas:    activo y=0-65 · inactivo y=100-165 · mascara y=200-265
+            maximizado y=300-372 · maximizado inactivo y=400-472
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="30" height="475" viewBox="0 0 30 475" version="1.1">
+  <defs>
+    <!-- Degradado vertical de la barra de titulo Luna -->
+    <linearGradient id="g-title" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#0b4898"/>
+      <stop offset="0.06" stop-color="#0458ba"/>
+      <stop offset="0.14" stop-color="#0d3c81"/>
+      <stop offset="0.52" stop-color="#063073"/>
+      <stop offset="0.86" stop-color="#063276"/>
+      <stop offset="0.93" stop-color="#0f4992"/>
+      <stop offset="1.00" stop-color="#082e6c"/>
+    </linearGradient>
+    <linearGradient id="g-title-inactive" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0.00" stop-color="#2761bd"/>
+      <stop offset="0.06" stop-color="#226fde"/>
+      <stop offset="0.14" stop-color="#2a5dad"/>
+      <stop offset="0.52" stop-color="#2749a1"/>
+      <stop offset="0.86" stop-color="#264aa5"/>
+      <stop offset="0.93" stop-color="#2463c4"/>
+      <stop offset="1.00" stop-color="#2b4997"/>
+    </linearGradient>
+    <!-- Brillo "Frutiger Aero": cristal sobre la mitad superior -->
+    <linearGradient id="g-gloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ============ ACTIVO ============ -->
+  <g id="decoration-topleft">
+    <path d="M 0,5 A 5,5 0 0 1 5,0 L 5,30 L 0,30 Z" fill="url(#g-title)"/>
+    <path d="M 0,5 A 5,5 0 0 1 5,0 L 5,14 L 0,14 Z" fill="url(#g-gloss)"/>
+  </g>
+  <g id="decoration-top">
+    <rect x="5" y="0" width="20" height="30" fill="url(#g-title)"/>
+    <rect x="5" y="0" width="20" height="14" fill="url(#g-gloss)"/>
+  </g>
+  <g id="decoration-topright">
+    <path d="M 25,0 A 5,5 0 0 1 30,5 L 30,30 L 25,30 Z" fill="url(#g-title)"/>
+    <path d="M 25,0 A 5,5 0 0 1 30,5 L 30,14 L 25,14 Z" fill="url(#g-gloss)"/>
+  </g>
+
+  <g id="decoration-left">
+    <rect x="0" y="35" width="5" height="20" fill="#073477"/>
+    <rect x="0" y="35" width="1" height="20" fill="#062961"/>
+    <rect x="4" y="35" width="1" height="20" fill="#0b57b9"/>
+  </g>
+  <rect id="decoration-center" x="5" y="35" width="20" height="20" fill="#aea158" fill-opacity="0"/>
+  <g id="decoration-right">
+    <rect x="25" y="35" width="5" height="20" fill="#073477"/>
+    <rect x="29" y="35" width="1" height="20" fill="#062961"/>
+    <rect x="25" y="35" width="1" height="20" fill="#0b57b9"/>
+  </g>
+
+  <g id="decoration-bottomleft">
+    <rect x="0" y="60" width="5" height="5" fill="#073477"/>
+    <rect x="0" y="60" width="1" height="5" fill="#062961"/>
+    <rect x="0" y="64" width="5" height="1" fill="#062961"/>
+    <rect x="0" y="60" width="5" height="1" fill="#0b57b9"/>
+  </g>
+  <g id="decoration-bottom">
+    <rect x="5" y="60" width="20" height="5" fill="#073477"/>
+    <rect x="5" y="64" width="20" height="1" fill="#062961"/>
+    <rect x="5" y="60" width="20" height="1" fill="#0b57b9"/>
+  </g>
+  <g id="decoration-bottomright">
+    <rect x="25" y="60" width="5" height="5" fill="#073477"/>
+    <rect x="29" y="60" width="1" height="5" fill="#062961"/>
+    <rect x="25" y="64" width="5" height="1" fill="#062961"/>
+    <rect x="25" y="60" width="5" height="1" fill="#0b57b9"/>
+  </g>
+
+  <!-- ============ INACTIVO (y + 100) ============ -->
+  <g id="decoration-inactive-topleft">
+    <path d="M 0,105 A 5,5 0 0 1 5,100 L 5,130 L 0,130 Z" fill="url(#g-title-inactive)"/>
+    <path d="M 0,105 A 5,5 0 0 1 5,100 L 5,114 L 0,114 Z" fill="url(#g-gloss)"/>
+  </g>
+  <g id="decoration-inactive-top">
+    <rect x="5" y="100" width="20" height="30" fill="url(#g-title-inactive)"/>
+    <rect x="5" y="100" width="20" height="14" fill="url(#g-gloss)"/>
+  </g>
+  <g id="decoration-inactive-topright">
+    <path d="M 25,100 A 5,5 0 0 1 30,105 L 30,130 L 25,130 Z" fill="url(#g-title-inactive)"/>
+    <path d="M 25,100 A 5,5 0 0 1 30,105 L 30,114 L 25,114 Z" fill="url(#g-gloss)"/>
+  </g>
+
+  <g id="decoration-inactive-left">
+    <rect x="0" y="135" width="5" height="20" fill="#2951a9"/>
+    <rect x="0" y="135" width="1" height="20" fill="#304986"/>
+    <rect x="4" y="135" width="1" height="20" fill="#276ad4"/>
+  </g>
+  <rect id="decoration-inactive-center" x="5" y="135" width="20" height="20" fill="#aea158" fill-opacity="0"/>
+  <g id="decoration-inactive-right">
+    <rect x="25" y="135" width="5" height="20" fill="#2951a9"/>
+    <rect x="29" y="135" width="1" height="20" fill="#304986"/>
+    <rect x="25" y="135" width="1" height="20" fill="#276ad4"/>
+  </g>
+
+  <g id="decoration-inactive-bottomleft">
+    <rect x="0" y="160" width="5" height="5" fill="#2951a9"/>
+    <rect x="0" y="160" width="1" height="5" fill="#304986"/>
+    <rect x="0" y="164" width="5" height="1" fill="#304986"/>
+  </g>
+  <g id="decoration-inactive-bottom">
+    <rect x="5" y="160" width="20" height="5" fill="#2951a9"/>
+    <rect x="5" y="164" width="20" height="1" fill="#304986"/>
+  </g>
+  <g id="decoration-inactive-bottomright">
+    <rect x="25" y="160" width="5" height="5" fill="#2951a9"/>
+    <rect x="29" y="160" width="1" height="5" fill="#304986"/>
+    <rect x="25" y="164" width="5" height="1" fill="#304986"/>
+  </g>
+
+  <!-- ============ MASCARA (y + 200) — define la region opaca ============ -->
+  <path id="mask-topleft"     d="M 0,205 A 5,5 0 0 1 5,200 L 5,230 L 0,230 Z" fill="#ffffff"/>
+  <rect id="mask-top"         x="5"  y="200" width="20" height="30" fill="#ffffff"/>
+  <path id="mask-topright"    d="M 25,200 A 5,5 0 0 1 30,205 L 30,230 L 25,230 Z" fill="#ffffff"/>
+  <rect id="mask-left"        x="0"  y="235" width="5"  height="20" fill="#ffffff"/>
+  <rect id="mask-center"      x="5"  y="235" width="20" height="20" fill="#ffffff"/>
+  <rect id="mask-right"       x="25" y="235" width="5"  height="20" fill="#ffffff"/>
+  <rect id="mask-bottomleft"  x="0"  y="260" width="5"  height="5"  fill="#ffffff"/>
+  <rect id="mask-bottom"      x="5"  y="260" width="20" height="5"  fill="#ffffff"/>
+  <rect id="mask-bottomright" x="25" y="260" width="5"  height="5"  fill="#ffffff"/>
+
+  <!-- ====== MAXIMIZADO ======
+       Sin estos prefijos, KWin reutiliza "decoration" con NoBorder y solo
+       dibuja decoration-center, que es transparente: la barra de titulo de
+       una ventana maximizada desaparece. Verificado en aurorae.qml. -->
+  <!-- decoration-maximized (y + 300) -->
+  <rect id="decoration-maximized-topleft"     x="0"  y="300"      width="5"  height="30" fill="url(#g-title)"/>
+  <rect id="decoration-maximized-top"         x="5"  y="300"      width="20" height="30" fill="url(#g-title)"/>
+  <rect id="decoration-maximized-topright"    x="25" y="300"      width="5"  height="30" fill="url(#g-title)"/>
+  <rect id="decoration-maximized-left"        x="0"  y="335" width="5"  height="30" fill="url(#g-title)"/>
+  <g id="decoration-maximized-center">
+    <rect x="5" y="335" width="20" height="30" fill="url(#g-title)"/>
+    <rect x="5" y="335" width="20" height="14" fill="url(#g-gloss)"/>
+  </g>
+  <rect id="decoration-maximized-right"       x="25" y="335" width="5"  height="30" fill="url(#g-title)"/>
+  <rect id="decoration-maximized-bottomleft"  x="0"  y="370" width="5"  height="2"  fill="#062961"/>
+  <rect id="decoration-maximized-bottom"      x="5"  y="370" width="20" height="2"  fill="#062961"/>
+  <rect id="decoration-maximized-bottomright" x="25" y="370" width="5"  height="2"  fill="#062961"/>
+
+  <!-- decoration-maximized-inactive (y + 400) -->
+  <rect id="decoration-maximized-inactive-topleft"     x="0"  y="400"      width="5"  height="30" fill="url(#g-title-inactive)"/>
+  <rect id="decoration-maximized-inactive-top"         x="5"  y="400"      width="20" height="30" fill="url(#g-title-inactive)"/>
+  <rect id="decoration-maximized-inactive-topright"    x="25" y="400"      width="5"  height="30" fill="url(#g-title-inactive)"/>
+  <rect id="decoration-maximized-inactive-left"        x="0"  y="435" width="5"  height="30" fill="url(#g-title-inactive)"/>
+  <g id="decoration-maximized-inactive-center">
+    <rect x="5" y="435" width="20" height="30" fill="url(#g-title-inactive)"/>
+    <rect x="5" y="435" width="20" height="14" fill="url(#g-gloss)"/>
+  </g>
+  <rect id="decoration-maximized-inactive-right"       x="25" y="435" width="5"  height="30" fill="url(#g-title-inactive)"/>
+  <rect id="decoration-maximized-inactive-bottomleft"  x="0"  y="470" width="5"  height="2"  fill="#062961"/>
+  <rect id="decoration-maximized-inactive-bottom"      x="5"  y="470" width="20" height="2"  fill="#062961"/>
+  <rect id="decoration-maximized-inactive-bottomright" x="25" y="470" width="5"  height="2"  fill="#062961"/>
+</svg>

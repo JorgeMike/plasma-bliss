@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Genera Bliss.kvconfig a partir del kvconfig de un tema base.
 
-    python3 tools/make-kvconfig.py <base.kvconfig> <destino.kvconfig>
+    python3 tools/make-kvconfig.py <base.kvconfig> <destino.kvconfig> [--dark]
 
 La geometria y los nombres de grupo del tema base se conservan INTACTOS: tienen
 que seguir cuadrando con los IDs de Bliss.svg, que sale del mismo tema. Solo se
@@ -43,6 +43,32 @@ TEXT_FIXES = {
                  "text.press.color": "#FFFFFF"},
 }
 
+DARK = {
+    "window.color": "#2E343B", "base.color": "#22272D", "alt.base.color": "#272D34",
+    "button.color": "#394048", "light.color": "#454D56", "mid.light.color": "#3A4149",
+    "dark.color": "#171B20", "mid.color": "#2A3036",
+    "highlight.color": "#2F6ABF", "inactive.highlight.color": "#3A4A60",
+    "text.color": "#E8EDF2", "inactive.text.color": "#E8EDF2bf",
+    "window.text.color": "#E8EDF2", "inactive.window.text.color": "#E8EDF2bf",
+    "button.text.color": "#E8EDF2", "inactive.button.text.color": "#E8EDF2bf",
+    "disabled.text.color": "#7A848E", "tooltip.text.color": "#E8EDF2",
+    "highlight.text.color": "#FFFFFF",
+    "link.color": "#6DBAF5", "link.visited.color": "#B496DC",
+    "progress.indicator.text.color": "#FFFFFF",
+}
+
+# En oscuro el fondo del menu ya es oscuro, asi que el texto normal va claro.
+DARK_TEXT_FIXES = {
+    "MenuItem": {"text.normal.color": "#E8EDF2",
+                 "text.normal.inactive.color": "#E8EDF2bf",
+                 "text.focus.color": "#FFFFFF"},
+    "MenuBarItem": {"text.normal.color": "#E8EDF2",
+                    "text.focus.color": "#FFFFFF",
+                    "text.press.color": "#FFFFFF"},
+    "ItemView": {"text.toggle.color": "#FFFFFF",
+                 "text.press.color": "#FFFFFF"},
+}
+
 HEADER = """# Bliss.kvconfig — estilo de widgets de aplicacion
 #
 # GENERADO por tools/make-kvconfig.py. No editar a mano: usa `make kvantum`.
@@ -75,17 +101,23 @@ def patch(text, group, mapping):
     return text[:m.start(2)] + "\n".join(body).rstrip() + "\n\n" + text[m.end(2):]
 
 
-def main(src, dst):
+def main(src, dst, dark=False):
     cfg = open(src).read()
-    cfg = patch(cfg, "%General", GENERAL)
-    cfg = patch(cfg, "GeneralColors", COLORS)
-    for group, fixes in TEXT_FIXES.items():
+    general = dict(GENERAL)
+    if dark:
+        general["comment"] = "Bliss Dark — cristal de oceano profundo"
+    cfg = patch(cfg, "%General", general)
+    cfg = patch(cfg, "GeneralColors", DARK if dark else COLORS)
+    for group, fixes in (DARK_TEXT_FIXES if dark else TEXT_FIXES).items():
         cfg = patch(cfg, group, fixes)
     open(dst, "w").write(HEADER + "\n" + cfg)
-    print(f"{dst}: paleta Luna + {len(TEXT_FIXES)} grupos de texto corregidos")
+    fixes = DARK_TEXT_FIXES if dark else TEXT_FIXES
+    print(f"{dst}: paleta {'pizarra (oscuro)' if dark else 'Luna (claro)'} "
+          f"+ {len(fixes)} grupos de texto corregidos")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    if len(args) != 2:
         sys.exit(__doc__)
-    main(sys.argv[1], sys.argv[2])
+    main(args[0], args[1], dark="--dark" in sys.argv)

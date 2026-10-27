@@ -11,6 +11,7 @@ Referencia (leida de /usr/share/kwin/aurorae/*.qml en Plasma 6.3):
                     "inactive", "deactivated"
 Cada prefijo necesita las 9 partes del 9-slice.
 """
+import os
 import sys
 import xml.etree.ElementTree as ET
 
@@ -33,18 +34,32 @@ def need(found, label, required, fmt):
 
 def main():
     bad = 0
-    deco = ids("src/aurorae/Bliss/decoration.svg")
-    for prefix in ("decoration", "decoration-inactive", "mask",
-                   "decoration-maximized", "decoration-maximized-inactive"):
-        bad |= need(deco, f"decoration.svg [{prefix}]", PARTS,
-                    lambda p, x=prefix: f"{x}-{p}")
+    # La variante oscura se genera desde la clara y debe tener EXACTAMENTE los
+    # mismos ids: si divergen, el generador ha roto algo.
+    for theme in ("Bliss", "Bliss-Dark"):
+        base = f"src/aurorae/{theme}"
+        if not os.path.isdir(base):
+            print(f"  FALTA  {base} (ejecuta: make dark)")
+            bad = 1
+            continue
+        deco = ids(f"{base}/decoration.svg")
+        for prefix in ("decoration", "decoration-inactive", "mask",
+                       "decoration-maximized", "decoration-maximized-inactive"):
+            bad |= need(deco, f"{theme}/decoration.svg [{prefix}]", PARTS,
+                        lambda p, x=prefix: f"{x}-{p}")
 
-    for btn in ("close", "minimize", "maximize", "restore", "alldesktops",
-                "keepabove", "keepbelow", "shade", "help"):
-        found = ids(f"src/aurorae/Bliss/{btn}.svg")
-        bad |= need(found, f"{btn}.svg",
-                    ["active", "hover", "pressed", "inactive"],
-                    lambda s: f"{s}-center")
+        for btn in ("close", "minimize", "maximize", "restore", "alldesktops",
+                    "keepabove", "keepbelow", "shade", "help"):
+            found = ids(f"{base}/{btn}.svg")
+            bad |= need(found, f"{theme}/{btn}.svg",
+                        ["active", "hover", "pressed", "inactive"],
+                        lambda s: f"{s}-center")
+
+    if os.path.isdir("src/aurorae/Bliss-Dark"):
+        same = ids("src/aurorae/Bliss/decoration.svg") == ids("src/aurorae/Bliss-Dark/decoration.svg")
+        print(("  ok     " if same else "  FALTA  ")
+              + "Bliss-Dark comparte geometria con Bliss")
+        bad |= 0 if same else 1
 
     plasma = "src/plasma/desktoptheme/Bliss"
     panel = ids(f"{plasma}/widgets/panel-background.svg")

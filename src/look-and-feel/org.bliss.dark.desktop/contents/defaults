@@ -1,0 +1,28 @@
+[kdeglobals][KDE]
+widgetStyle=kvantum
+
+[kdeglobals][General]
+ColorScheme=Bliss-Dark
+
+[kdeglobals][Icons]
+Theme=Bliss
+
+# El Plasma style NO cambia entre claro y oscuro: el chrome del shell ya es
+# azul oscuro en ambos. Es la misma logica que siguen Windows 7 y 10, donde la
+# barra de tareas se mantiene oscura con independencia del modo de las
+# aplicaciones. Ademas evita duplicar todos los SVG del panel.
+[plasmarc][Theme]
+name=Bliss
+
+[Wallpaper]
+Image=Next
+
+[kcminputrc][Mouse]
+cursorTheme=breeze_cursors
+
+[kwinrc][org.kde.kdecoration2]
+library=org.kde.kwin.aurorae
+theme=__aurorae__svg__Bliss-Dark
+
+[KSplash]
+Theme=org.kde.Breeze

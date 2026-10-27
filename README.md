@@ -33,6 +33,7 @@ un backup automatico antes porque rehace el panel.
 ## Que hay aqui
 
     src/color-schemes/Bliss.colors      Paleta Luna para todas las apps Qt
+    src/color-schemes/Bliss-Dark.colors Variante oscura (GENERADA a mano, ver palette.md)
     src/aurorae/Bliss/                  Barra de titulo y botones
     src/plasma/desktoptheme/Bliss/      Shell de Plasma: barra, popups, filas
       widgets/panel-background.svg        fondo de la barra de tareas
@@ -54,6 +55,31 @@ un backup automatico antes porque rehace el panel.
     tools/recolor-kvantum.py  remapea la paleta de un tema Kvantum
     tools/make-kvconfig.py    genera el kvconfig con la paleta Luna
     tools/set-start-button.py pone el icono Inicio en el panel del usuario
+
+## La variante oscura se genera, no se duplica
+
+Bliss Dark no es un segundo tema escrito a mano: es el claro pasado por una
+transformacion. La geometria — el 9-slice, los ids, los margenes, el `rc` de
+Aurorae — es **identica**, y `make check` lo verifica comparando los ids de
+las dos decoraciones. Si divergen, el generador ha roto algo.
+
+    make dark          # regenera Aurorae oscuro + Kvantum oscuro
+    make apply-dark    # lo activa
+
+- **Aurorae**: `tools/make-dark-aurorae.py` escala la luminosidad de cada
+  color conservando tono y saturacion. Factor 0.58 en la decoracion, para que
+  la barra de titulo se hunda y no deslumbre, y 0.82 en los botones, que son
+  lo interactivo y deben seguir leyendose. El blanco puro queda intacto:
+  define la mascara de opacidad, el brillo de cristal y los glifos.
+- **Kvantum**: el mismo recolorizador con `--dark`, partiendo de KvCurves3d.
+  Ahi no se conserva ningun color por saturado — la base trae naranjas y rojos
+  que no pintan nada aqui — y la fase 2 devuelve el azul de seleccion.
+- **Plasma style**: no cambia. El chrome del shell ya es azul oscuro en ambas
+  variantes, igual que la barra de tareas de Windows 7 o 10 se mantiene
+  oscura con independencia del modo de las aplicaciones.
+
+El contraste de la paleta oscura esta comprobado: todos los pares criticos
+pasan AA, el peor es 5.3:1 (texto blanco sobre seleccion).
 
 ## El tema Kvantum es generado
 
@@ -122,13 +148,10 @@ popups, todo el chrome comparte paleta oscura. Detalles en `docs/formats.md`.
 
 ## Estado
 
-Fases 1 a 3 casi completas: la ventana (barra de titulo, nueve botones,
+Fases 1 a 4 completas: la ventana (barra de titulo, nueve botones,
 maximizado), el interior de las aplicaciones Qt y el escritorio (barra de
-tareas, popups, filas de menu). Falta el fondo de pantalla y los iconos.
-
-El modo oscuro esta disenado pero no construido: paleta en `docs/palette.md`,
-plan en la fase 4 de `docs/roadmap.md`. Sale barato porque la geometria se
-reutiliza entera.
+tareas, popups, filas de menu). y la variante oscura completa.
+Falta el fondo de pantalla y los iconos.
 
 El arte es un punto de partida calibrado a ojo, no un calco fiel.
 
