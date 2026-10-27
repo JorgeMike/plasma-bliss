@@ -319,11 +319,55 @@ por pieza ni el orden de pintado, y ya mando por mal camino una vez.
 Un tema derivado solo cambia el pigmento si la base es la misma. Bliss-Dark
 salia de KvCurves3d, que es oscuro de serie pero redondea los botones hasta la
 capsula; el resultado no se parecia a la variante clara. Generando las dos
-desde KvBeige, `make check` confirma que los 794 elementos tienen caja
-identica.
+desde KvBeige, `make check` confirma que los 433 elementos con nombre tienen
+caja identica.
+
+La comparacion se limita a los ids escritos en el fichero. Inkscape inventa un
+id por cada elemento anonimo (`circle346`) numerandolos por orden de
+documento: en cuanto una variante tiene un elemento de mas, esos nombres
+dejan de referirse a la misma forma y la comparacion da falsos positivos.
 
 La rampa de pizarra que convierte una base clara en oscura **no invierte** la
 luminosidad. Invertirla pondria la luz debajo: la cara del boton quedaria
 oscura arriba y clara abajo, y el relieve se leeria hundido. Lo que hace es
 comprimir de forma monotona el rango claro dentro del oscuro, conservando el
 orden de los tonos.
+
+### Los colores de tres digitos son una trampa real
+
+KvBeige escribe el blanco como `#fff`, no como `#ffffff`. Hay 22 asi, mas 56
+`#000` y 4 `#aaa`. Una regex de recolorizado que solo mire seis digitos los
+deja intactos **en silencio**.
+
+En la variante clara no se nota: el resultado tambien habria sido casi blanco.
+En la oscura se ve a la primera. El interior del campo de texto usa
+`linearGradient3923`, cuyos topes son `#e1e1e1` y `#fff`: el primero caia en
+la rampa y el segundo no, asi que el campo quedaba con un degradado de
+pizarra a **blanco puro**.
+
+Dos consecuencias para el recolorizador:
+
+- La regex se ancla a la propiedad CSS (`fill:`, `stroke:`, `stop-color:`,
+  `color:`), no busca `#` a secas. Asi acepta tres y seis digitos sin riesgo
+  de tocar una referencia tipo `url(#abc)`.
+- Hay una guarda que falla la generacion si queda algun color de tres digitos
+  sin pasar por la rampa. Un fallo silencioso no se puede permitir aqui.
+
+### El interior de un campo de texto no es material
+
+Al oscurecer, el material conserva el orden de luminosidades, pero **base y
+primer plano se invierten**. Un campo de texto es base: en claro es BLANCO,
+por encima del fondo de ventana; en oscuro es `#22272D`, por DEBAJO. Una rampa
+monotona no puede expresar ese giro.
+
+Sin tratarlo aparte, el campo quedaba mas claro que la ventana y, peor, no
+cuadraba con las areas de texto multilinea, que Kvantum rellena directamente
+con `base.color` y por tanto si salian oscuras. Se arregla reasignando el
+interior en la fase 2, con `BASE_DARK` y solo en `--dark`.
+
+El patron lleva `$` (`^lineedit-(normal|focused)$`) para alcanzar el interior
+y no las piezas del marco: el borde si es material y tiene que seguir
+leyendose como un bisel hundido.
+
+Es el mismo reparto que en el kvconfig, donde los colores de texto tambien se
+invierten mientras la geometria y el material no.

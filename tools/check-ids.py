@@ -67,7 +67,15 @@ def kvantum_geometry():
         print("  --     kvantum: falta inkscape, omitido")
         return 0
 
-    a, b = boxes(light), boxes(dark)
+    # Solo los ids ESCRITOS en el fichero. Inkscape inventa un id por cada
+    # elemento anonimo ("circle346") numerandolos por orden de documento, asi
+    # que en cuanto una variante tiene un elemento de mas — la fase 2 clona
+    # degradados — esos nombres dejan de referirse a la misma forma y la
+    # comparacion da falsos positivos. Los ids del tema si son estables.
+    named = ids(light) & ids(dark)
+    a = {k: v for k, v in boxes(light).items() if k in named}
+    b = {k: v for k, v in boxes(dark).items() if k in named}
+
     only = (set(a) ^ set(b))
     moved = [k for k in set(a) & set(b) if a[k] != b[k]]
     if only or moved:

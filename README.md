@@ -76,7 +76,7 @@ las dos decoraciones. Si divergen, el generador ha roto algo.
   la fase 2 devuelve el azul de seleccion. La rampa de pizarra no invierte la
   luminosidad, la comprime: invertirla pondria la luz debajo y los biseles se
   verian hundidos. `make check` comprueba que las dos variantes comparten la
-  caja de los 794 elementos, es decir, la misma forma.
+  caja de los 433 elementos con nombre, es decir, la misma forma.
 - **Plasma style**: no cambia. El chrome del shell ya es azul oscuro en ambas
   variantes, igual que la barra de tareas de Windows 7 o 10 se mantiene
   oscura con independencia del modo de las aplicaciones.

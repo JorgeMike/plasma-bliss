@@ -83,6 +83,28 @@ ACCENT_ELEMENTS = [
     (re.compile(r"^(expand-)?progress-(normal|pattern-normal)(-|$)"), GREEN),
 ]
 
+# Rampa de superficie "base", solo para --dark.
+#
+# El interior de un campo de texto no es material: es base, y base se comporta
+# al reves al oscurecer. En claro es BLANCO, mas claro que la ventana; en
+# oscuro es #22272D, mas OSCURO que la ventana. Una rampa monotona no puede
+# expresar ese giro: conserva el orden, asi que lo que estaba por encima del
+# fondo sigue por encima. El resultado era un campo mas claro que la ventana y
+# distinto de las areas de texto multilinea, que Kvantum rellena con
+# base.color y por tanto si salian oscuras.
+#
+# Es el mismo caso que los colores de texto en el kvconfig: primer plano y
+# fondo se invierten, el material no.
+BASE_DARK = [(0.00, "0e1115"), (0.50, "16191f"), (0.88, "1d2127"),
+             (1.00, "252b32")]
+
+# Elementos que solo se reasignan en la variante oscura. El patron lleva $
+# para alcanzar el interior y no las piezas del marco, que si son material:
+# el borde del campo tiene que seguir leyendose como un bisel hundido.
+DARK_ELEMENTS = [
+    (re.compile(r"^lineedit-(normal|focused)$"), BASE_DARK),
+]
+
 
 def rgb(h):
     return tuple(int(h[i:i + 2], 16) / 255 for i in (0, 2, 4))
@@ -101,8 +123,27 @@ def through(ramp, lightness):
     return ramp[-1][1]
 
 
+# Todo color de este SVG vive en un atributo style=, detras de una de estas
+# propiedades. Anclar ahi, en vez de buscar "#" a secas, es lo que impide
+# tocar una referencia como url(#abc) el dia que un id parezca un color.
+#
+# Acepta hex de TRES digitos ademas de los de seis. No es un detalle: KvBeige
+# escribe el blanco como #fff, y con la regex de solo seis digitos ese blanco
+# se escapaba del recolorizado. En claro no se notaba, porque el resultado
+# tambien era casi blanco; en oscuro dejaba el campo de texto con un
+# degradado que acababa en blanco puro.
+COLOR = re.compile(
+    r"\b(fill|stroke|stop-color|flood-color|color)\s*:\s*"
+    r"#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})\b")
+
+
+def expand(h):
+    """#fff -> #ffffff, para que todo lo demas trabaje con seis digitos."""
+    return "".join(c * 2 for c in h) if len(h) == 3 else h
+
+
 def material(h, ramp, sat_keep):
-    h = h.lower()
+    h = expand(h.lower())
     if h in KEEP:
         return h
     if h in ACCENT:
@@ -112,8 +153,8 @@ def material(h, ramp, sat_keep):
 
 
 def phase1(svg, ramp, sat_keep):
-    return re.sub(r"#([0-9a-fA-F]{6})\b",
-                  lambda m: "#" + material(m.group(1), ramp, sat_keep), svg)
+    return COLOR.sub(
+        lambda m: f"{m.group(1)}:#{material(m.group(2), ramp, sat_keep)}", svg)
 
 
 # ---------------------------------------------------------------- utilidades
@@ -181,24 +222,26 @@ def element_span(svg, eid):
 
 
 def _retint(text, ramp):
-    for c in sorted(set(re.findall(r"#([0-9a-fA-F]{6})\b", text))):
-        if c.lower() in KEEP:
-            continue
+    def one(m):
+        c = expand(m.group(2).lower())
+        if c in KEEP:
+            return m.group(0)
         _, L, _ = colorsys.rgb_to_hls(*rgb(c))
-        text = re.sub(rf"#{c}\b", "#" + through(ramp, L), text)
-    return text
+        return f"{m.group(1)}:#{through(ramp, L)}"
+    return COLOR.sub(one, text)
 
 
-def phase2(svg):
+def phase2(svg, dark=False):
     """Reasigna las superficies que no son del material: seleccion y progreso.
 
     Sin aritmetica de desplazamientos: se acumulan sustituciones de texto y se
     aplican al final. Insertar los clones antes de </defs> invalida cualquier
     indice calculado previamente.
     """
+    rules = ACCENT_ELEMENTS + (DARK_ELEMENTS if dark else [])
     targets = {}
     for eid in re.findall(r'id="([a-zA-Z][\w-]*)"', svg):
-        for pat, ramp in ACCENT_ELEMENTS:
+        for pat, ramp in rules:
             if pat.match(eid):
                 targets[eid] = ramp
                 break
@@ -256,10 +299,10 @@ def main(src, dst, dark=False):
     ramp = DARK_RAMP if dark else RAMP
     sat_keep = 1.1 if dark else SAT_KEEP   # en oscuro no se conserva ningun acento
     svg = open(src).read()
-    n_colors = len(set(re.findall(r"#[0-9a-fA-F]{6}", svg)))
+    n_colors = len(set(expand(m.group(2).lower()) for m in COLOR.finditer(svg)))
     n_ids_before = len(set(re.findall(r'id="([^"]+)"', svg)))
     svg = phase1(svg, ramp, sat_keep)
-    svg, n_accent, problems = phase2(svg)
+    svg, n_accent, problems = phase2(svg, dark)
     open(dst, "w").write(svg)
     print(f"{dst}")
     print(f"  fase 1: {n_colors} colores por la rampa "
@@ -270,9 +313,16 @@ def main(src, dst, dark=False):
     # guardas: el XML debe seguir siendo valido y no puede perderse ningun id
     import xml.etree.ElementTree as ET
     ET.parse(dst)
-    n_after = len(set(re.findall(r'id="([^"]+)"', open(dst).read())))
+    out = open(dst).read()
+    n_after = len(set(re.findall(r'id="([^"]+)"', out)))
     assert n_after >= n_ids_before, f"se perdieron ids: {n_ids_before} -> {n_after}"
-    print(f"  guardas: XML valido, {n_after} ids (antes {n_ids_before})")
+    # Ningun color puede quedar sin pasar por la rampa. Los de tres digitos se
+    # escapaban en silencio y solo se vio meses despues, en un campo de texto.
+    short = sorted(set(m.group(0) for m in COLOR.finditer(out)
+                       if len(m.group(2)) == 3))
+    assert not short, f"colores sin recolorear: {short}"
+    print(f"  guardas: XML valido, {n_after} ids (antes {n_ids_before}), "
+          f"ningun color sin recolorear")
 
 
 if __name__ == "__main__":
