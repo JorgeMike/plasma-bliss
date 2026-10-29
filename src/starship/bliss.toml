@@ -56,14 +56,28 @@ format = ' [\($branch\)]($style)'
 
 [git_status]
 style = "yellow"
-# Flechas en ASCII. Las de serie son Unicode y este prompt tiene que verse
-# igual en un TTY pelado.
-ahead = "+${count}"
-behind = "-${count}"
-diverged = "+${ahead_count}-${behind_count}"
+# Indicadores en ASCII puro. Los de serie usan flechas Unicode (U+21E1) y
+# este prompt tiene que verse igual en un TTY pelado.
+#
+#   !  conflicto de fusion        *  modificado, sin anhadir al indice
+#   ?  sin seguimiento            +  anhadido al indice
+#   r  renombrado                 x  borrado
+#   s  guardado en el stash
+#   >N  N commits por subir       <N  N commits por bajar
+#   >N<M  las dos cosas (ramas divergidas)
+#
+# El adelanto NO usa "+": "+" ya significa "en el indice", y "+2" se leia
+# como "dos archivos en el indice" cuando eran dos commits sin subir.
+#
+# El stash tampoco usa "$": en el formato de starship "$" abre una variable,
+# asi que se perdia en silencio. Escapado seria '\$', pero choca con el
+# simbolo del prompt, asi que se usa "s".
+ahead = ">${count}"
+behind = "<${count}"
+diverged = ">${ahead_count}<${behind_count}"
 conflicted = "!"
 untracked = "?"
-stashed = "$"
+stashed = "s"
 modified = "*"
 staged = "+"
 renamed = "r"

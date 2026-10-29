@@ -561,3 +561,47 @@ Dos detalles del formato de starship que cuestan un intento:
 Konsole. Por eso `make terminal` esta fuera de `make apply`, guarda copia de
 lo que hubiera en `backup/terminal/` y `make terminal-revert` la devuelve. Es
 el mismo trato que `make start-button`.
+
+### Que significan los indicadores de git del prompt
+
+| | |
+|---|---|
+| `!` | conflicto de fusion |
+| `?` | archivo sin seguimiento |
+| `*` | modificado, sin anhadir al indice |
+| `+` | anhadido al indice |
+| `r` | renombrado |
+| `x` | borrado |
+| `s` | guardado en el stash |
+| `>N` | N commits por subir |
+| `<N` | N commits por bajar |
+| `>N<M` | las dos cosas: ramas divergidas |
+
+Dos de estos cambiaron despues de la primera version, por fallos reales:
+
+- **El adelanto no puede usar `+`.** `+` ya significa "en el indice", asi que
+  `+2` se leia como "dos archivos preparados" cuando en realidad eran dos
+  commits sin subir. Ahora es `>2`.
+- **El stash no puede usar `$`.** En el formato de starship `$` abre una
+  variable, asi que el indicador desaparecia en silencio. Escapado (`'\$'`)
+  funciona, pero choca con el simbolo del prompt, asi que es `s`.
+
+### Ctrl+R tambien lleva colores propios
+
+La busqueda inversa del historial no la hace zsh: la hace **fzf**, que zsh
+carga con `source <(fzf --zsh)`. Y fzf se pinta con lo que diga
+`FZF_DEFAULT_OPTS`.
+
+Si esa variable trae colores hex, Ctrl+R ignora el palé del terminal y
+aparece con los colores de antes sobre el fondo negro. Es exactamente el
+mismo problema que tenia el prompt de starship, en otro sitio: en este equipo
+estaba en `~/.config/shell/common.sh`, que cargan tanto `.zshrc` como
+`.bashrc`.
+
+La version de Bliss usa solo indices ANSI: `-1` es "el color por defecto del
+terminal" y la linea seleccionada va en video inverso (`fg+:0,bg+:7`), que es
+como resaltaba una consola de verdad.
+
+Moraleja para el resto del sistema: **cualquier herramienta de terminal que
+guarde colores hex en su configuracion se quedara con el tema anterior.**
+Cambiar el esquema del emulador no la alcanza.
