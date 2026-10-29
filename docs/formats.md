@@ -491,13 +491,46 @@ Por eso `tools/fetch-icons.py` lleva un `DENY`. El coste es que esos tipos de
 archivo se quedan con el icono heredado en el gestor de archivos, que es
 mejor trato que un icono roto en el panel, visible siempre.
 
-### Los iconos de aplicacion no cambian, y es correcto
+### Los iconos de aplicacion: tres de ocho, y el porque
 
-LinXP no tiene dibujo propio para Dolphin, Konsole, Brave, VS Code ni ninguno
-de los lanzadores de un escritorio actual: su conjunto de `apps` es de la
-epoca de XP. Comprobado nombre por nombre. Por eso `fetch-icons.py` ni mira
-el contexto `apps`: los iconos de los lanzadores salen de breeze-dark y asi
-deben quedarse.
+**Correccion de una version anterior de esta pagina.** Decia que LinXP no
+tenia dibujo propio para ninguno de los lanzadores. Era falso, y el error
+estuvo en comprobar los nombres equivocados: el lanzador de Konsole no pide
+`konsole`, pide **`utilities-terminal`**, y ese LinXP si lo tiene.
+
+Dos cosas hacian falta para verlo:
+
+1. **Comparar contra el contexto correcto.** LinXP mete en `apps` los iconos
+   que Breeze guarda en `preferences` (los paneles de Ajustes). Comparando
+   solo `apps` contra `apps` se perdian doce.
+2. **Dejar que los alias se salten el filtro.** El criterio general es "solo
+   nombres que Breeze define", pero Dolphin pide `org.kde.dolphin`, que lo
+   declara el propio Dolphin y Breeze no. Un alias escrito a mano ya es la
+   prueba de que ese nombre se pide.
+
+Con eso, de los 50 iconos de `apps` con dibujo propio entran 19, y de los
+ocho lanzadores de este escritorio cambian tres:
+
+| lanzador | pide | lo sirve |
+|---|---|---|
+| Ajustes del sistema | `preferences-system` | Bliss (alias de `cs-general`) |
+| Dolphin | `org.kde.dolphin` | Bliss (alias de `places/folder`) |
+| Konsole | `utilities-terminal` | Bliss |
+| Discover | `plasmadiscover` | breeze-dark |
+| Brave, Claude | su propio nombre | hicolor, del paquete |
+| VS Code, DBeaver | ruta absoluta en el .desktop | ni se consulta el tema |
+
+Los cinco que no cambian son aplicaciones de terceros con icono de marca
+propio. LinXP no los tiene ni podria: es un conjunto de la epoca de XP.
+
+**Cuidado con lo que se anhade como alias.** `software-properties`, de LinXP,
+es literalmente la bandera de Microsoft. No entra, ni como alias: la regla
+del proyecto es recrear el aspecto, nunca usar marcas.
+
+Y conviene revisar la bandeja al anhadir nombres de `apps`: el applet de
+Bluetooth pide `preferences-system-bluetooth-symbolic`, con sufijo, asi que
+el `preferences-system-bluetooth` que ahora trae Bliss no lo pisa. Si alguna
+vez coincidieran, va al `DENY`.
 
 ## Terminal: Konsole y el prompt
 

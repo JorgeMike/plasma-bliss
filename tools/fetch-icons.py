@@ -47,10 +47,18 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 CACHE = ROOT / "build" / "cache"
 DEST = ROOT / "build" / "icons" / "Bliss"
 
-# Contextos que se ven a diario. Las aplicaciones se dejan fuera a proposito:
-# los iconos de app de la epoca de XP no casan con el software de ahora, y
-# breeze-dark ya los tiene todos.
-CONTEXTS = ("places", "devices", "mimetypes")
+# Contexto de LinXP -> contextos de Breeze contra los que se compara.
+#
+# No siempre coinciden: LinXP mete en `apps` los iconos que Breeze guarda en
+# `preferences` (los paneles de Ajustes del sistema). Comparando solo contra
+# `apps` se perdian doce, incluido el `utilities-terminal` que pide el
+# lanzador de Konsole.
+CONTEXTS = {
+    "places": ("places",),
+    "devices": ("devices",),
+    "mimetypes": ("mimetypes",),
+    "apps": ("apps", "preferences", "categories"),
+}
 
 # Nombres que KDE pide y LinXP llama de otra forma. Sin esto, la carpeta
 # personal — de los iconos mas visibles que hay — se quedaria sin cambiar.
@@ -75,7 +83,20 @@ ALIASES = {
     "mimetypes": {
         "inode-directory": "places/folder",
     },
+    "apps": {
+        # Ajustes del sistema pide "preferences-system", que LinXP no tiene
+        # con ese nombre. cs-general es su panel de control: un engranaje.
+        "preferences-system": "apps/cs-general",
+        # Dolphin pide su nombre propio, y LinXP no conoce Dolphin. Se le
+        # pone la carpeta amarilla, que es lo que habria usado XP.
+        "system-file-manager": "places/folder",
+        "org.kde.dolphin": "places/folder",
+    },
 }
+
+# OJO con lo que se anhade aqui: software-properties, de LinXP, es
+# literalmente la bandera de Microsoft. No entra, ni como alias. La regla del
+# proyecto es recrear el aspecto, nunca usar marcas.
 
 # Nombres que NO se cogen aunque encajen en el criterio.
 #
@@ -92,21 +113,25 @@ DENY = {
     "mimetypes": {"audio-x-generic", "unknown"},
     "devices": set(),
     "places": set(),
+    "apps": set(),
 }
 
 REFERENCE = "/usr/share/icons/breeze"
 
 
-def reference_names(context):
-    """Nombres que define el tema de referencia, para ese contexto.
+def reference_names(contexts):
+    """Nombres que define el tema de referencia, en esos contextos.
 
-    Breeze ordena contexto/tamano, al reves que Papirus. Se lee Breeze porque
-    es el tema de KDE: lo que el nombra es lo que el escritorio pide.
+    Breeze ordena contexto/tamano. Se lee Breeze porque es el tema de KDE: lo
+    que el nombra es lo que el escritorio pide.
     """
-    base = pathlib.Path(REFERENCE) / context
-    if not base.is_dir():
-        return set()
-    return {p.stem for p in base.glob("*/*") if p.suffix in (".svg", ".png")}
+    out = set()
+    for context in contexts:
+        base = pathlib.Path(REFERENCE) / context
+        if base.is_dir():
+            out |= {p.stem for p in base.glob("*/*")
+                    if p.suffix in (".svg", ".png")}
+    return out
 
 
 def available(src, context):
@@ -166,17 +191,21 @@ def main():
     if DEST.exists():
         shutil.rmtree(DEST)
 
-    for context in CONTEXTS:
+    for context, refs in CONTEXTS.items():
         have = available(src, context)
-        wanted = reference_names(context)
+        wanted = reference_names(refs)
 
         # los que coinciden de nombre, mas los alias
         picks = {n: (have, n) for n in sorted(have)
                  if n in wanted and n not in DENY[context]}
+        # Los alias NO exigen que Breeze nombre el destino. El filtro de
+        # arriba existe para no instalar nombres que nadie pide; un alias
+        # escrito a mano ya dice que ese nombre se pide. Hace falta para
+        # org.kde.dolphin, que lo declara el propio Dolphin y Breeze no.
         for target, source in ALIASES[context].items():
             src_ctx, _, src_name = source.rpartition("/")
             pool = available(src, src_ctx) if src_ctx else have
-            if src_name in pool and target in wanted and target not in DENY[context]:
+            if src_name in pool and target not in DENY[context]:
                 picks[target] = (pool, src_name)
 
         for target in sorted(picks):
