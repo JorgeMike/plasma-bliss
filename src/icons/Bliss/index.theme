@@ -2,19 +2,22 @@
 Name=Bliss
 Comment=Windows XP Luna x Frutiger Aero
 
-# Hereda de Papirus-Dark: cualquier icono que no este aqui sale de ahi.
+# Hereda de breeze-dark: cualquier icono que no este aqui sale de ahi.
 # Esto es lo que hace viable el proyecto — no dibujas 1500 iconos, cubres los
 # que se ven a diario y dejas que el resto caiga por herencia.
 #
-# Papirus y no breeze porque es el que usa este escritorio y porque su
-# cobertura es mayor. breeze y hicolor quedan detras como red.
-Inherits=Papirus-Dark,Papirus,breeze,hicolor
+# breeze-dark y NO Papirus, aunque Papirus tenga mas cobertura. Los iconos de
+# la bandeja del sistema son simbolicos y Plasma los recolorea con la clase
+# CSS ColorScheme-Text, que breeze trae y Papirus no. Heredando de Papirus,
+# el volumen, el portapapeles y las notificaciones salian en gris oscuro
+# sobre el azul del panel, porque Plasma no podia reteñirlos.
+Inherits=breeze-dark,breeze,hicolor
 Example=folder
 
 # Los mapas de bits de places, devices y mimetypes NO estan en el
 # repositorio: los trae `make icons` desde LinXP a build/, porque LinXP no
 # publica licencia. Declarar aqui sus directorios no molesta si faltan: la
-# busqueda simplemente no encuentra nada y sigue hacia Papirus.
+# busqueda simplemente no encuentra nada y sigue hacia breeze-dark.
 Directories=16x16/places,16x16/devices,16x16/mimetypes,24x24/places,24x24/devices,24x24/mimetypes,32x32/places,32x32/devices,32x32/mimetypes,48x48/places,48x48/devices,48x48/mimetypes,128x128/places,22x22/places,scalable/places,22x22/apps,48x48/apps,scalable/apps
 
 [16x16/places]

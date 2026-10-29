@@ -79,7 +79,7 @@ las dos decoraciones. Si divergen, el generador ha roto algo.
   caja de los 433 elementos con nombre, es decir, la misma forma.
 - **Iconos**: no cambian entre claro y oscuro. `Bliss` solo sobrescribe
   carpetas, dispositivos y tipos de archivo, y hereda el resto de
-  Papirus-Dark. Los mapas de bits los trae `make icons` desde LinXP a
+  breeze-dark. Los mapas de bits los trae `make icons` desde LinXP a
   `build/`, fuera del repositorio, porque LinXP no publica licencia.
 - **Plasma style**: no cambia. El chrome del shell ya es azul oscuro en ambas
   variantes, igual que la barra de tareas de Windows 7 o 10 se mantiene

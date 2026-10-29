@@ -99,7 +99,7 @@ Kvantum — se reutiliza tal cual. Solo cambia el pigmento.
 ## Fase 5 — acabado
 
 - [x] Iconos. No hizo falta dibujar ni forkear: `make icons` espiga 61 iconos
-      XP de LinXP y el tema hereda el resto de Papirus-Dark. Se descarto usar
+      XP de LinXP y el tema hereda el resto de breeze-dark. Se descarto usar
       LinXP entero porque de sus 1025 nombres solo 210 tienen dibujo propio
       (el resto son alias de Mint-X) y porque hereda de temas que no estan
       instalados. No entran en el repositorio: LinXP no publica licencia

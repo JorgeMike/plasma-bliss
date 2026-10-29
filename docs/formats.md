@@ -418,12 +418,12 @@ encadena temas, y la busqueda recorre la cadena hasta encontrar el nombre. Por
 eso Bliss solo cubre lo que se ve a diario y declara:
 
 ```
-Inherits=Papirus-Dark,Papirus,breeze,hicolor
+Inherits=breeze-dark,breeze,hicolor
 ```
 
 Detalle del spec que conviene saber: **dentro de un tema se elige el tamano
 mas cercano antes de pasar al padre**. Si Bliss tiene `folder` a 32 px pero no
-a 22, una peticion de 22 px coge el de 32 y lo escala; no se va a Papirus. Eso
+a 22, una peticion de 22 px coge el de 32 y lo escala; no sube al padre. Eso
 es lo que mantiene la coherencia sin tener que cubrir todos los tamanos.
 
 ### LinXP: solo 210 de sus 1025 nombres son suyos
@@ -448,7 +448,7 @@ escritorio pide. Si LinXP creciera, la seleccion crece sola.
 Algunos nombres que pide KDE no coinciden con los de LinXP, y uno cruza de
 contexto: `inode-directory` es el tipo MIME de una carpeta, Breeze lo define
 en `mimetypes`, y el dibujo esta en `places/folder`. Sin ese alias, las
-carpetas se quedaban con el icono de Papirus en las vistas que piden el tipo
+carpetas se quedaban con el icono heredado en las vistas que piden el tipo
 MIME en lugar del lugar. Los demas son renombres simples: `user-home` viene de
 `folder-home`, `folder-downloads` de `folder-download`.
 
@@ -457,5 +457,40 @@ MIME en lugar del lugar. Los demas son renombres simples: `user-home` viene de
 LinXP no publica fichero de licencia. Podemos usarlo, no redistribuirlo. Asi
 que los PNG se bajan a `build/`, que esta fuera de git, y `make install` los
 mezcla si estan. Si no estan, el tema sigue siendo valido y todo cae a
-Papirus. Es el mismo trato que KvBeige: la base vive fuera, el repositorio
+breeze-dark. Es el mismo trato que KvBeige: la base vive fuera, el repositorio
 guarda la receta.
+
+### El padre tiene que ser breeze, no Papirus
+
+Los iconos de la bandeja del sistema son simbolicos y Plasma **los retiñe**:
+sus SVG traen una clase CSS `ColorScheme-Text` que Plasma reescribe con el
+color de primer plano del Plasma style. Breeze la trae; Papirus no, sus
+iconos son de color fijo.
+
+Heredar de Papirus dejaba el portapapeles, la caja fuerte y las
+notificaciones en gris oscuro sobre el azul del panel: Plasma encontraba el
+icono, pero no podia aclararlo. Con `Inherits=breeze-dark` vuelven a ser
+blancos.
+
+Es el mismo tipo de fallo que los iconos negros del panel de la fase 3, pero
+por otra via: alli el problema era el color declarado en el Plasma style;
+aqui, que el icono no fuese retiñible.
+
+### Hay nombres que no se pueden robar: los que usa la bandeja
+
+Algunos nombres son a la vez de tipo de archivo y de applet. `audio-x-generic`
+es el caso claro: el applet de volumen lo acaba usando, y con el mapa de bits
+de LinXP puesto mostraba una pagina blanca con una nota musical en lugar del
+altavoz. Comprobado apartando el fichero y recargando plasmashell.
+
+Por eso `tools/fetch-icons.py` lleva un `DENY`. El coste es que esos tipos de
+archivo se quedan con el icono heredado en el gestor de archivos, que es
+mejor trato que un icono roto en el panel, visible siempre.
+
+### Los iconos de aplicacion no cambian, y es correcto
+
+LinXP no tiene dibujo propio para Dolphin, Konsole, Brave, VS Code ni ninguno
+de los lanzadores de un escritorio actual: su conjunto de `apps` es de la
+epoca de XP. Comprobado nombre por nombre. Por eso `fetch-icons.py` ni mira
+el contexto `apps`: los iconos de los lanzadores salen de breeze-dark y asi
+deben quedarse.

@@ -26,7 +26,7 @@ Por que espigar y no usar LinXP entero:
     incompleto: se ve roto.
 
 Aqui se coge solo lo que se ve a diario — carpetas, dispositivos y tipos de
-archivo — y el resto lo pone Papirus por herencia, que es de lo que hereda
+archivo — y el resto lo pone breeze-dark por herencia, que es de lo que hereda
 nuestro index.theme.
 
 La seleccion no esta escrita a mano: son los iconos de LinXP cuyo nombre
@@ -49,7 +49,7 @@ DEST = ROOT / "build" / "icons" / "Bliss"
 
 # Contextos que se ven a diario. Las aplicaciones se dejan fuera a proposito:
 # los iconos de app de la epoca de XP no casan con el software de ahora, y
-# Papirus ya los tiene todos y bien.
+# breeze-dark ya los tiene todos.
 CONTEXTS = ("places", "devices", "mimetypes")
 
 # Nombres que KDE pide y LinXP llama de otra forma. Sin esto, la carpeta
@@ -58,7 +58,7 @@ CONTEXTS = ("places", "devices", "mimetypes")
 # El origen puede venir de OTRO contexto, escrito "contexto/nombre". Hace
 # falta para inode-directory, que es el tipo MIME de una carpeta y que Breeze
 # define en mimetypes aunque el dibujo este en places. Sin esa linea, las
-# carpetas se quedaban con el icono de Papirus en las vistas que piden el
+# carpetas se quedaban con el icono heredado en las vistas que piden el
 # tipo MIME en vez del lugar.
 #   destino: origen en LinXP
 ALIASES = {
@@ -75,6 +75,23 @@ ALIASES = {
     "mimetypes": {
         "inode-directory": "places/folder",
     },
+}
+
+# Nombres que NO se cogen aunque encajen en el criterio.
+#
+# La bandeja del sistema los usa como icono propio, y ahi un mapa de bits a
+# todo color no vale: el panel es azul oscuro y espera glifos monocromos que
+# Plasma retiñe. Se comprobo apartando el fichero y recargando plasmashell:
+# con audio-x-generic puesto, el applet de volumen mostraba una pagina blanca
+# con una nota musical en lugar del altavoz.
+#
+# El coste es que esos tipos de archivo se quedan con el icono de breeze en
+# el gestor de archivos. Es mejor trato que un icono permanentemente roto en
+# el panel, que se ve siempre.
+DENY = {
+    "mimetypes": {"audio-x-generic", "unknown"},
+    "devices": set(),
+    "places": set(),
 }
 
 REFERENCE = "/usr/share/icons/breeze"
@@ -154,11 +171,12 @@ def main():
         wanted = reference_names(context)
 
         # los que coinciden de nombre, mas los alias
-        picks = {n: (have, n) for n in sorted(have) if n in wanted}
+        picks = {n: (have, n) for n in sorted(have)
+                 if n in wanted and n not in DENY[context]}
         for target, source in ALIASES[context].items():
             src_ctx, _, src_name = source.rpartition("/")
             pool = available(src, src_ctx) if src_ctx else have
-            if src_name in pool and target in wanted:
+            if src_name in pool and target in wanted and target not in DENY[context]:
                 picks[target] = (pool, src_name)
 
         for target in sorted(picks):

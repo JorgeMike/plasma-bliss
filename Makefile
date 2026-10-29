@@ -100,7 +100,7 @@ install-icons:
 	-@gtk-update-icon-cache -qtf $(DEST)/icons/hicolor 2>/dev/null || true
 # Los mapas de bits espigados de LinXP viven en build/, fuera del repositorio,
 # asi que se mezclan aqui si estan. Si no estan, el tema sigue siendo valido:
-# todo cae a Papirus por herencia.
+# todo cae a breeze-dark por herencia.
 	@if [ -d build/icons/$(NAME) ]; then \
 		cp -r build/icons/$(NAME)/. $(DEST)/icons/$(NAME)/; \
 		echo "   iconos       -> $(DEST)/icons/$(NAME) (+ $$(find build/icons/$(NAME) -name '*.png' | wc -l) PNG de LinXP)"; \
@@ -169,9 +169,9 @@ _apply:
 		echo "   estilo de widgets -> kvantum/$(VARIANT)"; \
 	fi
 # El tema de iconos es el MISMO en claro y oscuro: Bliss solo sobrescribe
-# carpetas, dispositivos y tipos de archivo, y hereda el resto de Papirus-Dark.
+# carpetas, dispositivos y tipos de archivo, y hereda el resto de breeze-dark.
 	@$(KWRITE) --file kdeglobals --group Icons --key Theme $(NAME)
-	@echo "   iconos            -> $(NAME) (hereda de Papirus-Dark)"
+	@echo "   iconos            -> $(NAME) (hereda de breeze-dark)"
 	@if [ -n "$(QDBUS)" ]; then $(QDBUS) org.kde.KWin /KWin reconfigure; fi
 	@echo ">> $(VARIANT) aplicado. El panel NO se ha tocado."
 	@echo "   las aplicaciones Qt ya abiertas no releen los iconos: reinicialas"
