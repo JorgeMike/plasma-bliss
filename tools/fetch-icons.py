@@ -91,6 +91,11 @@ ALIASES = {
         # pone la carpeta amarilla, que es lo que habria usado XP.
         "system-file-manager": "places/folder",
         "org.kde.dolphin": "places/folder",
+        # Discover pide su nombre propio. system-software-installer es una
+        # caja de software con un CD, que es justo lo que es.
+        # El notificador de Discover NO colisiona: pide
+        # system-software-update, con otro nombre.
+        "plasmadiscover": "apps/system-software-installer",
     },
 }
 

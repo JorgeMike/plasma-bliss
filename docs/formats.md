@@ -508,20 +508,25 @@ Dos cosas hacian falta para verlo:
    declara el propio Dolphin y Breeze no. Un alias escrito a mano ya es la
    prueba de que ese nombre se pide.
 
-Con eso, de los 50 iconos de `apps` con dibujo propio entran 19, y de los
-ocho lanzadores de este escritorio cambian tres:
+Con eso, de los 50 iconos de `apps` con dibujo propio entran 20, y de los
+ocho lanzadores de este escritorio cambian cuatro:
 
 | lanzador | pide | lo sirve |
 |---|---|---|
 | Ajustes del sistema | `preferences-system` | Bliss (alias de `cs-general`) |
 | Dolphin | `org.kde.dolphin` | Bliss (alias de `places/folder`) |
+| Discover | `plasmadiscover` | Bliss (alias de `system-software-installer`) |
 | Konsole | `utilities-terminal` | Bliss |
-| Discover | `plasmadiscover` | breeze-dark |
 | Brave, Claude | su propio nombre | hicolor, del paquete |
 | VS Code, DBeaver | ruta absoluta en el .desktop | ni se consulta el tema |
 
-Los cinco que no cambian son aplicaciones de terceros con icono de marca
-propio. LinXP no los tiene ni podria: es un conjunto de la epoca de XP.
+Los cuatro que no cambian son aplicaciones de terceros con icono de marca
+propio, o declaran una ruta absoluta y ni consultan el tema. LinXP no las
+tiene ni podria: es un conjunto de la epoca de XP.
+
+Antes de anhadir cada alias conviene mirar si la bandeja usa ese nombre. El
+notificador de Discover, por ejemplo, no pide `plasmadiscover` sino
+`system-software-update`, asi que no colisiona.
 
 **Cuidado con lo que se anhade como alias.** `software-properties`, de LinXP,
 es literalmente la bandera de Microsoft. No entra, ni como alias: la regla
