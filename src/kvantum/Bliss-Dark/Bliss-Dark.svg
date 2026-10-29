@@ -630,87 +630,25 @@
 <stop offset="0" style="stop-color:#111419"/>
 <stop offset="1" style="stop-color:#13161c"/>
 </linearGradient>
-<linearGradient gradientTransform="matrix(-1.1875,0,0,-1.1875,46.5625,580.5004)" xlink:href="#linearGradient7980" id="blissAccent33_0" y1="280" x1="-211.3158" y2="292.63193" gradientUnits="userSpaceOnUse" x2="-211.3158"/>
+<linearGradient gradientTransform="translate(0,-16)" xlink:href="#linearGradient7330" id="blissAccent33_0" y1="246" x1="44" y2="261" gradientUnits="userSpaceOnUse" x2="44"/>
 <linearGradient id="blissAccent33_1">
-<stop offset="0" style="stop-color:#227814;stop-opacity:.392"/>
-<stop offset="1" style="stop-color:#227814;stop-opacity:0"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(-1.1875,0,0,-1.1875,-0.9375,541.25)" xlink:href="#blissAccent34_1" id="blissAccent34_0" y1="280" x1="-211.3158" y2="292.63156" gradientUnits="userSpaceOnUse" x2="-211.3158"/>
-<linearGradient id="blissAccent34_1">
-<stop offset="0" style="stop-color:#2c9517"/>
-<stop offset="1" style="stop-color:#258015"/>
-</linearGradient>
-<linearGradient gradientTransform="rotate(180,107.5,170.625)" xlink:href="#linearGradient6954" id="blissAccent35_0" y1="121.9203" x1="-27.5" y2="121.9203" gradientUnits="userSpaceOnUse" x2="-32.5"/>
-<linearGradient id="blissAccent35_1">
-<stop offset="0" style="stop-color:#2c9517"/>
-<stop offset="1" style="stop-color:#258015"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(-1.1875,0,0,-1.1875,-0.9375,541.25)" xlink:href="#linearGradient7980" id="blissAccent36_0" y1="280" x1="-211.3158" y2="292.63159" gradientUnits="userSpaceOnUse" x2="-211.3158"/>
-<linearGradient id="blissAccent36_1">
-<stop offset="0" style="stop-color:#2a8f16"/>
-<stop offset="0.5" style="stop-color:#278916"/>
-<stop offset="1" style="stop-color:#268315"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(1,0,0,-1,317.5,341.25)" xlink:href="#linearGradient6962" id="blissAccent37_0" y1="154.41991" x1="-27.5" y2="154.41991" gradientUnits="userSpaceOnUse" x2="-32.5"/>
-<linearGradient id="blissAccent37_1">
-<stop offset="0" style="stop-color:#2c9517"/>
-<stop offset="1" style="stop-color:#258015"/>
-</linearGradient>
-<linearGradient gradientTransform="translate(-215,-341.25)" xlink:href="#linearGradient6954" id="blissAccent38_0" y1="154.41991" x1="-27.5" y2="154.41991" gradientUnits="userSpaceOnUse" x2="-32.5"/>
-<linearGradient id="blissAccent38_1">
-<stop offset="0" style="stop-color:#2d9a18"/>
-<stop offset="0.5" style="stop-color:#2d9a18;stop-opacity:.784"/>
-<stop offset="1" style="stop-color:#2d9a18;stop-opacity:0"/>
-</linearGradient>
-<linearGradient gradientTransform="translate(317.5,-341.25)" xlink:href="#linearGradient6962" id="blissAccent39_0" y1="154.41991" x1="-27.5" y2="154.8125" gradientUnits="userSpaceOnUse" x2="-32.5625"/>
-<linearGradient id="blissAccent39_1">
-<stop offset="0"/>
-<stop offset="1" style="stop-opacity:0"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(-1.1875,0,0,-1.1875,46.5625,613)" xlink:href="#blissAccent40_1" id="blissAccent40_0" y1="307.36844" x1="-211.3158" y2="320" gradientUnits="userSpaceOnUse" x2="-211.3158"/>
-<linearGradient id="blissAccent40_1">
-<stop offset="0" style="stop-color:#2c9517"/>
-<stop offset="1" style="stop-color:#258015"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(-1.1875,0,0,-1.1875,-0.9375,541.25)" xlink:href="#blissAccent41_1" id="blissAccent41_0" y1="307.3681" x1="-211.3158" y2="320" gradientUnits="userSpaceOnUse" x2="-211.3158"/>
-<linearGradient id="blissAccent41_1">
-<stop offset="0" style="stop-color:#2c9517"/>
-<stop offset="1" style="stop-color:#258015"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(-1,0,0,-1,215,341.25)" xlink:href="#blissAccent42_1" id="blissAccent42_0" y1="154.41991" x1="-27.5" y2="154.41991" gradientUnits="userSpaceOnUse" x2="-32.5"/>
-<linearGradient id="blissAccent42_1">
-<stop offset="0" style="stop-color:#227814;stop-opacity:.392"/>
-<stop offset="1" style="stop-color:#227814;stop-opacity:0"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(-1.1875,0,0,-1.1875,-0.9375,541.25)" xlink:href="#linearGradient7980" id="blissAccent43_0" y1="307.3681" x1="-211.3158" y2="320" gradientUnits="userSpaceOnUse" x2="-211.3158"/>
-<linearGradient id="blissAccent43_1">
-<stop offset="0" style="stop-color:#2d9a18;stop-opacity:.196"/>
-<stop offset="1" style="stop-color:#2d9a18;stop-opacity:0"/>
-</linearGradient>
-<linearGradient gradientTransform="matrix(1,0,0,-1,317.5,341.25)" xlink:href="#linearGradient6962" id="blissAccent44_0" y1="152.5" x1="-27.5" y2="153.125" gradientUnits="userSpaceOnUse" x2="-32.5"/>
-<linearGradient id="blissAccent44_1">
-<stop offset="0" style="stop-color:#2b9117"/>
-<stop offset="1" style="stop-color:#237d14"/>
-</linearGradient>
-<linearGradient gradientTransform="translate(0,-16)" xlink:href="#linearGradient7330" id="blissAccent45_0" y1="246" x1="44" y2="261" gradientUnits="userSpaceOnUse" x2="44"/>
-<linearGradient id="blissAccent45_1">
 <stop offset="0" style="stop-color:#2c9517"/>
 <stop offset="1" style="stop-color:#278615"/>
 </linearGradient>
-<linearGradient gradientTransform="translate(0,-16)" xlink:href="#blissAccent46_1" id="blissAccent46_0" y1="246" x1="44" y2="261" gradientUnits="userSpaceOnUse" x2="44"/>
-<linearGradient id="blissAccent46_1">
+<linearGradient gradientTransform="translate(0,-16)" xlink:href="#blissAccent34_1" id="blissAccent34_0" y1="246" x1="44" y2="261" gradientUnits="userSpaceOnUse" x2="44"/>
+<linearGradient id="blissAccent34_1">
 <stop offset="0" style="stop-color:#237b14"/>
 <stop offset="0.4" style="stop-color:#217613"/>
 <stop offset="1" style="stop-color:#247e14"/>
 </linearGradient>
-<linearGradient xlink:href="#blissAccent47_1" id="blissAccent47_0" y1="230" x1="44" y2="245" gradientUnits="userSpaceOnUse" x2="44"/>
-<linearGradient id="blissAccent47_1">
+<linearGradient xlink:href="#blissAccent35_1" id="blissAccent35_0" y1="230" x1="44" y2="245" gradientUnits="userSpaceOnUse" x2="44"/>
+<linearGradient id="blissAccent35_1">
 <stop offset="0" style="stop-color:#237b14"/>
 <stop offset="0.4" style="stop-color:#217613"/>
 <stop offset="1" style="stop-color:#247e14"/>
 </linearGradient>
-<linearGradient xlink:href="#linearGradient7330" id="blissAccent48_0" y1="230" x1="44" y2="245" gradientUnits="userSpaceOnUse" x2="44"/>
-<linearGradient id="blissAccent48_1">
+<linearGradient xlink:href="#linearGradient7330" id="blissAccent36_0" y1="230" x1="44" y2="245" gradientUnits="userSpaceOnUse" x2="44"/>
+<linearGradient id="blissAccent36_1">
 <stop offset="0" style="stop-color:#2b9117"/>
 <stop offset="1" style="stop-color:#237d14"/>
 </linearGradient>
@@ -718,7 +656,7 @@
 <path style="fill:url(#linearGradient5576)" id="common-normal" d="m 252,-1246.75 h 16 v 16 h -16 z" transform="scale(1,-1)"/>
 <path style="opacity:0" id="toolbar-normal-bottom" d="m 250,170 0,5 30,0 0,-5 z"/>
 <path style="opacity:.5;fill:url(#linearGradient7407)" id="dock-normal" d="m 25,955 h 30 v 30 H 25 Z"/>
-<path style="fill:#278615" id="progress-normal" d="M 297.5,240.49957 H 330 v 32.5 h -32.5 z"/>
+<path style="fill:#2c3239" id="progress-normal" d="M 297.5,240.49957 H 330 v 32.5 h -32.5 z"/>
 <path style="fill:url(#linearGradient7901);fill-rule:evenodd" id="slider-normal" d="m 56,638.55609 h 16 v 16 H 56 Z"/>
 <g id="mdi-maximize-normal" transform="translate(995,-318.8866)">
 <path style="opacity:0;fill-rule:evenodd" d="m -412,1414.8866 h 32 v 32 h -32 z"/>
@@ -842,38 +780,38 @@
 <path style="opacity:.6" d="m 214.625,670 -1.75,1 2.25,3.9063 1.75,-1 z m 20.75,0 -2.25,3.9063 1.75,1 2.25,-3.9063 z M 202.5,689 v 2 h 4.5 v -2 z m 40.5,0 v 2 h 4.5 v -2 z m -27.875,16.0938 -2.25,3.9062 1.75,1 2.25,-3.9062 z m 19.75,0 -1.75,1 2.25,3.9062 1.75,-1 z"/>
 <path style="opacity:.6" d="m 222.9062,667.5938 -.5,.0625 .3125,2.9688 .5,-.0312 -.3125,-3 z  m 4.1875,0 -.3125,3 .5,.0312 .3125,-2.9688 -.5,-.0625 z  m -8.8125,.9375 -.4688,.1562 .9375,2.8438 .4688,-.1562 z  m 13.4375,0 -.9375,2.8438 .4688,.1562 .9375,-2.8438 z  m -21.5938,4.5938 -.375,.3125 2.0312,2.25 .3438,-.3438 -2,-2.2188 z  m 29.75,0 -2,2.2188 .3438,.3438 2.0312,-2.25 -.375,-.3125 z  m -32.9375,3.4375 -.2812,.4062 2.4062,1.7812 .3125,-.4062 z  m 36.125,0 -2.4375,1.7812 .3125,.4062 2.4062,-1.7812 z  m -38.5,4.0625 -.2188,.4375 2.75,1.25 .1875,-.4688 -2.7188,-1.2188 z  m 40.875,0 -2.7188,1.2188 .1875,.4688 2.75,-1.25 -.2188,-.4375 z  m -42.4062,4.4375 -.0937,.5 2.9375,.625 .0937,-.5 z  m 43.9375,0 -2.9375,.625 .0937,.5 2.9375,-.625 z  m -41.0938,8.75 -2.9375,.625 .0937,.5 2.9375,-.625 z  m 38.25,0 -.0937,.5 2.9375,.625 .0937,-.5 z  m -37.0312,3.875 -2.75,1.25 .2188,.4375 2.7188,-1.2188 -.1875,-.4688 z  m 35.8125,0 -.1875,.4688 2.7188,1.2188 .2188,-.4375 -2.75,-1.25 z  m -33.8438,3.5625 -2.4062,1.7812 .2812,.4062 2.4375,-1.7812 z  m 31.875,0 -.3125,.4062 2.4375,1.7812 .2812,-.4062 z  m -29.1562,3.0625 -2.0312,2.25 .375,.3125 2,-2.2188 -.3438,-.3438 z  m 26.4375,0 -.3438,.3438 2,2.2188 .375,-.3125 -2.0312,-2.25 z "/>
 </g>
-<path style="fill:url(#blissAccent40_0);fill-rule:evenodd" id="progress-normal-top" d="m 297.5,240.4996 32.5,0 0,-7.5 -32.5,0 0,7.5 z "/>
+<path style="fill:url(#linearGradient6029);fill-rule:evenodd" id="progress-normal-top" d="m 297.5,240.4996 32.5,0 0,-7.5 -32.5,0 0,7.5 z "/>
 <g style="fill-rule:evenodd" id="progress-normal-left" transform="translate(47.5,71.749579)">
-<path style="fill:#278615" d="m 250,201.25 v -32.5 h -7.5 v 32.5 z"/>
-<path style="opacity:.6;fill:url(#blissAccent38_0)" d="m -250,-201.25 h 7.5 v 32.5 h -7.5 z" transform="scale(-1)"/>
+<path style="fill:#2c3239" d="m 250,201.25 v -32.5 h -7.5 v 32.5 z"/>
+<path style="opacity:.6;fill:url(#linearGradient6021)" d="m -250,-201.25 h 7.5 v 32.5 h -7.5 z" transform="scale(-1)"/>
 </g>
-<path style="fill:url(#blissAccent33_0);fill-rule:evenodd" id="progress-normal-bottom" d="m 330,248 v -7.5 h -32.5 v 7.5 z"/>
+<path style="fill:url(#linearGradient6025);fill-rule:evenodd" id="progress-normal-bottom" d="m 330,248 v -7.5 h -32.5 v 7.5 z"/>
 <g style="fill-rule:evenodd" id="progress-normal-topleft" transform="translate(47.5,71.75)">
-<path style="fill:url(#blissAccent41_0)" d="m 250,168.75 v -7.5 c -4.25,0 -7.5,3.25 -7.5,7.5 z"/>
-<path style="opacity:.6;fill:url(#blissAccent42_0)" d="m 250,168.75 v -7.5 c -4.25,0 -7.5,3.25 -7.5,7.5 z"/>
+<path style="fill:url(#linearGradient6011)" d="m 250,168.75 v -7.5 c -4.25,0 -7.5,3.25 -7.5,7.5 z"/>
+<path style="opacity:.6;fill:url(#linearGradient6013)" d="m 250,168.75 v -7.5 c -4.25,0 -7.5,3.25 -7.5,7.5 z"/>
 </g>
 <g style="fill-rule:evenodd" id="progress-normal-bottomleft" transform="translate(47.5,39.25)">
-<path style="fill:url(#blissAccent34_0)" d="m 250,208.75 v -7.5 h -7.5 c 0,4.25 3.25,7.5 7.5,7.5 z"/>
-<path style="opacity:.6;fill:url(#blissAccent35_0)" d="m 250,208.75 v -7.5 h -7.5 c 0,4.25 3.25,7.5 7.5,7.5 z"/>
+<path style="fill:url(#linearGradient6015)" d="m 250,208.75 v -7.5 h -7.5 c 0,4.25 3.25,7.5 7.5,7.5 z"/>
+<path style="opacity:.6;fill:url(#linearGradient6017)" d="m 250,208.75 v -7.5 h -7.5 c 0,4.25 3.25,7.5 7.5,7.5 z"/>
 </g>
 <g style="fill-rule:evenodd" id="progress-normal-right" transform="translate(47.5,71.749579)">
-<path style="fill:#278615" d="m 282.5,168.75 v 32.5 h 7.5 v -32.5 z"/>
-<path style="fill:url(#blissAccent39_0)" d="m 282.5,-201.25 h 7.5 v 32.5 h -7.5 z" transform="scale(1,-1)"/>
+<path style="fill:#2c3239" d="m 282.5,168.75 v 32.5 h 7.5 v -32.5 z"/>
+<path style="fill:url(#linearGradient6009)" d="m 282.5,-201.25 h 7.5 v 32.5 h -7.5 z" transform="scale(1,-1)"/>
 </g>
 <g style="fill-rule:evenodd" id="progress-normal-topright" transform="translate(47.5,71.75)">
-<path style="fill:url(#blissAccent43_0)" d="m 290,168.75 c 0,-4.25 -3.25,-7.5 -7.5,-7.5 v 7.5 z"/>
-<path style="fill:url(#blissAccent44_0)" d="m 282.5,168.75 v -7.5 c 4.25,0 7.5,3.25 7.5,7.5 z"/>
+<path style="fill:url(#linearGradient5999)" d="m 290,168.75 c 0,-4.25 -3.25,-7.5 -7.5,-7.5 v 7.5 z"/>
+<path style="fill:url(#linearGradient6001)" d="m 282.5,168.75 v -7.5 c 4.25,0 7.5,3.25 7.5,7.5 z"/>
 </g>
 <g style="fill-rule:evenodd" id="progress-normal-bottomright" transform="translate(47.5,39.25)">
-<path style="fill:url(#blissAccent36_0)" d="m 282.5,208.75 c 4.25,0 7.5,-3.25 7.5,-7.5 h -7.5 z"/>
-<path style="fill:url(#blissAccent37_0)" d="m 282.5,208.75 v -7.5 h 7.5 c 0,4.25 -3.25,7.5 -7.5,7.5 z"/>
+<path style="fill:url(#linearGradient6003)" d="m 282.5,208.75 c 4.25,0 7.5,-3.25 7.5,-7.5 h -7.5 z"/>
+<path style="fill:url(#linearGradient6005)" d="m 282.5,208.75 v -7.5 h 7.5 c 0,4.25 -3.25,7.5 -7.5,7.5 z"/>
 </g>
-<path style="fill:url(#blissAccent47_0);fill-rule:evenodd" id="progress-pattern-normal-top" d="m 44,237.4996 16,0 0,-7.5 -16,0 0,7.5 z "/>
+<path style="fill:url(#blissAccent35_0);fill-rule:evenodd" id="progress-pattern-normal-top" d="m 44,237.4996 16,0 0,-7.5 -16,0 0,7.5 z "/>
 <path style="fill:#227814" id="progress-pattern-normal-left" d="M 36.5,237.5 H 44 v 16 h -7.5 z"/>
 <path style="fill:#227814" id="progress-pattern-normal" d="M 48.5,237.5 H 56 v 16 h -7.5 z"/>
-<path style="fill:url(#blissAccent45_0);fill-rule:evenodd" id="progress-pattern-normal-bottom" d="m 60,245 v -7.5 H 44 v 7.5 z"/>
-<path style="fill:url(#blissAccent46_0);fill-rule:evenodd" id="progress-pattern-normal-bottomleft" d="m 44,245 v -7.5 h -7.5 c 0,4.25 3.25,7.5 7.5,7.5 z"/>
-<path style="fill:url(#blissAccent48_0);fill-rule:evenodd" id="progress-pattern-normal-topleft" d="m 44,237.5 v -7.5 c -4.25,0 -7.5,3.25 -7.5,7.5 z"/>
+<path style="fill:url(#blissAccent33_0);fill-rule:evenodd" id="progress-pattern-normal-bottom" d="m 60,245 v -7.5 H 44 v 7.5 z"/>
+<path style="fill:url(#blissAccent34_0);fill-rule:evenodd" id="progress-pattern-normal-bottomleft" d="m 44,245 v -7.5 h -7.5 c 0,4.25 3.25,7.5 7.5,7.5 z"/>
+<path style="fill:url(#blissAccent36_0);fill-rule:evenodd" id="progress-pattern-normal-topleft" d="m 44,237.5 v -7.5 c -4.25,0 -7.5,3.25 -7.5,7.5 z"/>
 <path style="fill:url(#linearGradient7594);fill-rule:evenodd" id="tab-normal" d="m 22.5,820 0,32.5 32.5,0 0,-32.5 -32.5,0 z"/>
 <path style="fill:url(#linearGradient7591);fill-rule:evenodd" id="tab-toggled" d="m 145,820 0,32.5 32.5,0 0,-32.5 -32.5,0 z"/>
 <g style="fill-rule:evenodd" id="tab-toggled-top" transform="matrix(1,0,0,0.66666667,-125,-1.6666661)">

@@ -80,7 +80,11 @@ GREEN = [(0.00, "1d6b12"), (0.35, "2e9b18"), (0.60, "3cae1f"),
 
 ACCENT_ELEMENTS = [
     (re.compile(r"^itemview-(toggled|pressed)(-|$)"), BLUE),
-    (re.compile(r"^(expand-)?progress-(normal|pattern-normal)(-|$)"), GREEN),
+    # Solo el RELLENO. El canal es progress-normal*, y pintarlo de verde era
+    # un fallo: en XP el canal es un pozo hundido del color de la ventana, y
+    # el verde solo marca lo avanzado. Con los dos en verde la barra no
+    # comunicaba nada, porque llena y vacia eran del mismo tono.
+    (re.compile(r"^(expand-)?progress-pattern-normal(-|$)"), GREEN),
 ]
 
 # Rampa de superficie "base", solo para --dark.

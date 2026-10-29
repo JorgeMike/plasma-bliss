@@ -35,7 +35,17 @@ Ordenado por impacto visual por hora invertida, no por dificultad tecnica.
       3. Quien redondeaba de mas era la variante OSCURA, porque salia de otra
       base (KvCurves3d) y heredaba su geometria de capsula. Arreglado
       generando las dos desde la misma base; no hubo que tocar una sola ruta
-- [ ] Barra de progreso segmentada (XP la dibuja a bloques, no continua)
+- [~] Barra de progreso segmentada. **No es posible desde el tema.** Kvantum
+      pinta lo relleno solo con `renderFrame`, un 9-slice, que estira sus
+      piezas en vez de repetirlas; el interior no se dibuja para
+      `[ProgressbarContents]`, asi que `interior.x.patternsize` no sirve ahi.
+      Comprobado con cuatro pruebas en `kvantumpreview`, anotadas en
+      `formats.md`. Lo que si salio de ahi: el canal estaba verde, porque el
+      acento alcanzaba tambien a `progress-normal*`. Arreglado
+- [ ] Opcional: cuadrar los extremos de la barra (`frame.expansion=0`) y
+      subir `progressbar_thickness` de 8 a ~14, que es lo de Luna. Es cosmetico
+      y el grosor afecta a la maquetacion de todas las aplicaciones, asi que
+      se deja a decision
 - [ ] Decidir que hacer con las apps GTK (no obedecen a Kvantum: hacen falta
       un tema GTK aparte y `gtk.css`)
 

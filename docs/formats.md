@@ -371,3 +371,42 @@ leyendose como un bisel hundido.
 
 Es el mismo reparto que en el kvconfig, donde los colores de texto tambien se
 invierten mientras la geometria y el material no.
+
+## Kvantum no puede dibujar una barra de progreso segmentada
+
+XP dibuja el progreso a bloques: rectangulos verdes de unos 9 px separados por
+2 px de canal. Desde un tema de Kvantum **no se puede**, y conviene dejar
+escrito por que, con las pruebas hechas, para no volver a intentarlo.
+
+Anatomia real, averiguada pintando cada familia de elementos de un color
+distinto y mirando el resultado en `kvantumpreview`:
+
+| grupo | elemento | que es |
+|---|---|---|
+| `[Progressbar]` | `progress-normal*` | el canal |
+| `[ProgressbarContents]` | `progress-pattern-normal*` | lo relleno |
+
+El nombre `progress-pattern` despista: no es un mosaico, es solo el nombre que
+KvBeige le dio al elemento. El sufijo `-pattern` que si conoce la libreria es
+otra cosa, la animacion de barra indeterminada (`ProgressbarAnimation`).
+
+Lo relleno se pinta **solo con `renderFrame`**, es decir, un 9-slice. Un
+9-slice estira sus piezas: no las repite. Y el interior no entra en juego:
+
+- Con `interior=true`, `interior.element=progress-pattern` y
+  `interior.x.patternsize=11`, el interior no se dibuja. Se probo con marco y
+  sin marco.
+- Con `frame=false` el relleno desaparece entero, lo que confirma que todo lo
+  que se ve sale del marco.
+- `interior.x.patternsize` si funciona, pero solo donde los temas lo usan:
+  `[Window]` y `[WindowTranslucent]`, para la textura del fondo.
+
+Asi que la barra es continua por construccion. Lo unico que queda a mano es el
+degradado y el color.
+
+### De paso: el canal no va verde
+
+El acento verde debe alcanzar `progress-pattern-normal*` y **no**
+`progress-normal*`. Pintar los dos dejaba la barra en dos verdes, y una barra
+de progreso cuyo lleno y vacio son del mismo tono no comunica nada. En XP el
+canal es un pozo hundido del color de la ventana.
