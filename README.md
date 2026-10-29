@@ -14,6 +14,8 @@ contra los valores canonicos de XP que estan anotados en `docs/palette.md`.
 
 ### La barra de tareas
 
+![Landing](docs/screenshots/home.png)
+
 ![Barra de tareas](docs/screenshots/panel.png)
 
 Degradado azul de Luna, boton Inicio verde, y los botones de ventana con su
