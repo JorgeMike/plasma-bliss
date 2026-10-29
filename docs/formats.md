@@ -189,12 +189,16 @@ escribe con `kwriteconfig6`. `make start-button` lo aplica y
 `make start-button-revert` lo deshace.
 
 **El icono se instala en `hicolor`, no solo en el tema Bliss.** El tema de
-iconos activo del usuario no tiene por que ser el del tema global — en este
-equipo es Papirus-Dark — y un icono que solo exista en `icons/Bliss/` no
-resolveria. `hicolor` es el respaldo universal: toda cadena de herencia acaba
-ahi. Se puede comprobar leyendo los `Inherits` de cada `index.theme`:
+iconos activo del usuario no tiene por que ser el del tema global, y un icono
+que solo exista en `icons/Bliss/` no resolveria. `hicolor` es el respaldo
+universal: toda cadena de herencia acaba ahi. Se puede comprobar leyendo los
+`Inherits` de cada `index.theme`:
 
-    Papirus-Dark -> breeze-dark -> hicolor -> breeze
+    Bliss -> breeze-dark -> breeze -> hicolor
+
+(En una version anterior esta pagina decia que el tema activo de este equipo
+era Papirus-Dark. Era falso: es breeze-dark. Esa suposicion se colo en la
+herencia del tema Bliss y rompio los iconos de la bandeja.)
 
 Por eso `make install` copia `bliss-start.svg` a las dos rutas.
 
