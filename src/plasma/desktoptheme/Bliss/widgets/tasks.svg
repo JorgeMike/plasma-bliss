@@ -283,4 +283,10 @@
   <rect id="normal-hint-bottom-margin" x="28" y="4"  width="1" height="2" fill="none"/>
   <rect id="normal-hint-left-margin"   x="28" y="8"  width="4" height="1" fill="none"/>
   <rect id="normal-hint-right-margin"  x="28" y="12" width="4" height="1" fill="none"/>
+  <!-- Sin esto, KSvg EMBALDOSA las piezas de borde en vez de estirarlas, y
+       un degradado en los laterales se repite: en los botones de la barra
+       se veian dos ciclos del degradado por boton, como franjas. Basta con
+       que el elemento exista; no se dibuja. Lo usan tambien los SVG de
+       Breeze (background, plasmoidheading, switch...). -->
+  <rect id="hint-stretch-borders" x="0" y="0" width="1" height="1" fill="none"/>
 </svg>

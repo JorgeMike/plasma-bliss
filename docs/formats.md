@@ -752,3 +752,37 @@ aspecto distinto al panel flotante definiendo elementos `floating-topleft` y
 compania; si no estan, se usa el prefijo vacio, que es nuestro caso. Los
 margenes del flotante salen de ahi: con prefijo propio, de sus
 `fixedMargins`; sin el, 8 px fijos.
+
+## KSvg EMBALDOSA los bordes del 9-slice, no los estira
+
+Esta es la que mas cuesta ver, porque el sintoma no parece lo que es.
+
+Por defecto, `FrameSvg` **estira** la pieza central y **repite** las de
+borde. Si una pieza lateral lleva un degradado vertical, ese degradado se
+repite tantas veces como quepa. En los botones de la barra de tareas se veia
+asi: dos franjas verticales a los lados de cada boton, con su propio
+degradado, en lugar de una linea de borde.
+
+Se confirma midiendo una columna de pixeles de arriba abajo del boton:
+
+    banda lateral   el azul baja de 217 a 201 ... y VUELVE a 218 a media altura
+    cuerpo          el azul baja de 217 a 201 una sola vez
+
+La solucion es un elemento vacio cuya sola presencia activa el modo estirar:
+
+```xml
+<rect id="hint-stretch-borders" x="0" y="0" width="1" height="1" fill="none"/>
+```
+
+No se dibuja; `FrameSvg` solo comprueba que exista. Lo usan los propios SVG
+de Breeze (`background`, `plasmoidheading`, `switch`, `dragger`...), que es
+donde se puede verificar el nombre exacto: `zcat` sobre los `.svgz` del tema
+por defecto.
+
+Esta puesto en **todos** los 9-slice de Bliss, incluidos los tooltips, que
+hoy son de color plano y no lo necesitan. Es para que el fallo no reaparezca
+en silencio el dia que alguien les ponga un degradado.
+
+Los otros dos hints de la familia, por si hacen falta: `hint-tile-center`
+hace lo contrario en el centro, y `hint-overlay-*` gobierna las capas de
+superposicion.
