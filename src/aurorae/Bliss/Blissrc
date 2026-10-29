@@ -40,7 +40,11 @@ TitleEdgeTopMaximized=2
 TitleEdgeBottomMaximized=2
 TitleEdgeLeftMaximized=2
 TitleEdgeRightMaximized=2
-ButtonMarginTopMaximized=2
+# El margen del boton SE SUMA al borde: AuroraeButtonGroup.qml usa
+# titleEdgeTopMaximized + buttonMarginTopMaximized. Maximizada la barra mide
+# 2+22+2 = 26, y el boton 21, asi que para centrarlo el hueco de arriba debe
+# ser 2 o 3: lo pone ya TitleEdgeTopMaximized, y este va a 0.
+ButtonMarginTopMaximized=0
 
 BorderBottom=5
 BorderTop=30
@@ -53,7 +57,13 @@ BorderRight=5
 ButtonHeight=21
 ButtonWidth=21
 ButtonWidthClose=25
-ButtonMarginTop=4
+
+# OJO: este margen NO es la posicion del boton, se SUMA al borde superior.
+# AuroraeButtonGroup.qml calcula titleEdgeTop + padding.top + buttonMarginTop.
+# Con TitleEdgeTop=4 y esto a 4 quedaban 8 px por encima y 1 por debajo, o sea
+# los botones pegados al canto inferior. La barra mide 4+22+4 = 30 y el boton
+# 21, asi que centrado son 4,5 px por lado: los pone TitleEdgeTop y este va a 0.
+ButtonMarginTop=0
 ButtonSpacing=1
 ExplicitButtonSpacer=4
 

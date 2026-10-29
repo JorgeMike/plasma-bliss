@@ -786,3 +786,34 @@ en silencio el dia que alguien les ponga un degradado.
 Los otros dos hints de la familia, por si hacen falta: `hint-tile-center`
 hace lo contrario en el centro, y `hint-overlay-*` gobierna las capas de
 superposicion.
+
+
+## ButtonMarginTop no es la posicion del boton: se SUMA al borde
+
+`AuroraeButtonGroup.qml` lo calcula asi:
+
+    topMargin = maximizada
+        ? titleEdgeTopMaximized + buttonMarginTopMaximized
+        : titleEdgeTop + padding.top + buttonMarginTop
+
+O sea que el margen del boton **se acumula** sobre el borde superior del
+titulo. Con `TitleEdgeTop=4` y `ButtonMarginTop=4` el hueco de arriba era de
+8 px y el de abajo de 1, y los botones se veian pegados al canto inferior.
+
+La cuenta para centrarlos:
+
+    alto visible de la barra = TitleEdgeTop + TitleHeight + TitleEdgeBottom
+                             = 4 + 22 + 4 = 30
+    hueco ideal = (30 - ButtonHeight) / 2 = (30 - 21) / 2 = 4,5
+
+Esos 4 ya los pone `TitleEdgeTop`, asi que `ButtonMarginTop` tiene que ser
+**0**. Queda 4 arriba y 5 abajo, que es lo mas centrado que permite una
+diferencia impar; mejor que sobre abajo, porque un boton 1 px alto se lee
+centrado y 1 px bajo se lee hundido.
+
+Maximizada la cuenta es la misma con los valores `*Maximized`: barra de
+2+22+2 = 26, hueco ideal 2,5, que ya pone `TitleEdgeTopMaximized`, asi que
+`ButtonMarginTopMaximized` tambien va a 0.
+
+Medido sobre una captura real, columna de pixeles a traves del boton de
+cerrar: antes 8/1, despues 4/5.
