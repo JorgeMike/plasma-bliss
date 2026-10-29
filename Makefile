@@ -38,7 +38,8 @@ QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
         reload start-button start-button-revert \
         check list install-colors install-aurorae install-plasma install-lnf \
         install-icons install-kvantum install-wallpaper \
-        wallpaper wallpaper-apply icons install-konsole terminal terminal-revert
+        wallpaper wallpaper-apply wallpaper-revert icons install-konsole \
+        terminal terminal-revert revert-all
 
 help:
 	@printf "\033[1mBliss\033[0m — tema global de Plasma 6\n"
@@ -50,6 +51,7 @@ help:
 	@printf "  \033[36mmake dark\033[0m          regenera la variante oscura desde la clara\n"
 	@printf "  \033[36mmake apply-global\033[0m  aplica el tema global entero (REHACE el panel)\n"
 	@printf "  \033[36mmake revert\033[0m        vuelve a Breeze\n"
+	@printf "  \033[36mmake revert-all\033[0m    deshace TODO: tema, fondo, Inicio y terminal\n"
 	@printf "  \033[36mmake backup\033[0m        guarda tu config actual en ./backup/\n"
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
 	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
@@ -198,6 +200,16 @@ apply-global: backup
 	@plasma-apply-lookandfeel -a $(LNF_ID)
 	@echo ">> tema global aplicado. Si el panel queda raro: make restore"
 
+# Deshace TODO lo que este repositorio haya cambiado en tu sesion, en orden
+# inverso al que se aplico. No borra los archivos instalados: para eso esta
+# `make uninstall`, que es otra cosa y por eso no se encadena aqui.
+revert-all:
+	@$(MAKE) --no-print-directory terminal-revert
+	@$(MAKE) --no-print-directory start-button-revert
+	@$(MAKE) --no-print-directory wallpaper-revert
+	@$(MAKE) --no-print-directory revert
+	@echo ">> todo revertido. Los archivos siguen en $(DEST): make uninstall"
+
 revert:
 	-@plasma-apply-colorscheme BreezeLight
 	-@plasma-apply-desktoptheme default
@@ -255,7 +267,10 @@ wallpaper:
 # Plasma elige segun la paleta de las aplicaciones, asi que el fondo sigue
 # solo a `make apply` y `make apply-dark`.
 wallpaper-apply:
-	@plasma-apply-wallpaperimage $(DEST)/wallpapers/$(NAME)
+	@python3 -I tools/set-wallpaper.py
+
+wallpaper-revert:
+	@python3 -I tools/set-wallpaper.py --revert
 
 # ------------------------------------------------------------------- kvantum
 # Bliss.svg y Bliss.kvconfig son GENERADOS. Para cambiar la paleta, edita las

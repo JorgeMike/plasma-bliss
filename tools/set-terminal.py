@@ -109,13 +109,16 @@ def do_starship(revert):
     if not src.exists():
         sys.exit(f"!! falta {src}")
     STATE.mkdir(parents=True, exist_ok=True)
+    absent = STATE / "starship.absent"
     if STARSHIP.exists():
-        if not saved.exists():        # no pisar la copia buena al repetir
+        # Ni al repetir se pisa la copia buena, ni se toma copia de lo que
+        # escribimos nosotros (que es lo que dice el marcador `absent`).
+        if not saved.exists() and not absent.exists():
             shutil.copy2(STARSHIP, saved)
             print(f"   starship  -- copia de tu config en "
                   f"{saved.relative_to(ROOT)}")
     else:
-        (STATE / "starship.absent").touch()
+        absent.touch()
     shutil.copy2(src, STARSHIP)
     print(f"   starship  -> {STARSHIP}")
 
@@ -201,7 +204,10 @@ def do_btop(revert):
 
     STATE.mkdir(parents=True, exist_ok=True)
     if BTOP.exists():
-        if not saved.exists():
+        # Si `created` existe, este fichero lo escribimos nosotros en una
+        # pasada anterior: guardarlo como "original" dejaria a --revert
+        # restaurando nuestra propia configuracion en vez de la de antes.
+        if not saved.exists() and not created.exists():
             shutil.copy2(BTOP, saved)
             print(f"   btop      -- copia en {saved.relative_to(ROOT)}")
         lines = BTOP.read_text().splitlines()

@@ -58,29 +58,113 @@ DOS, y el prompt de starship reescrito en colores ANSI para que siga al
 terminal en lugar de ignorarlo. *(Esta imagen esta compuesta a partir del
 pale y de la salida real del prompt, no es una captura de pantalla.)*
 
-## Empezar
+## Instalacion
 
-    make check     # valida SVG, JSON y los IDs que KSvg necesita
-    make install   # copia a ~/.local/share — no cambia nada visible todavia
-    make apply     # activa colores + Plasma style + decoracion de ventana
+Todo en orden, de una vez:
 
-El boton Inicio verde va aparte, porque Kickoff guarda su icono en la
-configuracion de tu panel y no en el tema:
+    make check            # valida SVG, JSON, TOML y los IDs que KSvg necesita
+    make icons            # baja los iconos XP a build/  (ANTES de install)
+    make install          # copia a ~/.local/share — aun no cambia nada visible
+    make apply            # activa el tema  (o make apply-dark)
+    make wallpaper-apply  # pone el fondo
+    make start-button     # icono verde de Inicio en tu panel
+    make terminal         # Konsole, prompt, Ctrl+R y btop
 
-    make start-button          # y make start-button-revert para deshacerlo
+**`make icons` va antes que `make install`.** Deja los mapas de bits en
+`build/`, y `install` los mezcla si los encuentra. Si lo ejecutas despues,
+repite `make install`. Sin ese paso el tema funciona igual: los iconos caen
+por herencia a breeze-dark.
+
+**`make install` por si solo no cambia nada que se vea.** Solo copia
+archivos. Lo visible empieza en `make apply`.
 
 Si cambias un SVG del Plasma style sin cambiar el nombre del tema, Plasma lo
 sirve de cache. Para verlo:
 
     make reload
 
-Para volver atras, en cualquier momento:
+### Que toca cada comando, y como se deshace
 
-    make revert
+Hay una diferencia que importa: unos comandos solo escriben en
+`~/.local/share` y otros tocan **tu** configuracion. Los segundos guardan
+copia antes.
+
+| comando | que cambia | como se deshace |
+|---|---|---|
+| `make install` | solo `~/.local/share` | `make uninstall` |
+| `make apply` / `apply-dark` | esquema de color, Plasma style, decoracion, estilo de widgets y tema de iconos | `make revert` |
+| `make wallpaper-apply` | el fondo del escritorio | `make wallpaper-revert` |
+| `make start-button` | el icono de Kickoff en tu panel | `make start-button-revert` |
+| `make terminal` | perfil de Konsole, `starship.toml`, el bloque de fzf en `common.sh` y `btop.conf` | `make terminal-revert` |
+| `make apply-global` | **rehace el panel entero** | `make restore` |
+
+### Deshacerlo todo de una vez
+
+    make revert-all
+
+Encadena los cuatro reversos en orden inverso al que se aplicaron: terminal,
+boton Inicio, fondo y tema. Deja tu sesion como estaba.
+
+Lo que **no** hace es borrar los archivos instalados en `~/.local/share`,
+porque eso es otra cosa:
+
+    make uninstall
+
+Cada reverso usa la copia que se guardo al aplicar — en `backup/terminal/` y
+`backup/wallpaper/`. Si borras ese directorio, el reverso ya no sabe a que
+volver y te lo dice en lugar de inventarse un valor.
 
 `make apply` **no toca tu panel**. Para la disposicion completa tipo XP
 (barra inferior, Inicio, lista de ventanas) usa `make apply-global`, que hace
 un backup automatico antes porque rehace el panel.
+
+Antes de nada, si quieres red de seguridad:
+
+    make backup        # guarda tu config de KDE en ./backup/<fecha>/
+    make restore       # la devuelve
+    make list          # muestra que hay instalado y que esta activo ahora
+
+### Claro y oscuro
+
+    make apply         # claro
+    make apply-dark    # oscuro
+
+El fondo cambia solo: el paquete lleva las dos variantes y Plasma elige
+segun la paleta de las aplicaciones. Las aplicaciones Qt ya abiertas no
+releen el estilo ni los iconos, asi que hay que reabrirlas.
+
+### Los iconos
+
+    make icons         # los baja a build/ y los selecciona
+    make install       # los mezcla en el tema instalado
+
+No se dibuja ni se forkea nada. `tools/fetch-icons.py` baja
+[LinXP](https://github.com/B00merang-Artwork/LinXP) y se queda solo con los
+que el escritorio pide de verdad: los que Breeze tambien nombra, mas unos
+alias escritos a mano para Dolphin, Ajustes y Discover, que piden nombres
+propios. El resto se hereda de breeze-dark.
+
+**No entran en el repositorio.** LinXP no publica fichero de licencia, asi
+que se puede usar pero no redistribuir: por eso viven en `build/`, que esta
+en `.gitignore`. Hace falta `curl`.
+
+### La terminal
+
+    make terminal          # y make terminal-revert para deshacerlo
+
+Cambia cuatro cosas, y las tres ultimas son configuracion tuya, no del tema:
+
+- **Konsole**: apunta tu perfil por defecto a `Bliss.colorscheme`.
+- **starship** (`~/.config/starship.toml`): prompt en colores ANSI. Hace
+  falta porque un prompt con colores hex fijos ignora el pale del terminal y
+  seguiria viendose igual sobre el negro.
+- **fzf**, el bloque `FZF_DEFAULT_OPTS` de `~/.config/shell/common.sh`: es
+  quien pinta el `Ctrl+R`, y tenia el mismo problema.
+- **btop** (`~/.config/btop/btop.conf`): cinco claves para que use 16
+  colores en vez de sus gradientes de 24 bits.
+
+Lo que hubiera se guarda en `backup/terminal/`. Konsole no recarga el esquema
+en las pestañas abiertas: abre una nueva.
 
 ## Que hay aqui
 
@@ -196,12 +280,29 @@ consola, y `make restore` devuelve la configuracion guardada.
 
 ## Dependencias
 
-Ya presentes: `plasma-workspace`, `kwin-wayland`, `kconfig-bin`, `python3`.
+Para instalar y aplicar el tema:
 
-Instalados: `inkscape`, `qt6-style-kvantum` (con `kvantummanager` y
-`kvantumpreview`).
+    plasma-workspace   plasma-apply-colorscheme, -desktoptheme, -wallpaperimage
+    kconfig-bin        kwriteconfig6 / kreadconfig6
+    python3            las herramientas de generacion
+    qt6-style-kvantum  kvantummanager; aporta tambien KvBeige, la base
 
-Pendiente, util pero no bloqueante:
+Para regenerar lo que es generado (`make kvantum`, `make dark`,
+`make wallpaper`):
+
+    inkscape           render y medida de cajas de los SVG
+
+Opcionales, cada uno solo para su parte:
+
+    curl               make icons
+    konsole            make terminal
+    starship           el prompt
+    fzf, btop          los colores de Ctrl+R y del monitor
+
+Si falta alguno, el objetivo correspondiente lo dice y sigue adelante en vez
+de fallar.
+
+Util para desarrollar, no necesario:
 
     sudo apt install plasma-sdk
 

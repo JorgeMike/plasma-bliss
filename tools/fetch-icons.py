@@ -157,6 +157,9 @@ def available(src, context):
 
 
 def download():
+    if not shutil.which("curl"):
+        sys.exit("!! falta curl, que es lo unico que hace falta para bajar LinXP.\n"
+                 "   Sin iconos XP el tema funciona igual: todo cae por herencia.")
     CACHE.mkdir(parents=True, exist_ok=True)
     tar = CACHE / "linxp.tar.gz"
     if not tar.exists():
