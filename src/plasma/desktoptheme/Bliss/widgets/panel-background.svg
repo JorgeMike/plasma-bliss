@@ -2,47 +2,69 @@
 <!--
   Bliss — widgets/panel-background.svg  (fondo de la barra de tareas)
 
-  Igual que en Aurorae es un 9-slice, pero aqui el prefijo es VACIO:
-  los IDs son  topleft top topright left center right
-               bottomleft bottom bottomright
-  Opcionales:  hint-tile-center       (repetir en vez de estirar)
-               hint-{top,bottom,left,right}-margin  (margenes de contenido)
-               mask-*                 (region opaca)
-               current-color-scheme   (NO lo usamos: el azul Luna es fijo)
+  9-slice con prefijo VACIO:
+    topleft top topright  left center right  bottomleft bottom bottomright
+  Opcionales: hint-tile-center, hint-{top,bottom,left,right}-margin, mask-*
 
-  Rejilla: columnas 0-2 | 2-22 | 22-24 · filas 0-3 | 8-28 | 33-35
+  Rejilla: columnas 0-7 | 7-27 | 27-34  ·  filas 0-7 | 11-31 | 35-42
+
+  ESQUINAS REDONDEADAS, radio 7. Solo se ven cuando el panel esta en modo
+  flotante (`floating=1` en plasmashellrc), que es cuando Plasma habilita los
+  cuatro bordes del 9-slice. Anclado al borde de la pantalla, Plasma activa
+  solo el borde superior y dibuja `top` de lado a lado: las esquinas no
+  llegan a usarse, asi que redondearlas no cambia nada en ese caso.
+
+  El degradado NO es continuo de arriba abajo a proposito: en un 9-slice las
+  bandas superior e inferior conservan su altura en pixeles y solo la franja
+  central se estira. Por eso hay tres degradados que encajan por los
+  extremos — g-top acaba en #3C81F3, donde empieza g-body, que acaba en
+  #215CD4, donde empieza g-bottom.
 -->
-<svg xmlns="http://www.w3.org/2000/svg" width="30" height="35" viewBox="0 0 30 35" version="1.1">
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="46" viewBox="0 0 40 46" version="1.1">
   <defs>
-    <linearGradient id="g-taskbar" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0.00" stop-color="#3C81F3"/>
-      <stop offset="0.10" stop-color="#2C6BE0"/>
-      <stop offset="0.45" stop-color="#1F57CE"/>
-      <stop offset="0.88" stop-color="#215CD4"/>
-      <stop offset="1.00" stop-color="#3A7FEE"/>
-    </linearGradient>
-    <linearGradient id="g-topline" x1="0" y1="0" x2="0" y2="1">
+    <!-- Banda superior, 7 px: canto oscuro, linea de brillo y bajada al cuerpo. -->
+    <linearGradient id="g-top" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="7">
       <stop offset="0.00" stop-color="#1A3F9E"/>
-      <stop offset="0.34" stop-color="#4C8BF5"/>
-      <stop offset="1.00" stop-color="#2E6FE0"/>
+      <stop offset="0.16" stop-color="#4C8BF5"/>
+      <stop offset="0.50" stop-color="#2E6FE0"/>
+      <stop offset="1.00" stop-color="#3C81F3"/>
+    </linearGradient>
+
+    <!-- Cuerpo, la unica franja que se estira. -->
+    <linearGradient id="g-body" gradientUnits="userSpaceOnUse" x1="0" y1="11" x2="0" y2="31">
+      <stop offset="0.00" stop-color="#3C81F3"/>
+      <stop offset="0.12" stop-color="#2C6BE0"/>
+      <stop offset="0.50" stop-color="#1F57CE"/>
+      <stop offset="1.00" stop-color="#215CD4"/>
+    </linearGradient>
+
+    <!-- Banda inferior, 7 px: reflejo de Luna y canto oscuro. -->
+    <linearGradient id="g-bottom" gradientUnits="userSpaceOnUse" x1="0" y1="35" x2="0" y2="42">
+      <stop offset="0.00" stop-color="#215CD4"/>
+      <stop offset="0.55" stop-color="#3A7FEE"/>
+      <stop offset="0.80" stop-color="#2A62D6"/>
+      <stop offset="1.00" stop-color="#1B4FBE"/>
     </linearGradient>
   </defs>
 
-  <rect id="topleft"     x="0"  y="0"  width="2"  height="3"  fill="url(#g-topline)"/>
-  <rect id="top"         x="2"  y="0"  width="20" height="3"  fill="url(#g-topline)"/>
-  <rect id="topright"    x="22" y="0"  width="2"  height="3"  fill="url(#g-topline)"/>
+  <!-- ====================================================== banda superior -->
+  <path id="topleft"  fill="url(#g-top)" d="M 0,7 A 7,7 0 0 1 7,0 L 7,7 Z"/>
+  <rect id="top"      fill="url(#g-top)" x="7" y="0" width="20" height="7"/>
+  <path id="topright" fill="url(#g-top)" d="M 27,0 A 7,7 0 0 1 34,7 L 27,7 Z"/>
 
-  <rect id="left"        x="0"  y="8"  width="2"  height="20" fill="url(#g-taskbar)"/>
-  <rect id="center"      x="2"  y="8"  width="20" height="20" fill="url(#g-taskbar)"/>
-  <rect id="right"       x="22" y="8"  width="2"  height="20" fill="url(#g-taskbar)"/>
+  <!-- ============================================================= cuerpo -->
+  <rect id="left"   fill="url(#g-body)" x="0"  y="11" width="7"  height="20"/>
+  <rect id="center" fill="url(#g-body)" x="7"  y="11" width="20" height="20"/>
+  <rect id="right"  fill="url(#g-body)" x="27" y="11" width="7"  height="20"/>
 
-  <rect id="bottomleft"  x="0"  y="33" width="2"  height="2"  fill="#1B4FBE"/>
-  <rect id="bottom"      x="2"  y="33" width="20" height="2"  fill="#1B4FBE"/>
-  <rect id="bottomright" x="22" y="33" width="2"  height="2"  fill="#1B4FBE"/>
+  <!-- ====================================================== banda inferior -->
+  <path id="bottomleft"  fill="url(#g-bottom)" d="M 0,35 L 7,35 L 7,42 A 7,7 0 0 1 0,35 Z"/>
+  <rect id="bottom"      fill="url(#g-bottom)" x="7" y="35" width="20" height="7"/>
+  <path id="bottomright" fill="url(#g-bottom)" d="M 27,35 L 34,35 A 7,7 0 0 1 27,42 Z"/>
 
-  <!-- Margenes de contenido: el TAMANO del rect es lo que cuenta, no su posicion -->
-  <rect id="hint-top-margin"    x="26" y="0"  width="1" height="3" fill="none"/>
-  <rect id="hint-bottom-margin" x="26" y="5"  width="1" height="2" fill="none"/>
-  <rect id="hint-left-margin"   x="26" y="9"  width="2" height="1" fill="none"/>
-  <rect id="hint-right-margin"  x="26" y="12" width="2" height="1" fill="none"/>
+  <!-- Margenes de contenido: cuenta el TAMANO del rect, no su posicion -->
+  <rect id="hint-top-margin"    x="36" y="0"  width="1" height="3" fill="none"/>
+  <rect id="hint-bottom-margin" x="36" y="5"  width="1" height="2" fill="none"/>
+  <rect id="hint-left-margin"   x="36" y="9"  width="2" height="1" fill="none"/>
+  <rect id="hint-right-margin"  x="36" y="12" width="2" height="1" fill="none"/>
 </svg>

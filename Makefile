@@ -86,7 +86,17 @@ install-plasma:
 	@rm -rf $(DEST)/plasma/desktoptheme/$(NAME)
 	@mkdir -p $(DEST)/plasma/desktoptheme
 	@cp -r $(SRC)/plasma/desktoptheme/$(NAME) $(DEST)/plasma/desktoptheme/
-	@echo "   plasma style -> $(DEST)/plasma/desktoptheme/$(NAME)"
+# Panel.qml del shell pide DOS rutas segun el estado: widgets/panel-background
+# cuando el panel es translucido, y solid/widgets/panel-background cuando es
+# opaco — y lo es en cuanto una ventana lo toca. Si falta la de solid/, KSvg
+# se va al tema por defecto y el panel aparece gris de Breeze.
+#
+# Se copia en la instalacion en vez de duplicar el archivo en el repositorio:
+# dos copias en git acaban divergiendo el dia que solo se edita una.
+	@install -Dm644 \
+		$(DEST)/plasma/desktoptheme/$(NAME)/widgets/panel-background.svg \
+		$(DEST)/plasma/desktoptheme/$(NAME)/solid/widgets/panel-background.svg
+	@echo "   plasma style -> $(DEST)/plasma/desktoptheme/$(NAME) (+ solid/panel-background)"
 
 install-icons:
 	@rm -rf $(DEST)/icons/$(NAME)

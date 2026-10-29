@@ -705,3 +705,50 @@ systemctl --user start plasma-plasmashell
 importa: justo despues de una caida la unidad esta inactiva o en fallo, y la
 version anterior de este objetivo lanzaba entonces un `plasmashell --replace`
 suelto, provocando exactamente la colision que se queria evitar.
+
+## El panel flotante y sus cuatro esquinas
+
+Un panel de Plasma 6 puede estar **acoplado** al borde o **flotante**, con un
+margen alrededor. Lo decide `floating=` en `~/.config/plasmashellrc`, bajo
+`[PlasmaViews][Panel <id>]`, y el cambio es dinamico: flota mientras ninguna
+ventana lo toque.
+
+Eso cambia que piezas del 9-slice se dibujan:
+
+- **acoplado abajo**: solo el borde superior. Plasma estira `top` de lado a
+  lado y **las esquinas ni se usan**.
+- **flotante**: los cuatro bordes. Ahi si salen `topleft`, `topright`,
+  `bottomleft` y `bottomright`.
+
+Por eso redondear las esquinas solo se nota cuando no hay ninguna ventana
+abierta, y no cambia nada el resto del tiempo.
+
+### Panel.qml pide DOS rutas, igual que el tooltip
+
+Leyendo `shells/org.kde.plasma.desktop/contents/views/Panel.qml` hay cuatro
+`FrameSvgItem`, y no usan el mismo archivo:
+
+| elemento | cuando | ruta |
+|---|---|---|
+| `translucentItem` | acoplado, translucido | `widgets/panel-background` |
+| `floatingTranslucentItem` | flotante, translucido | `widgets/panel-background` |
+| `opaqueItem` | acoplado, opaco | `solid/widgets/panel-background` |
+| `floatingOpaqueItem` | flotante, opaco | `solid/widgets/panel-background` |
+
+Con el modo de opacidad por defecto (Adaptativo) el panel se vuelve **opaco
+en cuanto una ventana lo toca**, que es casi siempre. Si el tema no trae la
+ruta `solid/`, KSvg se va al tema por defecto y el panel sale gris de Breeze.
+Breeze, de hecho, trae cuatro variantes: la plana, `solid/`, `opaque/` y
+`translucent/`.
+
+`make install` copia la misma imagen a las dos rutas en vez de duplicar el
+archivo en el repositorio: dos copias en git acaban divergiendo el dia que
+solo se edita una.
+
+### Tambien existe un prefijo `floating`
+
+`floatingPanelSvg` declara `prefix: ['floating', '']`. Un tema puede dar un
+aspecto distinto al panel flotante definiendo elementos `floating-topleft` y
+compania; si no estan, se usa el prefijo vacio, que es nuestro caso. Los
+margenes del flotante salen de ahi: con prefijo propio, de sus
+`fixedMargins`; sin el, 8 px fijos.
