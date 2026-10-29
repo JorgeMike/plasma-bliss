@@ -8,8 +8,9 @@ Toca configuracion del USUARIO, no del tema, igual que set-start-button.py:
   - el perfil por defecto de Konsole, para apuntarlo a Bliss.colorscheme
   - ~/.config/starship.toml, que afecta a TODAS las terminales, no solo a
     Konsole. Por eso se guarda copia antes y --revert la devuelve
-  - ~/.config/shell/common.sh, solo el bloque FZF_DEFAULT_OPTS: ahi vivian
-    los colores de la busqueda inversa (Ctrl+R). Lo cargan .zshrc y .bashrc
+  - el bloque FZF_DEFAULT_OPTS, alla donde lo tengas: ahi viven los colores
+    de la busqueda inversa (Ctrl+R). Se busca en ~/.config/shell/common.sh,
+    .zshrc, .bashrc, .zshenv y .profile, y se toma el primero que lo defina
   - ~/.config/btop/btop.conf, solo cinco claves, para que btop use los
     dieciseis colores del terminal en vez de sus gradientes de 24 bits
 
@@ -30,16 +31,42 @@ HOME = pathlib.Path.home()
 KONSOLE_DIR = HOME / ".local/share/konsole"
 KONSOLERC = HOME / ".config/konsolerc"
 STARSHIP = HOME / ".config/starship.toml"
-# Lo cargan .zshrc y .bashrc, asi que afecta a los dos interpretes.
-COMMON = HOME / ".config/shell/common.sh"
+# FZF_DEFAULT_OPTS puede estar en cualquiera de estos. No hay un sitio
+# estandar: ~/.config/shell/common.sh es una convencion personal, no de fzf.
+# Se toma el PRIMERO que lo defina.
+FZF_FILES = [
+    HOME / ".config/shell/common.sh",
+    HOME / ".zshrc",
+    HOME / ".bashrc",
+    HOME / ".zshenv",
+    HOME / ".profile",
+]
 BTOP = HOME / ".config/btop/btop.conf"
 STATE = ROOT / "backup" / "terminal"
 
 SCHEME = "Bliss"
 
 
+# Perfil minimo para cuando Konsole no tiene ninguno propio. Parent=FALLBACK/
+# es el perfil integrado: heredamos todo y solo fijamos el esquema. No se
+# toca la fuente a proposito — en una instalacion recien hecha no se sabe
+# cual hay, y la de Konsole ya es monoespaciada.
+NEW_PROFILE = """[Appearance]
+ColorScheme=Bliss
+
+[General]
+Name=Bliss
+Parent=FALLBACK/
+"""
+
+
 def default_profile():
-    """El perfil que Konsole abre al arrancar, segun konsolerc."""
+    """El perfil que Konsole abre al arrancar, segun konsolerc.
+
+    En una instalacion recien hecha no hay ninguno: Konsole usa su perfil
+    integrado, que no tiene fichero, y konsolerc ni siquiera existe. Por eso
+    devuelve tambien si lo encontro o no, para poder crearlo.
+    """
     if not KONSOLERC.exists():
         return None
     c = configparser.ConfigParser(strict=False)
@@ -64,19 +91,54 @@ def write_scheme(profile, value):
 
 
 def do_konsole(revert):
-    profile = default_profile()
-    if profile is None:
-        print("   konsole   -- sin perfil por defecto en konsolerc, omitido")
-        return
     mark = STATE / "konsole-colorscheme"
+    created = STATE / "konsole-profile-created"
+    profile = default_profile()
+
     if revert:
-        if not mark.exists():
+        if created.exists():
+            # El perfil lo creamos nosotros: se borra entero y se quita de
+            # konsolerc, en vez de dejar un perfil huerfano por ahi.
+            (KONSOLE_DIR / "Bliss.profile").unlink(missing_ok=True)
+            subprocess.run(["kwriteconfig6", "--file", str(KONSOLERC),
+                            "--group", "Desktop Entry",
+                            "--key", "DefaultProfile", "--delete"], check=False)
+            # Si konsolerc se queda sin una sola clave, lo creamos nosotros al
+            # escribir DefaultProfile: se borra para dejarlo como estaba. Si
+            # tiene cualquier otro ajuste del usuario, se respeta.
+            if KONSOLERC.exists() and not any(
+                    "=" in line for line in KONSOLERC.read_text().splitlines()):
+                KONSOLERC.unlink()
+            created.unlink()
+            mark.unlink(missing_ok=True)
+            print("   konsole   -> perfil Bliss borrado (antes no tenias ninguno)")
+            return
+        if profile is None or not mark.exists():
             print("   konsole   -- no hay nada guardado que restaurar")
             return
         old = mark.read_text().strip()
         write_scheme(profile, old)
         mark.unlink()
         print(f"   konsole   -> {profile.name}: ColorScheme={old or '(vacio)'}")
+        return
+
+    if profile is None:
+        # Sin perfil propio, Konsole usa el integrado, que no tiene fichero
+        # que parchear. Se crea uno que hereda de el y solo fija el esquema.
+        if not shutil.which("konsole"):
+            print("   konsole   -- no esta instalado, omitido")
+            return
+        KONSOLE_DIR.mkdir(parents=True, exist_ok=True)
+        profile = KONSOLE_DIR / "Bliss.profile"
+        profile.write_text(NEW_PROFILE)
+        KONSOLERC.parent.mkdir(parents=True, exist_ok=True)
+        subprocess.run(["kwriteconfig6", "--file", str(KONSOLERC),
+                        "--group", "Desktop Entry",
+                        "--key", "DefaultProfile", "Bliss.profile"], check=True)
+        STATE.mkdir(parents=True, exist_ok=True)
+        created.touch()
+        print(f"   konsole   -> creado {profile.name} y puesto por defecto "
+              f"(no tenias perfil propio)")
         return
 
     current = read_scheme(profile)
@@ -141,36 +203,50 @@ FZF_RE = re.compile(
     r'^(?:#[^\n]*\n)?export FZF_DEFAULT_OPTS="[^"]*"', re.M)
 
 
+def fzf_file():
+    """El primer fichero del usuario que defina FZF_DEFAULT_OPTS."""
+    for f in FZF_FILES:
+        if f.exists() and FZF_RE.search(f.read_text()):
+            return f
+    return None
+
+
 def do_fzf(revert):
-    saved = STATE / "common.sh"
+    saved = STATE / "fzf-source"
+    name_mark = STATE / "fzf-source-name"
     if revert:
-        if saved.exists():
-            shutil.copy2(saved, COMMON)
+        if saved.exists() and name_mark.exists():
+            target = pathlib.Path(name_mark.read_text().strip())
+            shutil.copy2(saved, target)
             saved.unlink()
-            print(f"   fzf       -> restaurado tu {COMMON.name} de antes")
+            name_mark.unlink()
+            print(f"   fzf       -> restaurado tu {target.name} de antes")
         else:
             print("   fzf       -- no hay nada guardado que restaurar")
         return
 
-    if not COMMON.exists():
-        print(f"   fzf       -- no existe {COMMON}, omitido")
-        return
-    text = COMMON.read_text()
-    if "tema Bliss" in text:
-        print("   fzf       -- ya estaba puesto")
-        return
-    if not FZF_RE.search(text):
-        print(f"   fzf       -- no encuentro el bloque FZF_DEFAULT_OPTS en "
-              f"{COMMON.name}, omitido")
+    # Si ya esta puesto, no hay que buscar mas.
+    for f in FZF_FILES:
+        if f.exists() and "tema Bliss" in f.read_text():
+            print("   fzf       -- ya estaba puesto")
+            return
+
+    target = fzf_file()
+    if target is None:
+        # No es un fallo: sin FZF_DEFAULT_OPTS propio, fzf usa los colores
+        # del terminal, que es exactamente lo que queremos.
+        print("   fzf       -- no defines FZF_DEFAULT_OPTS; Ctrl+R ya usa "
+              "los colores del terminal")
         return
 
     STATE.mkdir(parents=True, exist_ok=True)
     if not saved.exists():
-        shutil.copy2(COMMON, saved)
-        print(f"   fzf       -- copia de {COMMON.name} en "
+        shutil.copy2(target, saved)
+        name_mark.write_text(str(target))
+        print(f"   fzf       -- copia de {target.name} en "
               f"{saved.relative_to(ROOT)}")
-    COMMON.write_text(FZF_RE.sub(FZF_BLOCK, text, count=1))
-    print(f"   fzf       -> {COMMON} (Ctrl+R sigue al palé del terminal)")
+    target.write_text(FZF_RE.sub(FZF_BLOCK, target.read_text(), count=1))
+    print(f"   fzf       -> {target} (Ctrl+R sigue al palé del terminal)")
 
 
 # btop se pinta con su propio tema, no con el del terminal: de serie usa

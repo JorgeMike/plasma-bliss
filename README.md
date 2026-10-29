@@ -154,12 +154,18 @@ en `.gitignore`. Hace falta `curl`.
 
 Cambia cuatro cosas, y las tres ultimas son configuracion tuya, no del tema:
 
-- **Konsole**: apunta tu perfil por defecto a `Bliss.colorscheme`.
+- **Konsole**: apunta tu perfil por defecto a `Bliss.colorscheme`. Si no
+  tienes perfil propio — lo normal en una instalacion recien hecha, donde
+  Konsole usa su perfil integrado, que no tiene fichero — crea uno que
+  hereda de el y lo deja por defecto.
 - **starship** (`~/.config/starship.toml`): prompt en colores ANSI. Hace
   falta porque un prompt con colores hex fijos ignora el pale del terminal y
   seguiria viendose igual sobre el negro.
-- **fzf**, el bloque `FZF_DEFAULT_OPTS` de `~/.config/shell/common.sh`: es
-  quien pinta el `Ctrl+R`, y tenia el mismo problema.
+- **fzf**, el bloque `FZF_DEFAULT_OPTS`: es quien pinta el `Ctrl+R`, y tiene
+  el mismo problema. No hay un sitio estandar, asi que se busca en
+  `~/.config/shell/common.sh`, `.zshrc`, `.bashrc`, `.zshenv` y `.profile`.
+  Si no defines ninguno, no hay nada que corregir: fzf ya usa los colores
+  del terminal.
 - **btop** (`~/.config/btop/btop.conf`): cinco claves para que use 16
   colores en vez de sus gradientes de 24 bits.
 
