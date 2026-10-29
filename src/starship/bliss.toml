@@ -1,0 +1,106 @@
+# Bliss — prompt de consola antigua para starship
+#
+# Por que hace falta este archivo y no basta con el esquema de Konsole:
+# el preset Tokyo Night que traias pinta una cinta powerline con colores hex
+# FIJOS (bg:#769ff0 y companhia). Esos colores no salen del palé del
+# terminal, asi que cambiar el esquema no los toca: la cinta azul pastel
+# seguiria flotando sobre el negro.
+#
+# Aqui no hay ni un color hex. Solo nombres ANSI, que es como funcionaba una
+# consola de verdad: el prompt se pinta con los dieciseis colores del
+# terminal. Si manhana cambias de esquema, el prompt le sigue solo.
+#
+# Tampoco hay glifos de Nerd Font. Una consola antigua no los tenia, y asi el
+# prompt se ve igual en cualquier terminal, incluido un TTY pelado.
+
+add_newline = false
+command_timeout = 800
+
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$cmd_duration\
+$jobs\
+$character"""
+
+[username]
+show_always = true
+style_user = "white"
+style_root = "bright-red bold"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "white"
+format = "[@$hostname]($style)"
+
+[directory]
+# Ruta entera, sin truncar ni sustituir por iconos: una consola antigua te
+# decia exactamente donde estabas.
+style = "bright-white bold"
+format = "[:$path]($style)"
+truncation_length = 0
+truncate_to_repo = false
+read_only = " [solo lectura]"
+read_only_style = "yellow"
+
+[git_branch]
+symbol = ""
+style = "white"
+# Los parentesis van escapados: en el formato de starship, (...) es un grupo
+# condicional que desaparece, no texto literal.
+format = ' [\($branch\)]($style)'
+
+[git_status]
+style = "yellow"
+# Flechas en ASCII. Las de serie son Unicode y este prompt tiene que verse
+# igual en un TTY pelado.
+ahead = "+${count}"
+behind = "-${count}"
+diverged = "+${ahead_count}-${behind_count}"
+conflicted = "!"
+untracked = "?"
+stashed = "$"
+modified = "*"
+staged = "+"
+renamed = "r"
+deleted = "x"
+format = '[ $all_status$ahead_behind]($style)' 
+
+[cmd_duration]
+min_time = 2000
+style = "white"
+format = " [{$duration}]($style)"
+
+[jobs]
+style = "white"
+format = " [&$number]($style)"
+
+[character]
+# El unico color que cambia: el simbolo se pone rojo si el comando anterior
+# fallo. Es la concesion que si hacia falta — el resto es monocromo.
+success_symbol = '[\$](bright-white)'
+error_symbol = '[\$](bright-red)'
+format = "$symbol "
+
+# ---------------------------------------------------------------------------
+# Variante MS-DOS. Si prefieres `C:\...>` en lugar de `usuario@equipo:ruta$`,
+# cambia el bloque [directory] y el [character] por esto, y quita $username,
+# $hostname y la barra invertida que los acompanha del `format` de arriba:
+#
+#     [directory]
+#     style = "bright-white bold"
+#     format = "[C:$path]($style)"
+#     truncation_length = 0
+#     truncate_to_repo = false
+#
+#     [character]
+#     success_symbol = "[>](bright-white)"
+#     error_symbol = "[>](bright-red)"
+#     format = "$symbol "
+#
+# No se deja puesto por defecto porque las rutas dejan de poder copiarse tal
+# cual, y eso se nota a diario.

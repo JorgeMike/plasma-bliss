@@ -498,3 +498,66 @@ de los lanzadores de un escritorio actual: su conjunto de `apps` es de la
 epoca de XP. Comprobado nombre por nombre. Por eso `fetch-icons.py` ni mira
 el contexto `apps`: los iconos de los lanzadores salen de breeze-dark y asi
 deben quedarse.
+
+## Terminal: Konsole y el prompt
+
+Dos piezas, y la segunda no es opcional si se quiere que el resultado se vea
+bien.
+
+### El esquema de Konsole
+
+Un `.colorscheme` en `~/.local/share/konsole/`, en formato INI: `Background`,
+`Foreground`, sus variantes `Intense`, y `Color0`…`Color7` con
+`Color0Intense`…`Color7Intense`. Cada clave es `Color=R,G,B`.
+
+El perfil lo referencia por nombre de archivo sin extension, en
+`[Appearance] ColorScheme=`. El perfil por defecto sale de
+`~/.config/konsolerc`, clave `DefaultProfile`.
+
+Konsole **no recarga el esquema en las pestañas abiertas**: hay que abrir una
+nueva.
+
+### Tres colores del palé de DOS no se leen sobre negro
+
+Medido con la formula de contraste de WCAG contra `#000000`:
+
+| color | DOS | ratio | Campbell | ratio |
+|---|---|---|---|---|
+| azul | `#000080` | 1.31 | `#0037DA` | 2.56 |
+| rojo | `#800000` | 1.92 | `#C50F1F` | 3.46 |
+| magenta | `#800080` | 2.23 | `#881798` | 2.62 |
+| azul vivo | `#0000FF` | 2.44 | `#3B78FF` | 5.32 |
+
+Los cuatro se cambian por los de Campbell, que es la correccion que hizo
+Microsoft para este mismo problema en Windows 10. El resto del palé es el de
+DOS sin tocar. El texto por defecto es `#C0C0C0` sobre negro: 11.5:1.
+
+Que el texto no sea blanco puro es deliberado. En cmd.exe el `#C0C0C0` era el
+color 7 y el blanco `#FFFFFF` el 15, el "intenso". Respetar la diferencia es
+lo que hace que el negrita se note.
+
+### El prompt tiene que usar colores ANSI, no hex
+
+Aqui esta la trampa. Un prompt moderno de starship —el preset Tokyo Night,
+por ejemplo— pinta con colores **hex fijos** y fondos de bloque:
+`style = "fg:#e3e5e5 bg:#769ff0"`. Esos colores no salen del palé del
+terminal, asi que **cambiar el esquema de Konsole no los toca**: queda una
+cinta azul pastel flotando sobre el negro.
+
+`src/starship/bliss.toml` no usa ni un hex: solo nombres ANSI (`white`,
+`bright-white`, `yellow`, `bright-red`). Asi el prompt hereda el palé del
+terminal y sigue cualquier cambio de esquema.
+
+Dos detalles del formato de starship que cuestan un intento:
+
+- `(...)` dentro de `[...]` es un **grupo condicional**, no texto literal.
+  Para que salgan parentesis de verdad hay que escaparlos: `\(` y `\)`.
+- Los indicadores de `git_status` traen flechas Unicode (`⇡`) de serie. Si se
+  quiere ASCII puro, hay que redefinir `ahead`, `behind` y `diverged`.
+
+### Es configuracion del usuario, no del tema
+
+`~/.config/starship.toml` afecta a **todas** las terminales, no solo a
+Konsole. Por eso `make terminal` esta fuera de `make apply`, guarda copia de
+lo que hubiera en `backup/terminal/` y `make terminal-revert` la devuelve. Es
+el mismo trato que `make start-button`.

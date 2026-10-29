@@ -38,7 +38,7 @@ QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
         reload start-button start-button-revert \
         check list install-colors install-aurorae install-plasma install-lnf \
         install-icons install-kvantum install-wallpaper \
-        wallpaper wallpaper-apply icons
+        wallpaper wallpaper-apply icons install-konsole terminal terminal-revert
 
 help:
 	@printf "\033[1mBliss\033[0m — tema global de Plasma 6\n"
@@ -54,6 +54,7 @@ help:
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
 	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
 	@printf "  \033[36mmake icons\033[0m         espiga los iconos XP de LinXP a build/\n"
+	@printf "  \033[36mmake terminal\033[0m      consola negra: Konsole + prompt de starship\n"
 	@printf "  \033[36mmake wallpaper\033[0m     regenera el fondo desde bliss.svg\n"
 	@printf "  \033[36mmake wallpaper-apply\033[0m pone el fondo en tu escritorio\n"
 	@printf "  \033[36mmake start-button\033[0m  pone el icono Inicio verde en tu panel\n"
@@ -65,7 +66,7 @@ help:
 
 # ---------------------------------------------------------------- instalacion
 install: install-colors install-aurorae install-plasma install-lnf install-icons \
-         install-kvantum install-wallpaper
+         install-kvantum install-wallpaper install-konsole
 	@echo ">> instalado. Ahora: make apply"
 
 install-colors:
@@ -134,6 +135,11 @@ install-kvantum:
 		fi; \
 	done
 
+install-konsole:
+	@install -Dm644 $(SRC)/konsole/$(NAME).colorscheme \
+		$(DEST)/konsole/$(NAME).colorscheme
+	@echo "   konsole      -> $(DEST)/konsole/$(NAME).colorscheme"
+
 uninstall:
 	@rm -rf $(DEST)/color-schemes/$(NAME).colors \
 		$(DEST)/aurorae/themes/$(NAME) $(DEST)/aurorae/themes/$(DARK) \
@@ -142,7 +148,8 @@ uninstall:
 		$(DEST)/icons/$(NAME) \
 		$(DEST)/icons/hicolor/scalable/apps/bliss-start.svg \
 		$(CFG)/Kvantum/$(NAME) $(CFG)/Kvantum/$(DARK) \
-		$(DEST)/wallpapers/$(NAME)
+		$(DEST)/wallpapers/$(NAME) \
+		$(DEST)/konsole/$(NAME).colorscheme
 	@echo ">> desinstalado (la config activa no se ha tocado; usa: make revert)"
 
 # ----------------------------------------------------------------- aplicacion
@@ -207,6 +214,16 @@ restore:
 	if [ -z "$$last" ]; then echo "!! no hay backups"; exit 1; fi; \
 	cp $$last/* $(CFG)/ && echo ">> restaurado desde $$last"; \
 	echo "   cierra sesion, o ejecuta: plasmashell --replace &"
+
+# ------------------------------------------------------------------ terminal
+# Fuera de `make apply` a proposito: toca el perfil de Konsole y, sobre todo,
+# ~/.config/starship.toml, que afecta a TODAS las terminales y no solo a
+# Konsole. Guarda copia de lo que habia; `make terminal-revert` lo devuelve.
+terminal:
+	@python3 -I tools/set-terminal.py
+
+terminal-revert:
+	@python3 -I tools/set-terminal.py --revert
 
 # -------------------------------------------------------------------- iconos
 # Los iconos XP NO estan en el repositorio. LinXP no publica licencia, asi que
@@ -284,6 +301,16 @@ check:
 	for f in $$(find $(SRC) -name "*.json"); do \
 		python3 -I -m json.tool $$f >/dev/null \
 			|| { echo "!! JSON invalido: $$f"; ok=1; }; \
+	done; \
+	for f in $$(find $(SRC) -name "*.toml"); do \
+		python3 -I -c "import tomllib,sys; tomllib.load(open(sys.argv[1],'rb'))" $$f \
+			|| { echo "!! TOML invalido: $$f"; ok=1; }; \
+	done; \
+	for f in $$(find $(SRC) -name "*.colorscheme"); do \
+		python3 -I -c "import configparser,sys; c=configparser.ConfigParser(strict=False); c.read(sys.argv[1]); \
+			need=['Background','Foreground']+['Color%d'%i for i in range(8)]+['Color%dIntense'%i for i in range(8)]; \
+			miss=[s for s in need if s not in c]; sys.exit('faltan secciones: %s'%miss if miss else 0)" $$f \
+			|| { echo "!! colorscheme incompleto: $$f"; ok=1; }; \
 	done; \
 	for p in decoration close minimize maximize restore; do \
 		[ -f $(SRC)/aurorae/$(NAME)/$$p.svg ] \

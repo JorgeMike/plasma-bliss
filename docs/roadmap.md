@@ -105,6 +105,8 @@ Kvantum — se reutiliza tal cual. Solo cambia el pigmento.
       instalados. No entran en el repositorio: LinXP no publica licencia
 - [ ] Opcional: redibujar en SVG los iconos que mas se vean. LinXP es PNG, y
       con escalado fraccionario se ablandan
+- [x] Terminal: esquema negro para Konsole con el palé de DOS, y un prompt de
+      starship en colores ANSI para que siga al terminal. `make terminal`
 - [ ] Cursores
 - [ ] Splash (QML)
 - [ ] Tema SDDM (paquete aparte, no entra en el tema global)

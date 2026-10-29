@@ -1,0 +1,89 @@
+# Bliss — esquema de color para Konsole
+#
+# La consola de Windows de toda la vida: fondo negro y texto gris claro, con
+# los dieciseis colores ANSI del palé CGA que cmd.exe arrastro desde DOS.
+#
+# No es blanco puro: el texto por defecto de cmd.exe era #C0C0C0, el color 7
+# del palé, y blanco puro (#FFFFFF) era el 15, el "blanco intenso" que se
+# usaba para resaltar. Respetarlo es lo que hace que el negrita se note.
+# Contraste del gris sobre negro: 11.5:1, de sobra para AAA.
+#
+# Tres colores NO son los de DOS, y es a proposito. Sobre negro no se leen:
+#
+#     azul    #000080 -> 1.31:1     magenta #800080 -> 2.23:1
+#     rojo    #800000 -> 1.92:1
+#
+# Se sustituyen por los de Campbell, que es la correccion que hizo Microsoft
+# para este mismo problema en Windows 10, no una invencion nuestra:
+#
+#     azul #0037DA (2.56:1)   rojo #C50F1F (3.46:1)   magenta #881798 (2.62:1)
+#     azul vivo #3B78FF (5.32:1), en vez de #0000FF (2.44:1)
+#
+# El resto del palé es el de DOS sin tocar.
+
+[Background]
+Color=0,0,0
+
+[BackgroundIntense]
+Color=0,0,0
+
+[Foreground]
+Color=192,192,192
+
+[ForegroundIntense]
+Color=255,255,255
+
+[Color0]
+Color=0,0,0
+
+[Color1]
+Color=197,15,31
+
+[Color2]
+Color=0,128,0
+
+[Color3]
+Color=128,128,0
+
+[Color4]
+Color=0,55,218
+
+[Color5]
+Color=136,23,152
+
+[Color6]
+Color=0,128,128
+
+[Color7]
+Color=192,192,192
+
+[Color0Intense]
+Color=128,128,128
+
+[Color1Intense]
+Color=255,0,0
+
+[Color2Intense]
+Color=0,255,0
+
+[Color3Intense]
+Color=255,255,0
+
+[Color4Intense]
+Color=59,120,255
+
+[Color5Intense]
+Color=255,0,255
+
+[Color6Intense]
+Color=0,255,255
+
+[Color7Intense]
+Color=255,255,255
+
+[General]
+Blur=false
+ColorRandomization=false
+Description=Bliss
+Opacity=1
+Wallpaper=

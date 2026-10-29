@@ -81,6 +81,10 @@ las dos decoraciones. Si divergen, el generador ha roto algo.
   carpetas, dispositivos y tipos de archivo, y hereda el resto de
   breeze-dark. Los mapas de bits los trae `make icons` desde LinXP a
   `build/`, fuera del repositorio, porque LinXP no publica licencia.
+- **Terminal**: `make terminal`. Konsole en negro con el palé de DOS, y el
+  prompt de starship reescrito en colores ANSI — el preset que traias usaba
+  hex fijos y habria seguido siendo una cinta azul sobre el negro. Toca
+  configuracion tuya, guarda copia y se deshace con `make terminal-revert`.
 - **Plasma style**: no cambia. El chrome del shell ya es azul oscuro en ambas
   variantes, igual que la barra de tareas de Windows 7 o 10 se mantiene
   oscura con independencia del modo de las aplicaciones.
