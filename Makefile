@@ -38,7 +38,7 @@ QDBUS  := $(shell command -v qdbus6 2>/dev/null || command -v qdbus 2>/dev/null)
         reload start-button start-button-revert \
         check list install-colors install-aurorae install-plasma install-lnf \
         install-icons install-kvantum install-wallpaper \
-        wallpaper wallpaper-apply
+        wallpaper wallpaper-apply icons
 
 help:
 	@printf "\033[1mBliss\033[0m — tema global de Plasma 6\n"
@@ -53,6 +53,7 @@ help:
 	@printf "  \033[36mmake backup\033[0m        guarda tu config actual en ./backup/\n"
 	@printf "  \033[36mmake restore\033[0m       restaura el backup mas reciente\n"
 	@printf "  \033[36mmake kvantum\033[0m       regenera el tema Kvantum desde $(KV_BASE)\n"
+	@printf "  \033[36mmake icons\033[0m         espiga los iconos XP de LinXP a build/\n"
 	@printf "  \033[36mmake wallpaper\033[0m     regenera el fondo desde bliss.svg\n"
 	@printf "  \033[36mmake wallpaper-apply\033[0m pone el fondo en tu escritorio\n"
 	@printf "  \033[36mmake start-button\033[0m  pone el icono Inicio verde en tu panel\n"
@@ -97,7 +98,16 @@ install-icons:
 	@install -Dm644 $(SRC)/icons/$(NAME)/scalable/apps/bliss-start.svg \
 		$(DEST)/icons/hicolor/scalable/apps/bliss-start.svg
 	-@gtk-update-icon-cache -qtf $(DEST)/icons/hicolor 2>/dev/null || true
-	@echo "   iconos       -> $(DEST)/icons/$(NAME) (+ hicolor/bliss-start)"
+# Los mapas de bits espigados de LinXP viven en build/, fuera del repositorio,
+# asi que se mezclan aqui si estan. Si no estan, el tema sigue siendo valido:
+# todo cae a Papirus por herencia.
+	@if [ -d build/icons/$(NAME) ]; then \
+		cp -r build/icons/$(NAME)/. $(DEST)/icons/$(NAME)/; \
+		echo "   iconos       -> $(DEST)/icons/$(NAME) (+ $$(find build/icons/$(NAME) -name '*.png' | wc -l) PNG de LinXP)"; \
+	else \
+		echo "   iconos       -> $(DEST)/icons/$(NAME) (sin los de LinXP: ejecuta make icons)"; \
+	fi
+	-@gtk-update-icon-cache -qtf $(DEST)/icons/$(NAME) 2>/dev/null || true
 
 install-lnf:
 	@rm -rf $(DEST)/plasma/look-and-feel/$(LNF_ID)
@@ -158,8 +168,13 @@ _apply:
 		$(KWRITE) --file kdeglobals --group KDE --key widgetStyle kvantum; \
 		echo "   estilo de widgets -> kvantum/$(VARIANT)"; \
 	fi
+# El tema de iconos es el MISMO en claro y oscuro: Bliss solo sobrescribe
+# carpetas, dispositivos y tipos de archivo, y hereda el resto de Papirus-Dark.
+	@$(KWRITE) --file kdeglobals --group Icons --key Theme $(NAME)
+	@echo "   iconos            -> $(NAME) (hereda de Papirus-Dark)"
 	@if [ -n "$(QDBUS)" ]; then $(QDBUS) org.kde.KWin /KWin reconfigure; fi
 	@echo ">> $(VARIANT) aplicado. El panel NO se ha tocado."
+	@echo "   las aplicaciones Qt ya abiertas no releen los iconos: reinicialas"
 
 # Sobrescribe la disposicion del panel. Hace backup automatico antes.
 apply-global: backup
@@ -173,6 +188,7 @@ revert:
 		$(KWRITE) --file kwinrc --group org.kde.kdecoration2 --key library org.kde.breeze; \
 		$(KWRITE) --file kwinrc --group org.kde.kdecoration2 --key theme Breeze; \
 	$(KWRITE) --file kdeglobals --group KDE --key widgetStyle Breeze; \
+		$(KWRITE) --file kdeglobals --group Icons --key Theme breeze-dark; \
 	fi
 	@if [ -n "$(QDBUS)" ]; then $(QDBUS) org.kde.KWin /KWin reconfigure; fi
 	@echo ">> de vuelta en Breeze"
@@ -191,6 +207,13 @@ restore:
 	if [ -z "$$last" ]; then echo "!! no hay backups"; exit 1; fi; \
 	cp $$last/* $(CFG)/ && echo ">> restaurado desde $$last"; \
 	echo "   cierra sesion, o ejecuta: plasmashell --replace &"
+
+# -------------------------------------------------------------------- iconos
+# Los iconos XP NO estan en el repositorio. LinXP no publica licencia, asi que
+# se bajan a build/ y de ahi los recoge `make install`. Mismo trato que
+# KvBeige: la base vive fuera, nosotros guardamos la receta.
+icons:
+	@python3 -I tools/fetch-icons.py
 
 # --------------------------------------------------------------------- fondo
 # bliss-dark.svg y contents/ son GENERADOS. La unica fuente es bliss.svg: para

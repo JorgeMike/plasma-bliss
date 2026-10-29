@@ -410,3 +410,52 @@ El acento verde debe alcanzar `progress-pattern-normal*` y **no**
 `progress-normal*`. Pintar los dos dejaba la barra en dos verdes, y una barra
 de progreso cuyo lleno y vacio son del mismo tono no comunica nada. En XP el
 canal es un pozo hundido del color de la ventana.
+
+## Iconos: herencia en vez de dibujar 1500
+
+Un tema de iconos no tiene que estar completo. `Inherits=` en `index.theme`
+encadena temas, y la busqueda recorre la cadena hasta encontrar el nombre. Por
+eso Bliss solo cubre lo que se ve a diario y declara:
+
+```
+Inherits=Papirus-Dark,Papirus,breeze,hicolor
+```
+
+Detalle del spec que conviene saber: **dentro de un tema se elige el tamano
+mas cercano antes de pasar al padre**. Si Bliss tiene `folder` a 32 px pero no
+a 22, una peticion de 22 px coge el de 32 y lo escala; no se va a Papirus. Eso
+es lo que mantiene la coherencia sin tener que cubrir todos los tamanos.
+
+### LinXP: solo 210 de sus 1025 nombres son suyos
+
+LinXP se anuncia con unos mil iconos. Mirando los ficheros `meta` de cada uno,
+resulta que **815 son alias que su script rellena copiandolos de Mint-X**. Un
+icono con dibujo propio trae PNG numerados (`16.png`, `32.png`…); uno que no,
+solo trae `meta` con rutas marcadas `Mint-X:`.
+
+Los de Mint-X no interesan aqui: ni son XP, ni Mint-X esta instalado en una
+Debian con KDE. De hecho el `index.theme` de LinXP hereda de
+`gnome,hicolor,Mint-X-Yellow`, ninguno de los tres presente, asi que instalado
+tal cual no se ve incompleto: se ve roto.
+
+De los 210 propios, `tools/fetch-icons.py` coge los 61 de lugares,
+dispositivos y tipos de archivo cuyo nombre **tambien define Breeze**. Ese es
+el criterio, y no una lista escrita a mano: lo que Breeze nombra es lo que el
+escritorio pide. Si LinXP creciera, la seleccion crece sola.
+
+### Alias entre contextos
+
+Algunos nombres que pide KDE no coinciden con los de LinXP, y uno cruza de
+contexto: `inode-directory` es el tipo MIME de una carpeta, Breeze lo define
+en `mimetypes`, y el dibujo esta en `places/folder`. Sin ese alias, las
+carpetas se quedaban con el icono de Papirus en las vistas que piden el tipo
+MIME en lugar del lugar. Los demas son renombres simples: `user-home` viene de
+`folder-home`, `folder-downloads` de `folder-download`.
+
+### Por que viven en build/ y no en src/
+
+LinXP no publica fichero de licencia. Podemos usarlo, no redistribuirlo. Asi
+que los PNG se bajan a `build/`, que esta fuera de git, y `make install` los
+mezcla si estan. Si no estan, el tema sigue siendo valido y todo cae a
+Papirus. Es el mismo trato que KvBeige: la base vive fuera, el repositorio
+guarda la receta.
