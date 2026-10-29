@@ -10,6 +10,8 @@ Toca configuracion del USUARIO, no del tema, igual que set-start-button.py:
     Konsole. Por eso se guarda copia antes y --revert la devuelve
   - ~/.config/shell/common.sh, solo el bloque FZF_DEFAULT_OPTS: ahi vivian
     los colores de la busqueda inversa (Ctrl+R). Lo cargan .zshrc y .bashrc
+  - ~/.config/btop/btop.conf, solo cinco claves, para que btop use los
+    dieciseis colores del terminal en vez de sus gradientes de 24 bits
 
 Lo que habia se guarda en backup/terminal/, que esta fuera de git. Sin esa
 copia no hay vuelta atras posible, asi que si falta, --revert lo dice en vez
@@ -30,6 +32,7 @@ KONSOLERC = HOME / ".config/konsolerc"
 STARSHIP = HOME / ".config/starship.toml"
 # Lo cargan .zshrc y .bashrc, asi que afecta a los dos interpretes.
 COMMON = HOME / ".config/shell/common.sh"
+BTOP = HOME / ".config/btop/btop.conf"
 STATE = ROOT / "backup" / "terminal"
 
 SCHEME = "Bliss"
@@ -167,10 +170,64 @@ def do_fzf(revert):
     print(f"   fzf       -> {COMMON} (Ctrl+R sigue al palé del terminal)")
 
 
+# btop se pinta con su propio tema, no con el del terminal: de serie usa
+# gradientes de 24 bits. Con estas claves pasa a los dieciseis ANSI y hereda
+# el palé. Se escriben SOLO estas; el resto del fichero no se toca, porque
+# btop guarda ahi todas las preferencias del usuario.
+BTOP_KEYS = {
+    "color_theme": '"TTY"',
+    "theme_background": "False",
+    "truecolor": "False",
+    "force_tty": "True",
+    "rounded_corners": "False",
+}
+
+
+def do_btop(revert):
+    saved = STATE / "btop.conf"
+    created = STATE / "btop.created"
+    if revert:
+        if saved.exists():
+            shutil.copy2(saved, BTOP)
+            saved.unlink()
+            print("   btop      -> restaurado tu btop.conf de antes")
+        elif created.exists():
+            BTOP.unlink(missing_ok=True)
+            created.unlink()
+            print("   btop      -> borrado (antes no tenias configuracion)")
+        else:
+            print("   btop      -- no hay nada guardado que restaurar")
+        return
+
+    STATE.mkdir(parents=True, exist_ok=True)
+    if BTOP.exists():
+        if not saved.exists():
+            shutil.copy2(BTOP, saved)
+            print(f"   btop      -- copia en {saved.relative_to(ROOT)}")
+        lines = BTOP.read_text().splitlines()
+    else:
+        BTOP.parent.mkdir(parents=True, exist_ok=True)
+        created.touch()
+        lines = []
+
+    seen = set()
+    out = []
+    for line in lines:
+        key = line.split("=", 1)[0].strip()
+        if key in BTOP_KEYS and not line.lstrip().startswith("#"):
+            out.append(f"{key} = {BTOP_KEYS[key]}")
+            seen.add(key)
+        else:
+            out.append(line)
+    out += [f"{k} = {v}" for k, v in BTOP_KEYS.items() if k not in seen]
+    BTOP.write_text("\n".join(out) + "\n")
+    print(f"   btop      -> {BTOP} ({len(BTOP_KEYS)} claves)")
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--revert", action="store_true")
-    ap.add_argument("--only", choices=("konsole", "starship", "fzf"))
+    ap.add_argument("--only", choices=("konsole", "starship", "fzf", "btop"))
     a = ap.parse_args()
 
     if a.only in (None, "konsole"):
@@ -179,6 +236,8 @@ def main():
         do_starship(a.revert)
     if a.only in (None, "fzf"):
         do_fzf(a.revert)
+    if a.only in (None, "btop"):
+        do_btop(a.revert)
 
     if not a.revert:
         print("   las pestañas de Konsole ya abiertas no cambian de esquema: "

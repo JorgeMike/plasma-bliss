@@ -605,3 +605,37 @@ como resaltaba una consola de verdad.
 Moraleja para el resto del sistema: **cualquier herramienta de terminal que
 guarde colores hex en su configuracion se quedara con el tema anterior.**
 Cambiar el esquema del emulador no la alcanza.
+
+### btop y bat: uno desentonaba, el otro no
+
+**bat ya estaba bien.** `~/.config/shell/common.sh` exporta
+`BAT_THEME='ansi'`, y ese tema emite codigos ANSI planos en lugar de indices
+fijos. Se ve en la salida cruda:
+
+    con ansi        ^[[35mdef^[[0m   ^[[32m"hola"^[[0m
+    con otro tema   ^[[38;5;203mdef^[[0m   ^[[38;5;186m"hola"^[[0m
+
+El segundo clava los colores; el primero sigue al palé. No habia nada que
+cambiar.
+
+**btop si.** De serie usa gradientes de 24 bits y, sin configuracion propia,
+no hereda nada del terminal. Cinco claves lo arreglan, y la que importa es
+`force_tty`:
+
+| clave | valor | para que |
+|---|---|---|
+| `color_theme` | `"TTY"` | tema de 16 colores integrado |
+| `truecolor` | `False` | sin esto, TTY se convierte a 256 |
+| `force_tty` | `True` | 16 colores y simbolos de grafico sencillos |
+| `theme_background` | `False` | deja ver el negro del terminal |
+| `rounded_corners` | `False` | esquinas rectas |
+
+**`tty_mode` no existe como clave de fichero.** Aparece en `btop --help` como
+nombre del argumento largo, y al ponerla en `btop.conf` btop la descarta en
+silencio al reescribir la configuracion. La del fichero es `force_tty`.
+
+Comprobado reproduciendo btop en un pty de 140x40 y contando codigos de
+escape: con estas claves, **0 de 24 bits, 0 de 256, 7502 ANSI basicos**.
+
+Solo se escriben esas cinco claves; el resto de `btop.conf` no se toca,
+porque ahi guarda btop todas las preferencias del usuario.
