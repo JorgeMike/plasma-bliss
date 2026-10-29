@@ -6,6 +6,58 @@ Tema global para **KDE Plasma 6**: Windows XP *Luna* con un acabado de cristal
 Pensado para Plasma 6.3 / Qt6 / KF6. Desarrollado y probado en Debian 13 sobre
 Wayland.
 
+No es un calco: los archivos originales de Luna son de Microsoft y no se
+redistribuyen. Todo lo que hay aqui esta **recreado en vectores**, calibrado
+contra los valores canonicos de XP que estan anotados en `docs/palette.md`.
+
+## Como se ve
+
+### La barra de tareas
+
+![Barra de tareas](docs/screenshots/panel.png)
+
+Degradado azul de Luna, boton Inicio verde, y los botones de ventana con su
+bisel. El panel esta en modo flotante: cuando no hay ninguna ventana abierta
+se despega del borde y entonces se ven sus cuatro esquinas redondeadas.
+
+### Ventanas y controles
+
+La decoracion de ventana es Aurorae; el interior de las aplicaciones Qt lo
+pinta Kvantum. Las dos variantes comparten geometria exacta — mismo radio de
+esquina, mismo bisel, mismo grosor de borde — y solo cambian de pigmento.
+
+| Claro | Oscuro |
+|---|---|
+| ![Claro](docs/screenshots/widgets-light.png) | ![Oscuro](docs/screenshots/widgets-dark.png) |
+
+### Fondo de pantalla
+
+| Claro | Oscuro |
+|---|---|
+| ![Fondo claro](docs/screenshots/wallpaper-light.jpg) | ![Fondo oscuro](docs/screenshots/wallpaper-dark.jpg) |
+
+Dibujo propio en SVG, no la fotografia de Microsoft. Se publica como paquete
+de vectores, asi que pesa 470 KB en lugar de decenas de megas y sale nitido a
+cualquier densidad. La variante oscura se genera de la clara con un mapa de
+color explicito, y las estrellas solo existen ahi.
+
+### Iconos
+
+![Iconos](docs/screenshots/icons.png)
+
+Fondo verde: lo sirve Bliss. Fondo azul: cae por herencia a breeze-dark. No
+se dibuja ni se forkea nada — `make icons` espiga de LinXP los iconos que el
+escritorio pide de verdad y el resto se hereda.
+
+### Terminal
+
+![Terminal](docs/screenshots/terminal.png)
+
+Konsole en negro con el pale de dieciseis colores que cmd.exe arrastro desde
+DOS, y el prompt de starship reescrito en colores ANSI para que siga al
+terminal en lugar de ignorarlo. *(Esta imagen esta compuesta a partir del
+pale y de la salida real del prompt, no es una captura de pantalla.)*
+
 ## Empezar
 
     make check     # valida SVG, JSON y los IDs que KSvg necesita
@@ -39,11 +91,16 @@ un backup automatico antes porque rehace el panel.
       widgets/panel-background.svg        fondo de la barra de tareas
       widgets/tasks.svg                   botones de ventana
       widgets/listitem.svg                filas con hover y seleccion
-      widgets/tooltip.svg                 el amarillo palido de XP
+      widgets/tooltip.svg                 tooltip oscuro (ver formats.md)
       dialogs/background.svg              fondo de popups y menu Inicio
       colors                              colores del SHELL (no de las apps)
     src/kvantum/Bliss/                  Interior de las aplicaciones (GENERADO)
-    src/icons/Bliss/                    Iconos (hereda de Breeze)
+    src/icons/Bliss/                    index.theme; los mapas de bits los
+                                        trae `make icons` a build/
+    src/wallpapers/Bliss/               Fondo en SVG (contents/ es GENERADO)
+    src/konsole/Bliss.colorscheme       Consola negra con el pale de DOS
+    src/starship/bliss.toml             Prompt en colores ANSI
+    src/btop/btop.conf                  Claves que llevan btop a 16 colores
     src/look-and-feel/org.bliss.desktop Meta-paquete que enlaza todo lo anterior
 
     docs/palette.md    los colores, de donde salen y como afinarlos
@@ -55,6 +112,11 @@ un backup automatico antes porque rehace el panel.
     tools/recolor-kvantum.py  remapea la paleta de un tema Kvantum
     tools/make-kvconfig.py    genera el kvconfig con la paleta Luna
     tools/set-start-button.py pone el icono Inicio en el panel del usuario
+    tools/make-dark-aurorae.py   genera la decoracion oscura desde la clara
+    tools/make-dark-wallpaper.py genera el fondo oscuro con un mapa de color
+    tools/build-wallpaper.py     recorta el fondo por proporcion de pantalla
+    tools/fetch-icons.py         espiga iconos XP de LinXP a build/
+    tools/set-terminal.py        Konsole, starship, fzf y btop (reversible)
 
 ## La variante oscura se genera, no se duplica
 
@@ -159,10 +221,14 @@ popups, todo el chrome comparte paleta oscura. Detalles en `docs/formats.md`.
 
 ## Estado
 
-Fases 1 a 4 completas: la ventana (barra de titulo, nueve botones,
-maximizado), el interior de las aplicaciones Qt y el escritorio (barra de
-tareas, popups, filas de menu). y la variante oscura completa.
-Falta el fondo de pantalla y los iconos.
+Completo y en uso: la ventana (barra de titulo, nueve botones, maximizado),
+el interior de las aplicaciones Qt, el escritorio (barra de tareas, popups,
+filas de menu), la variante oscura entera, el fondo de pantalla, los iconos
+y la terminal.
+
+Lo que queda esta en `docs/roadmap.md`. Lo principal: las aplicaciones GTK,
+que ignoran Kvantum y necesitarian un tema aparte, y el cambio automatico
+dia/noche, que Plasma no trae.
 
 El arte es un punto de partida calibrado a ojo, no un calco fiel.
 
