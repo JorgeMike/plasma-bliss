@@ -283,9 +283,19 @@ kvantum-dark:
 # tema, hay que reiniciar el shell para verlo.
 reload:
 	@rm -rf $(HOME)/.cache/plasma-svgelements* $(HOME)/.cache/plasma_theme_$(NAME)* 2>/dev/null || true
-	@if systemctl --user is-active --quiet plasma-plasmashell; then \
+# Si la unidad de systemd EXISTE, se usa siempre, este activa o no. Mirar si
+# esta activa no vale: cuando plasmashell acaba de caerse la unidad esta
+# inactiva o en fallo, y lanzar entonces un `plasmashell --replace` suelto
+# deja dos instancias en cuanto systemd lo reinicia por su cuenta. Las dos se
+# pelean por las mismas superficies de Wayland y revientan con SIGSEGV en
+# QQuickItemGrabResult::render, en bucle, hasta que systemd se rinde con
+# "Start request repeated too quickly" y te quedas sin panel ni fondo.
+#
+# reset-failed hace falta porque desde ese estado `restart` no arranca.
+	@if systemctl --user cat plasma-plasmashell >/dev/null 2>&1; then \
+		systemctl --user reset-failed plasma-plasmashell 2>/dev/null || true; \
 		systemctl --user restart plasma-plasmashell; \
-		echo ">> plasmashell reiniciado"; \
+		echo ">> plasmashell reiniciado (systemd)"; \
 	else \
 		(plasmashell --replace >/dev/null 2>&1 &); \
 		echo ">> plasmashell relanzado"; \

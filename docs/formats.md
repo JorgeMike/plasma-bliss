@@ -672,3 +672,31 @@ escape: con estas claves, **0 de 24 bits, 0 de 256, 7502 ANSI basicos**.
 
 Solo se escriben esas cinco claves; el resto de `btop.conf` no se toca,
 porque ahi guarda btop todas las preferencias del usuario.
+
+## Nunca lanzar plasmashell a mano si systemd lo gestiona
+
+En Plasma 6, plasmashell corre como unidad de usuario
+(`plasma-plasmashell.service`) con reinicio automatico. Lanzar ademas un
+`plasmashell --replace` suelto deja **dos instancias** peleandose por las
+mismas superficies de Wayland. El resultado es un SIGSEGV en
+`QQuickItemGrabResult::render` dentro de `renderSceneGraph`, en bucle, hasta
+que systemd se rinde:
+
+    plasma-plasmashell.service: Start request repeated too quickly
+    plasma-plasmashell.service: Failed with result 'core-dump'
+
+Y te quedas sin panel y sin fondo de escritorio, porque los dibuja
+plasmashell.
+
+Para salir de ahi no basta con `restart`: desde el estado `failed` hay que
+hacer `reset-failed` primero.
+
+```bash
+systemctl --user reset-failed plasma-plasmashell
+systemctl --user start plasma-plasmashell
+```
+
+`make reload` mira si la unidad **existe**, no si esta activa. La diferencia
+importa: justo despues de una caida la unidad esta inactiva o en fallo, y la
+version anterior de este objetivo lanzaba entonces un `plasmashell --replace`
+suelto, provocando exactamente la colision que se queria evitar.
